@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/res">
+        <file>ZOLL-AED-Plus-4.png</file>
+        <file>OK Button.png</file>
+        <file>Electrode Button.png</file>
+        <file>Chill Button.png</file>
+        <file>Call Button.png</file>
+        <file>Blow.png</file>
+        <file>Mouth Button.png</file>
+        <file>Sign Button.png</file>
+        <file>Step 2.png</file>
+        <file>button1.png</file>
+        <file>button2.png</file>
+    </qresource>
+</RCC>
