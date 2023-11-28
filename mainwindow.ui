@@ -17,14 +17,14 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>-4</y>
-      <width>801</width>
-      <height>611</height>
+      <x>-20</x>
+      <y>-20</y>
+      <width>771</width>
+      <height>701</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(:/res/ZOLL-AED-Plus-4.png);</string>
+     <string notr="true">image: url(:/aed/AED.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -33,14 +33,14 @@
    <widget class="QPushButton" name="pushButton1">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>150</y>
-      <width>101</width>
+      <x>180</x>
+      <y>180</y>
+      <width>111</width>
       <height>81</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/res/OK Button.png);
+     <string notr="true">border-image: url(:/aed/button1.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -51,50 +51,14 @@ border-radius: 10px; </string>
    <widget class="QPushButton" name="pushButton2">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>60</y>
-      <width>101</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-image: url(:/res/Call Button.png);
-color: white; 
-border-radius: 10px; </string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton5">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>240</y>
+      <x>250</x>
+      <y>90</y>
       <width>111</width>
       <height>81</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/res/Electrode Button.png);
-color: white; 
-border-radius: 10px; </string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton6">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>330</y>
-      <width>111</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-image: url(:/res/Chill Button.png);
+     <string notr="true">border-image: url(:/aed/button2.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -105,14 +69,14 @@ border-radius: 10px; </string>
    <widget class="QPushButton" name="pushButton3">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>60</y>
-      <width>101</width>
+      <x>370</x>
+      <y>90</y>
+      <width>111</width>
       <height>81</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/res/Mouth Button.png);
+     <string notr="true">border-image: url(:/aed/button3.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -123,14 +87,50 @@ border-radius: 10px; </string>
    <widget class="QPushButton" name="pushButton4">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>150</y>
+      <x>450</x>
+      <y>180</y>
       <width>111</width>
       <height>81</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/res/Sign Button.png);
+     <string notr="true">border-image: url(:/aed/button4.png);
+color: white; 
+border-radius: 10px; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton5">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>270</y>
+      <width>111</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/aed/button5png);
+color: white; 
+border-radius: 10px; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton6">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>360</y>
+      <width>111</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/aed/button6.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -141,14 +141,32 @@ border-radius: 10px; </string>
    <widget class="QPushButton" name="pushButton8">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>290</y>
-      <width>91</width>
+      <x>210</x>
+      <y>320</y>
+      <width>81</width>
       <height>71</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/res/Step 2.png);
+     <string notr="true">border-image: url(:/aed/button8.png);
+color: white; 
+border-radius: 10px; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton7">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>360</y>
+      <width>91</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/aed/button7.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -159,8 +177,8 @@ border-radius: 10px; </string>
    <widget class="QTextBrowser" name="textBrowser">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>161</y>
+      <x>300</x>
+      <y>190</y>
       <width>141</width>
       <height>71</height>
      </rect>
@@ -170,40 +188,21 @@ border-radius: 10px; </string>
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;output here&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton7">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>340</y>
-      <width>91</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-image: url(:/res/Blow.png);
-color: white; 
-border-radius: 10px; </string>
-    </property>
-    <property name="text">
-     <string/>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Info Goes Here&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonOnOff">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>470</y>
-      <width>71</width>
+      <x>480</x>
+      <y>500</y>
+      <width>81</width>
       <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(166,193,54); 
-color: black;
-</string>
+color: black;</string>
     </property>
     <property name="text">
      <string>On/Off</string>
@@ -212,21 +211,113 @@ color: black;
    <widget class="QTextBrowser" name="textBrowser_2">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>470</y>
+      <x>180</x>
+      <y>500</y>
       <width>81</width>
       <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(166,193,54); </string>
+     <string notr="true">background-color: rgb(166,193,54); 
+color: black;</string>
     </property>
     <property name="html">
      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;graph&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Chart&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton2">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>140</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton3">
+    <property name="geometry">
+     <rect>
+      <x>375</x>
+      <y>150</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton1">
+    <property name="geometry">
+     <rect>
+      <x>275</x>
+      <y>240</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton4">
+    <property name="geometry">
+     <rect>
+      <x>459</x>
+      <y>180</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton5">
+    <property name="geometry">
+     <rect>
+      <x>455</x>
+      <y>330</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton6">
+    <property name="geometry">
+     <rect>
+      <x>445</x>
+      <y>359</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton7">
+    <property name="geometry">
+     <rect>
+      <x>275</x>
+      <y>360</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

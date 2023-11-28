@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/aed">
+        <file>AED.png</file>
+        <file>button1.png</file>
+        <file>button2.png</file>
+        <file>button3.png</file>
+        <file>button4.png</file>
+        <file>button5png</file>
+        <file>button6.png</file>
+        <file>button7.png</file>
+        <file>button8.png</file>
+    </qresource>
+</RCC>
