@@ -10,11 +10,13 @@ CONFIG += c++11
 
 SOURCES += \
     Analyzer.cpp \
+    patient.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     Analyzer.h \
+    patient.h \
     mainwindow.h
 
 FORMS += \
