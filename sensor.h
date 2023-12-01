@@ -15,12 +15,13 @@ public:
     bool getgoodPlacement() const;
 
 public slots:
-    void setPlacement();
+    void setPlacement(bool placement);
+    void setCPRStatus(bool status);
 
 
 private:
     int heartRate;
-    bool CPRstatus = false;
+    bool CPRStatus = false;
     bool goodPlacement = false;
 
     Patient& patientRef;

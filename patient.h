@@ -12,11 +12,11 @@
 #include <QThread>
 
 
-class patient : public QObject
+class Patient : public QObject
 {
     Q_OBJECT
 public:
-    patient(bool iC, QString nm);
+    Patient(bool iC, QString nm);
 
     int getHeartRate();
     void setState(int state);
