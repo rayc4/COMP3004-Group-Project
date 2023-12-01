@@ -60,7 +60,6 @@ void Patient::vTac(){
     int minHR = 240;
     int maxHR = 250;
 
-    //Generate a value from 150 to 250
     heartRate = (QRandomGenerator::global()->bounded(minHR, maxHR+1));
 }
 

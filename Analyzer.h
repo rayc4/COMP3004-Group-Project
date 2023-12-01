@@ -34,6 +34,9 @@ public:
     void setSensor(Sensor* newSensor);
     void setHeartState(int state);
     void setShockState(bool state);
+    /* Regular, asystole, vtac, vfib
+     * Check for placement, check for cpr
+    */
 
 //signals:
     //out
