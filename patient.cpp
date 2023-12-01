@@ -13,56 +13,77 @@ patient::patient(bool iC, QString nm): isChild(iC), name(nm)
     QRandomGenerator::global()->seed(QTime::currentTime().msec());
 
     //Patient first initialized with a regular heartbeat
-    reg();
+    currState = 0; //Set to regular heartbeat
 
-    heartRateTimer = new QTimer(this);
-    connect(heartRateTimer, &QTimer::timeout, this, &patient::updateHeartRate);
-    heartRateTimer->start(1000);  // Update heart rate every second
+    QTimer* heartRateTimer = new QTimer();
+    connect(heartRateTimer, &QTimer::timeout, [=]() {
+        updateHeartRate();
+    });
+    heartRateTimer->start(1000);
 
 }
 
 
+
 void patient::updateHeartRate(){
+    QMutexLocker locker(&heartMutex);
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
-
-
+    if (currState == 0)
+        reg();
+    else if (currState == 1)
+        vTac();
+    else if (currState == 2)
+        vFib();
+    else if (currState == 3)
+        asystole();
+    else
+        currState = -1;
 }
 
 
 void patient::reg(){
-    int minHR = 60;
-    int maxHR = 80;
 
-    heartRate.clear();
+    int minHR = 70;
+    int maxHR = 75;
 
-    for (int i = 0; i < NUM_HEARTRATES; ++i) {
-            //Generate values from 60 to 80bpm which is resting heart rate
-           heartRate.append(QRandomGenerator::global()->bounded(minHR, maxHR+1));
-    }
+    //Generate a value from min to max heart rate
+    heartRate = (QRandomGenerator::global()->bounded(minHR, maxHR+1));
+
+
 }
+
+//[70,74,76,80,...]
+
 
 //Patient's body forces ventricular tachycardia
 void patient::vTac(){
+    int minHR = 240;
+    int maxHR = 250;
 
+    //Generate a value from 150 to 250
+    heartRate = (QRandomGenerator::global()->bounded(minHR, maxHR+1));
 }
 
 //Patient's body forces ventricular fibrillation
 void patient::vFib(){
+    int minHR = 150;
+    int maxHR = 500;
 
+    //Generate a value from 150 to 500
+    heartRate = (QRandomGenerator::global()->bounded(minHR, maxHR+1));
 }
 
 //Patient flatlines
 void patient::asystole(){
-
+    heartRate = 0;
 }
 
-QList<int>& patient::getHeartRate(){
+int patient::getHeartRate(){
+    QMutexLocker locker(&heartMutex);
     return heartRate;
 }
 
-
-//Set patient's heart rate back to normal
-void patient::setReg() {
-    reg();
+void patient::setState(int state){
+    QMutexLocker locker(&heartMutex);
+    currState = state;
 }
-

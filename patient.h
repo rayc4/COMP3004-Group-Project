@@ -7,10 +7,10 @@
 #include <QDebug>
 #include <QTime>
 #include <QTimer>
+#include <QMutex>
 
 #include <QThread>
 
-#define NUM_HEARTRATES 60
 
 class patient : public QObject
 {
@@ -18,8 +18,8 @@ class patient : public QObject
 public:
     patient(bool iC, QString nm);
 
-    QList<int>& getHeartRate();
-    void setReg();
+    int getHeartRate();
+    void setState(int state);
 
 public slots:
     void updateHeartRate();
@@ -30,11 +30,13 @@ public slots:
 
 private:
 
+    int currState; //0 = reg, 1 = vtac, 2 = vfib, 3 = asys
     bool isChild;
     QString name;
-    QList<int> heartRate;
+    int heartRate;
     QTimer* heartRateTimer;
 
+    QMutex heartMutex;
 
 
 
