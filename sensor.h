@@ -2,20 +2,28 @@
 #define SENSOR_H
 //#include "Analyzer.h"
 
-class sensor
+#include "patient.h"
+
+class Sensor
 {
 public:
-    sensor();
+    Sensor(Patient& p);
 
     //Getters
-    int getHeartRate() const;
+    int getHeartRate();
     bool getCPRstatus() const;
     bool getgoodPlacement() const;
+
+public slots:
+    void setPlacement();
+
 
 private:
     int heartRate;
     bool CPRstatus = false;
-    bool goodPlacement = true;
+    bool goodPlacement = false;
+
+    Patient& patientRef;
 };
 
 #endif // SENSOR_H

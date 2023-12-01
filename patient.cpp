@@ -1,6 +1,6 @@
 #include "patient.h"
 
-patient::patient(bool iC, QString nm): isChild(iC), name(nm)
+Patient::Patient(bool iC, QString nm): isChild(iC), name(nm)
 {
     //Let patient run on it's own thread:
     QThread* patientThread = new QThread;
@@ -25,7 +25,7 @@ patient::patient(bool iC, QString nm): isChild(iC), name(nm)
 
 
 
-void patient::updateHeartRate(){
+void Patient::updateHeartRate(){
     QMutexLocker locker(&heartMutex);
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
     if (currState == 0)
@@ -41,7 +41,7 @@ void patient::updateHeartRate(){
 }
 
 
-void patient::reg(){
+void Patient::reg(){
 
     int minHR = 70;
     int maxHR = 75;
@@ -56,7 +56,7 @@ void patient::reg(){
 
 
 //Patient's body forces ventricular tachycardia
-void patient::vTac(){
+void Patient::vTac(){
     int minHR = 240;
     int maxHR = 250;
 
@@ -65,7 +65,7 @@ void patient::vTac(){
 }
 
 //Patient's body forces ventricular fibrillation
-void patient::vFib(){
+void Patient::vFib(){
     int minHR = 150;
     int maxHR = 500;
 
@@ -74,16 +74,16 @@ void patient::vFib(){
 }
 
 //Patient flatlines
-void patient::asystole(){
+void Patient::asystole(){
     heartRate = 0;
 }
 
-int patient::getHeartRate(){
+int Patient::getHeartRate(){
     QMutexLocker locker(&heartMutex);
     return heartRate;
 }
 
-void patient::setState(int state){
+void Patient::setState(int state){
     QMutexLocker locker(&heartMutex);
     currState = state;
 }

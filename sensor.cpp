@@ -1,18 +1,33 @@
 #include "sensor.h"
 
 
-sensor::sensor(){
+Sensor::Sensor(Patient& p):patientRef(p){
+    heartRate = patientRef.getHeartRate();
 }
 
-//Getters
-int sensor::getHeartRate() const{
+
+int Sensor::getHeartRate(){
     return heartRate;
 }
 
-bool sensor::getCPRstatus() const{
-    return CPRstatus;
+
+//Is set from GUI
+void Sensor::setPlacement(bool placement){
+    goodPlacement = placement;
 }
 
-bool sensor::getgoodPlacement() const{
+
+//Analyzer will call this function
+bool Sensor::getgoodPlacement() const{
     return goodPlacement;
+}
+
+//Is set from GUI
+void Sensor::setCPRStatus(bool status){
+    CPRStatus = status;
+}
+
+//Analyzer will call this function
+bool Sensor::getCPRstatus() const{
+    return CPRStatus;
 }
