@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>747</width>
+    <width>680</width>
     <height>689</height>
    </rect>
   </property>
@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(:/aed/AED.png);</string>
+     <string notr="true">image: url(:/res/AED.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -40,7 +40,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/aed/button1.png);
+     <string notr="true">border-image: url(:/res/button1.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -58,7 +58,7 @@ border-radius: 10px; </string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/aed/button2.png);
+     <string notr="true">border-image: url(:/res/button2.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -76,7 +76,7 @@ border-radius: 10px; </string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/aed/button3.png);
+     <string notr="true">border-image: url(:/res/button3.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -94,7 +94,7 @@ border-radius: 10px; </string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/aed/button4.png);
+     <string notr="true">border-image: url(:/res/button4.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -112,7 +112,7 @@ border-radius: 10px; </string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/aed/button5png);
+     <string notr="true">border-image: url(:/res/button5png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -130,7 +130,7 @@ border-radius: 10px; </string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/aed/button6.png);
+     <string notr="true">border-image: url(:/res/button6.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -148,7 +148,7 @@ border-radius: 10px; </string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/aed/button8.png);
+     <string notr="true">border-image: url(:/res/button8.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -166,7 +166,7 @@ border-radius: 10px; </string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/aed/button7.png);
+     <string notr="true">border-image: url(:/res/button7.png);
 color: white; 
 border-radius: 10px; </string>
     </property>
@@ -320,13 +320,53 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButtonOnOff_2">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>260</y>
+      <width>91</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/res/middle button.png);
+border-radius: 45px; 
+background-color: grey;
+color: white; 
+padding: 5px; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>label</zorder>
+   <zorder>pushButton1</zorder>
+   <zorder>pushButton2</zorder>
+   <zorder>pushButton3</zorder>
+   <zorder>pushButton4</zorder>
+   <zorder>pushButton5</zorder>
+   <zorder>pushButton6</zorder>
+   <zorder>pushButton8</zorder>
+   <zorder>pushButton7</zorder>
+   <zorder>textBrowser</zorder>
+   <zorder>pushButtonOnOff</zorder>
+   <zorder>textBrowser_2</zorder>
+   <zorder>radioButton2</zorder>
+   <zorder>radioButton3</zorder>
+   <zorder>radioButton1</zorder>
+   <zorder>radioButton5</zorder>
+   <zorder>radioButton6</zorder>
+   <zorder>radioButton7</zorder>
+   <zorder>radioButton4</zorder>
+   <zorder>pushButtonOnOff_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>747</width>
+     <width>680</width>
      <height>22</height>
     </rect>
    </property>
