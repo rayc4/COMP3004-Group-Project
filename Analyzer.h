@@ -2,7 +2,7 @@
 #define ANALYZER_H
 
 #include <string>
-#include "Sensor.h" 
+#include "sensor.h"
 
 class Analyzer : public QObject {
     Q_OBJECT
