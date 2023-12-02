@@ -1,13 +1,20 @@
 #include "sensor.h"
 
 
-Sensor::Sensor(Patient& p):patientRef(p){
-    heartRate = patientRef.getHeartRate();
+Sensor::Sensor(){
+    //heartRate = patientRef->getHeartRate();
+    //connect(&patientRef, &Patient::sendHeartRate, this, &Sensor::receiveHeartRate);
 }
 
 
 int Sensor::getHeartRate(){
+
+    //heartRate = patientRef->getHeartRate();
     return heartRate;
+}
+
+void Sensor::receiveHeartRate(int hr){
+    qDebug() << "heartrate in sensor class is "<< hr;
 }
 
 

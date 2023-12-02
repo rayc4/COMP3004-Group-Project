@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     aed.cpp \
+    patientwindow.cpp \
     sensor.cpp \
     Analyzer.cpp \
     patient.cpp \
@@ -18,13 +19,15 @@ SOURCES += \
 
 HEADERS += \
     aed.h \
+    patientwindow.h \
     sensor.h \
     Analyzer.h \
     patient.h \
     mainwindow.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    patientwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

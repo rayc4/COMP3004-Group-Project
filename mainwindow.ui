@@ -340,6 +340,32 @@ padding: 5px; </string>
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>540</y>
+      <width>131</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>print hr</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>540</y>
+      <width>131</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>stop printing hr</string>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>pushButton1</zorder>
    <zorder>pushButton2</zorder>
@@ -360,6 +386,8 @@ padding: 5px; </string>
    <zorder>radioButton7</zorder>
    <zorder>radioButton4</zorder>
    <zorder>pushButtonOnOff_2</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>pushButton_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

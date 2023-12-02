@@ -9,17 +9,25 @@
 #include <QTimer>
 #include <QMutex>
 
+#include <QWidget>
+#include <QDialog>
+
 #include <QThread>
+
+
 
 
 class Patient : public QObject
 {
     Q_OBJECT
 public:
-    Patient(bool iC, QString nm);
+    Patient(bool iC=false, QString nm=NULL);
+    ~Patient();
 
     int getHeartRate();
     void setState(int state);
+
+
 
 public slots:
     void updateHeartRate();
@@ -30,6 +38,9 @@ public slots:
 
 private:
 
+    QThread* patientThread;
+
+    QRandomGenerator randomGen;
     int currState; //0 = reg, 1 = vtac, 2 = vfib, 3 = asys
     bool isChild;
     QString name;
@@ -37,6 +48,9 @@ private:
     QTimer* heartRateTimer;
 
     QMutex heartMutex;
+
+signals:
+    void sendHeartRate(int HR);
 
 
 

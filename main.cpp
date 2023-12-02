@@ -1,11 +1,31 @@
 #include "mainwindow.h"
+#include "patientwindow.h"
+#include "patient.h"
+#include "aed.h"
 
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+
+
+
+
+
+    Patient *patient = new Patient(false, "Bob");
+    AED *aed = new AED(nullptr);
+
+    PatientWindow *patientW = new PatientWindow(nullptr, patient);
+    patientW->show();
+
+    MainWindow *w = new MainWindow(nullptr, patient, aed);
+    w->show();
+
+    //This does not work at the moment:
+    //delete patient;
+    //delete patientW;
+    //delete aed;
+
     return a.exec();
 }

@@ -1,16 +1,19 @@
 #include "patient.h"
 
-Patient::Patient(bool iC, QString nm): isChild(iC), name(nm)
+
+Patient::Patient(bool iC, QString nm):isChild(iC), name(nm)
 {
+
+
     //Let patient run on it's own thread:
-    QThread* patientThread = new QThread;
+    patientThread = new QThread;
 
     moveToThread(patientThread);
     patientThread->start();
 
 
     //Initialize the patient with a resting heart rate
-    QRandomGenerator::global()->seed(QTime::currentTime().msec());
+    randomGen.seed(QTime::currentTime().msec());
 
     //Patient first initialized with a regular heartbeat
     currState = 0; //Set to regular heartbeat
@@ -19,13 +22,19 @@ Patient::Patient(bool iC, QString nm): isChild(iC), name(nm)
     connect(heartRateTimer, &QTimer::timeout, [=]() {
         updateHeartRate();
     });
-    heartRateTimer->start(1000);
+    heartRateTimer->start(300);
 
+}
+
+Patient::~Patient(){
+    delete heartRateTimer;
+    delete patientThread;
 }
 
 
 
 void Patient::updateHeartRate(){
+
     QMutexLocker locker(&heartMutex);
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
     if (currState == 0)
@@ -38,7 +47,11 @@ void Patient::updateHeartRate(){
         asystole();
     else
         currState = -1;
+    emit sendHeartRate(heartRate);
+
+    //qDebug() << "Curent heartrate is" << heartRate;
 }
+
 
 
 void Patient::reg(){
@@ -47,7 +60,7 @@ void Patient::reg(){
     int maxHR = 75;
 
     //Generate a value from min to max heart rate
-    heartRate = (QRandomGenerator::global()->bounded(minHR, maxHR+1));
+    heartRate = randomGen.bounded(minHR, maxHR+1);
 
 
 }
@@ -60,7 +73,7 @@ void Patient::vTac(){
     int minHR = 240;
     int maxHR = 250;
 
-    heartRate = (QRandomGenerator::global()->bounded(minHR, maxHR+1));
+    heartRate = randomGen.bounded(minHR, maxHR+1);
 }
 
 //Patient's body forces ventricular fibrillation
@@ -69,7 +82,7 @@ void Patient::vFib(){
     int maxHR = 500;
 
     //Generate a value from 150 to 500
-    heartRate = (QRandomGenerator::global()->bounded(minHR, maxHR+1));
+    heartRate = randomGen.bounded(minHR, maxHR+1);
 }
 
 //Patient flatlines
@@ -86,3 +99,4 @@ void Patient::setState(int state){
     QMutexLocker locker(&heartMutex);
     currState = state;
 }
+

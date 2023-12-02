@@ -1,20 +1,23 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 //#include "Analyzer.h"
+#include <QObject>
 
 #include "patient.h"
 
-class Sensor
+class Sensor : public QObject
 {
-public:
-    Sensor(Patient& p);
+    Q_OBJECT
 
+public:
+    Sensor();
     //Getters
     int getHeartRate();
     bool getCPRstatus() const;
     bool getgoodPlacement() const;
 
 public slots:
+    void receiveHeartRate(int hr);
     void setPlacement(bool placement);
     void setCPRStatus(bool status);
 
@@ -24,7 +27,6 @@ private:
     bool CPRStatus = false;
     bool goodPlacement = false;
 
-    Patient& patientRef;
 };
 
 #endif // SENSOR_H

@@ -4,6 +4,7 @@
 #include <QObject>
 #include "sensor.h"
 #include "Analyzer.h"
+#include "patient.h"
 
 class AED : public QObject
 {
@@ -17,7 +18,8 @@ private:
     int battery;
 
 public:
-    explicit AED(QObject *parent = nullptr, Sensor* sensor = nullptr, Analyzer* analyzer = nullptr);
+    explicit AED(QObject *parent = nullptr);
+    ~AED();
 
     void updateAED();
     void powerOn();
