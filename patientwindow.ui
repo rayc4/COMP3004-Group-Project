@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>605</width>
+    <height>486</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="vFibButton">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>150</y>
+     <x>480</x>
+     <y>310</y>
      <width>111</width>
      <height>41</height>
     </rect>
@@ -26,11 +26,11 @@
     <string>give bro vfib</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="vFibButton_2">
+  <widget class="QPushButton" name="vTacButton">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>200</y>
+     <x>480</x>
+     <y>360</y>
      <width>111</width>
      <height>41</height>
     </rect>
@@ -39,30 +39,56 @@
     <string>give bro vtac</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="vFibButton_3">
+  <widget class="QPushButton" name="resetButton">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>100</y>
+     <x>480</x>
+     <y>430</y>
      <width>111</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>let bro live</string>
+    <string>reset bro</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="vFibButton_4">
+  <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>250</y>
-     <width>111</width>
-     <height>41</height>
+     <x>20</x>
+     <y>200</y>
+     <width>131</width>
+     <height>111</height>
     </rect>
    </property>
    <property name="text">
-    <string>kill bro</string>
+    <string>GIVE BRO CPR</string>
+   </property>
+  </widget>
+  <widget class="QSlider" name="verticalSlider">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>200</y>
+     <width>81</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>240</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>(Depth Slider)</string>
    </property>
   </widget>
  </widget>
