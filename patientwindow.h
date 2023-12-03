@@ -39,6 +39,8 @@ private slots:
     void on_rightPadTable_cellPressed(int row, int column);
 
 
+    void on_cardiacButton_clicked(bool checked);
+
 private:
     Ui::PatientWindow *ui;
     Patient *patient;

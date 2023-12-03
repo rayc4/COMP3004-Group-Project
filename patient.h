@@ -44,8 +44,10 @@ public slots:
     void reg();
     void vTac();
     void vFib();
+    void cardiacArrest();
     void asystole();
     void respondToShock();
+    void falseCPR();
 
 private:
 
@@ -71,6 +73,7 @@ private:
     int click = 0;
 
     bool cpr=false;
+    bool cprReset = false;
 
 
 

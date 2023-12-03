@@ -46,16 +46,33 @@ void PatientWindow::on_killButton_clicked(bool checked)
         patient->setState(3);
         ui->vFibButton->setDisabled(1);
         ui->vTacButton->setDisabled(1);
+        ui->cardiacButton->setDisabled(1);
     }
     else{
         patient->setState(0);
         ui->vFibButton->setDisabled(0);
         ui->vTacButton->setDisabled(0);
+        ui->cardiacButton->setDisabled(0);
     }
 
 
 }
 
+void PatientWindow::on_cardiacButton_clicked(bool checked)
+{
+    if (checked){
+        patient->setState(4);
+        ui->vFibButton->setDisabled(1);
+        ui->vTacButton->setDisabled(1);
+        ui->killButton->setDisabled(1);
+    }
+    else{
+        patient->setState(0);
+        ui->vFibButton->setDisabled(0);
+        ui->vTacButton->setDisabled(0);
+        ui->killButton->setDisabled(0);
+    }
+}
 
 void PatientWindow::on_vFibButton_clicked(bool checked)
 {
@@ -63,11 +80,13 @@ void PatientWindow::on_vFibButton_clicked(bool checked)
         patient->setState(2);
         ui->killButton->setDisabled(1);
         ui->vTacButton->setDisabled(1);
+        ui->cardiacButton->setDisabled(1);
     }
     else{
         patient->setState(0);
         ui->killButton->setDisabled(0);
         ui->vTacButton->setDisabled(0);
+        ui->cardiacButton->setDisabled(0);
     }
 }
 
@@ -78,11 +97,13 @@ void PatientWindow::on_vTacButton_clicked(bool checked)
         patient->setState(1);
         ui->vFibButton->setDisabled(1);
         ui->killButton->setDisabled(1);
+        ui->cardiacButton->setDisabled(1);
     }
     else{
         patient->setState(0);
         ui->vFibButton->setDisabled(0);
         ui->killButton->setDisabled(0);
+        ui->cardiacButton->setDisabled(0);
     }
 }
 
@@ -145,9 +166,4 @@ void PatientWindow::on_rightPadTable_cellPressed(int row, int column)
         }
     }
 }
-
-
-
-
-
 

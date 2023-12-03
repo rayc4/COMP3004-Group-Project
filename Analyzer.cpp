@@ -57,7 +57,10 @@ void Analyzer::setShockState(bool state) {
 
 bool Analyzer::checkCPR(int cBPM){
     //qDebug() << cBPM;
-    if (cBPM >= 100 && cBPM <= 120){
+    //CPR BPM 100 - 120 (official requirement)
+    //For testing purposes, we did 90 - 130
+
+    if (cBPM >=  90 && cBPM <= 130){
         goodCPR = true;
     }else{
         goodCPR = false;

@@ -61,7 +61,7 @@
   <widget class="QSlider" name="verticalSlider">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>140</x>
      <y>360</y>
      <width>41</width>
      <height>111</height>
@@ -74,7 +74,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>170</x>
      <y>400</y>
      <width>101</width>
      <height>31</height>
@@ -87,10 +87,10 @@
   <widget class="QPushButton" name="killButton">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>360</y>
-     <width>151</width>
-     <height>111</height>
+     <x>330</x>
+     <y>420</y>
+     <width>141</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
@@ -364,7 +364,23 @@
     <string notr="true">border-image: url(:/res/human.png);</string>
    </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cardiacButton">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>360</y>
+     <width>141</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>cardiac arrest</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
    </property>
   </widget>
   <zorder>label_2</zorder>
@@ -378,6 +394,7 @@
   <zorder>ageLabel</zorder>
   <zorder>leftPadTable</zorder>
   <zorder>rightPadTable</zorder>
+  <zorder>cardiacButton</zorder>
  </widget>
  <resources/>
  <connections/>

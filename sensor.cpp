@@ -8,7 +8,6 @@ Sensor::Sensor(){
 
 void Sensor::receiveHeartRate(int hr){
     heartRate = hr;
-    qDebug() << "heartrate in sensor class is "<< heartRate;
 }
 
 

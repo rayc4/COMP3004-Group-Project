@@ -4,7 +4,7 @@
 Patient::Patient(int a, QString nm):age(a), name(nm)
 {
 
-    if (age < 18)
+    if (age < 8)
         isChild = true;
     else
         isChild = false;
@@ -31,9 +31,8 @@ Patient::Patient(int a, QString nm):age(a), name(nm)
 
 
     QTimer* survivalTimer = new QTimer();
-    // Connect the timeout signal to your slot
     connect(survivalTimer, &QTimer::timeout, this, &Patient::updateSurvivalRate);
-    // Start the timer (e.g., every 1000 milliseconds for seconds)
+    // Updates timer every 1 second
     survivalTimer->start(1000);
 
 }
@@ -46,20 +45,30 @@ Patient::~Patient(){
 
 
 void Patient::updateHeartRate(){
-
+    qDebug() << "-----------" << cpr;
     QMutexLocker locker(&heartMutex);
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
-    if (currState == 0)
-        reg();
-    else if (currState == 1)
-        vTac();
-    else if (currState == 2)
-        vFib();
-    else if (currState == 3){
-        asystole();
+    if (cpr){
+        if (!cprReset){
+             QTimer::singleShot(3000, this, &Patient::falseCPR);
+             cprReset = true;
+        }
+    }else{
+        cprReset = false;
+        if (currState == 0)
+            reg();
+        else if (currState == 1)
+            vTac();
+        else if (currState == 2)
+            vFib();
+        else if (currState == 3)
+            asystole();
+        else if (currState == 4)
+            cardiacArrest();
+        else
+            currState = -1;
     }
-    else
-        currState = -1;
+
     emit sendHeartRate(heartRate);
 
     //qDebug() << "Curent heartrate is" << heartRate;
@@ -106,8 +115,14 @@ void Patient::vFib(){
 
 //Patient flatlines
 void Patient::asystole(){
-    if (!cpr)
-        heartRate = 0;
+
+    heartRate = 0;
+}
+
+void Patient::cardiacArrest(){
+    int minHR = 40;
+    int maxHR = 50;
+    heartRate = randomGen.bounded(minHR, maxHR+1);
 }
 
 //Chance-based on how a patient responds to a shock
@@ -151,6 +166,8 @@ void Patient::setState(int state){
 
 //CPR Stuff
 void Patient::patientCPS(){
+    cpr = true;
+//    QTimer::singleShot(3000, this, &Patient::falseCPR);
     int cprBPM = 0;
     click++;
     if (click == 1){
@@ -164,10 +181,13 @@ void Patient::patientCPS(){
 //        qDebug() << cprBPM;
     }
     heartRate = cprBPM;
-
-    //emit sendBPM(cprBPM);
+//    emit sendBPM(cprBPM);
 }
 
 void Patient::setCPR(bool c){
     cpr = c;
+}
+
+void Patient::falseCPR(){
+    cpr = false;
 }
