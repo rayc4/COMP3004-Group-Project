@@ -35,7 +35,7 @@ public:
     void setHeartState(int state);
     void setShockState(bool state);
     /* Regular, asystole, vtac, vfib
-     * Check for placement, check for cpr
+     * Check for placement, check for cpr (depth AND speed)
     */
 
 //signals:
