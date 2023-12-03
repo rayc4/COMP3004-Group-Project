@@ -28,7 +28,9 @@ public:
     int getAge();
     QString getName();
 
+
     void setState(int state); 
+    void setCPR(bool c);
 
     void patientCPS();
 

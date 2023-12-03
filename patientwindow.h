@@ -38,6 +38,7 @@ private slots:
 
     void on_rightPadTable_cellPressed(int row, int column);
 
+
 private:
     Ui::PatientWindow *ui;
     Patient *patient;

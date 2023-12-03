@@ -38,6 +38,8 @@ void PatientWindow::on_pushButton_clicked(){
 }
 
 
+
+
 void PatientWindow::on_killButton_clicked(bool checked)
 {
     if (checked){
@@ -143,4 +145,9 @@ void PatientWindow::on_rightPadTable_cellPressed(int row, int column)
         }
     }
 }
+
+
+
+
+
 

@@ -151,7 +151,6 @@ void Patient::setState(int state){
 
 //CPR Stuff
 void Patient::patientCPS(){
-    cpr = true;
     int cprBPM = 0;
     click++;
     if (click == 1){
@@ -169,3 +168,6 @@ void Patient::patientCPS(){
     //emit sendBPM(cprBPM);
 }
 
+void Patient::setCPR(bool c){
+    cpr = c;
+}
