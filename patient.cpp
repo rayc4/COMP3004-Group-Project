@@ -122,8 +122,6 @@ void Patient::respondToShock(){
 
 }
 
-
-
 int Patient::getHeartRate(){
     QMutexLocker locker(&heartMutex);
     return heartRate;
@@ -132,5 +130,22 @@ int Patient::getHeartRate(){
 void Patient::setState(int state){
     QMutexLocker locker(&heartMutex);
     currState = state;
+}
+
+//CPR Stuff
+void Patient::patientCPS(){
+    int cprBPM = 0;
+    click++;
+    if (click == 1){
+        clickTime = QTime::currentTime();
+        cprBPM = 60;
+    }else{
+        QTime currentTime = QTime::currentTime();
+        int timeDifference = clickTime.msecsTo(currentTime);
+        cprBPM = 60000/ timeDifference;
+        clickTime = currentTime;
+//        qDebug() << cprBPM;
+    }
+    emit sendBPM(cprBPM);
 }
 

@@ -6,15 +6,9 @@ Sensor::Sensor(){
     //connect(&patientRef, &Patient::sendHeartRate, this, &Sensor::receiveHeartRate);
 }
 
-
-int Sensor::getHeartRate(){
-
-    //heartRate = patientRef->getHeartRate();
-    return heartRate;
-}
-
 void Sensor::receiveHeartRate(int hr){
-    qDebug() << "heartrate in sensor class is "<< hr;
+    heartRate = hr;
+    qDebug() << "heartrate in sensor class is "<< heartRate;
 }
 
 
@@ -23,18 +17,32 @@ void Sensor::setPlacement(bool placement){
     goodPlacement = placement;
 }
 
+//Is set from GUI
+void Sensor::setCPRStatus(bool status){
+    CPRStatus = status;
+    qDebug() << "Current Status: " << CPRStatus;
+}
 
 //Analyzer will call this function
 bool Sensor::getgoodPlacement() const{
     return goodPlacement;
 }
 
-//Is set from GUI
-void Sensor::setCPRStatus(bool status){
-    CPRStatus = status;
-}
-
 //Analyzer will call this function
 bool Sensor::getCPRstatus() const{
     return CPRStatus;
 }
+
+int Sensor::getHeartRate(){
+    //heartRate = patientRef->getHeartRate();
+    return heartRate;
+}
+
+void Sensor::setCPR(int cBpm){
+    cprBPM = cBpm;
+}
+
+int Sensor::getCPR() const{
+    return cprBPM;
+}
+

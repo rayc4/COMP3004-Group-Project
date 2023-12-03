@@ -1,7 +1,7 @@
 #include "Analyzer.h"
 
 
-Analyzer::Analyzer(QObject *parent) : QObject(parent), sensor(nullptr), heartState(0), shockState(false) {
+Analyzer::Analyzer(QObject *parent) : QObject(parent), sensor(nullptr), heartState(0), shockState(false){
 }
 
 Analyzer::~Analyzer() {
@@ -53,4 +53,14 @@ void Analyzer::setHeartState(int state) {
 
 void Analyzer::setShockState(bool state) {
     shockState = state;
+}
+
+bool Analyzer::checkCPR(int cBPM){
+    qDebug() << cBPM;
+    if (cBPM >= 100 && cBPM <= 120){
+        goodCPR = true;
+    }else{
+        goodCPR = false;
+    }
+    return goodCPR;
 }

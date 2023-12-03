@@ -12,6 +12,8 @@ private:
     Sensor* sensor;
     int heartState;
     bool shockState;
+    int cBPM;
+    bool goodCPR;
 
 
 
@@ -37,6 +39,9 @@ public:
     /* Regular, asystole, vtac, vfib
      * Check for placement, check for cpr (depth AND speed)
     */
+    bool checkCPR(int cBPM);
+
+
 
 //signals:
     //out

@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     Patient *patient = new Patient(false, "Bob");
     AED *aed = new AED(nullptr);
 
-    PatientWindow *patientW = new PatientWindow(nullptr, patient);
+    PatientWindow *patientW = new PatientWindow(nullptr, patient, aed);
     patientW->show();
 
     MainWindow *w = new MainWindow(nullptr, patient, aed);

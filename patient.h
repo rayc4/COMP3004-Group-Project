@@ -25,7 +25,10 @@ public:
     ~Patient();
 
     int getHeartRate();
-    void setState(int state);
+    void setState(int state); 
+
+    void patientCPS();
+
 
 
 
@@ -39,6 +42,7 @@ public slots:
     void respondToShock();
 
 private:
+
 
     QThread* patientThread;
 
@@ -55,10 +59,13 @@ private:
 
     QMutex heartMutex;
 
+    //CPR Stuff
+    QTime clickTime;
+    int click = 0;
 
 signals:
     void sendHeartRate(int HR);
-
+    void sendBPM(int bpm);
 
 
 };

@@ -16,6 +16,7 @@ private:
     int currentState;
     bool isChild;
     int battery;
+    bool goodCPR;
 
 public:
     explicit AED(QObject *parent = nullptr);
@@ -49,6 +50,7 @@ public:
     public slots:
         //in
         void receiveSensorData(int data);
+        void determineCPRStatus();
 
 };
 

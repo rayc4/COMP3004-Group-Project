@@ -7,6 +7,7 @@
 #include <QDebug>
 
 #include "patient.h"
+#include "aed.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class PatientWindow; }
@@ -18,15 +19,17 @@ class PatientWindow : public QDialog
     Q_OBJECT
 
 public:
-    PatientWindow(QWidget *parent = nullptr, Patient *p = nullptr);
+    PatientWindow(QWidget *parent = nullptr, Patient *p = nullptr, AED *a = nullptr);
     ~PatientWindow();
 
 private slots:
     void on_vFibButton_pressed();
+    void on_pushButton_clicked();
 
 private:
     Ui::PatientWindow *ui;
     Patient *patient;
+    AED *aed;
 
 };
 
