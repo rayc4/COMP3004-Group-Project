@@ -24,6 +24,13 @@ Patient::Patient(bool iC, QString nm):isChild(iC), name(nm)
     });
     heartRateTimer->start(300);
 
+
+    QTimer* survivalTimer = new QTimer();
+    // Connect the timeout signal to your slot
+    connect(survivalTimer, &QTimer::timeout, this, &Patient::updateSurvivalRate);
+    // Start the timer (e.g., every 1000 milliseconds for seconds)
+    survivalTimer->start(1000);
+
 }
 
 Patient::~Patient(){
@@ -50,9 +57,20 @@ void Patient::updateHeartRate(){
     emit sendHeartRate(heartRate);
 
     //qDebug() << "Curent heartrate is" << heartRate;
+
+    //qDebug() << "Current survival addition is " << survivalAddition;
 }
 
+void Patient::updateSurvivalRate(){
+    survivalTime++; //Add one second to the timer.
+    if (survivalTime %60 == 0) //Every minute
+        survivalAddition += 10; //Every minute, chances decrease by 10%
 
+    if (survivalAddition > 100)
+        survivalAddition = 100;
+
+
+}
 
 void Patient::reg(){
 
@@ -61,12 +79,7 @@ void Patient::reg(){
 
     //Generate a value from min to max heart rate
     heartRate = randomGen.bounded(minHR, maxHR+1);
-
-
 }
-
-//[70,74,76,80,...]
-
 
 //Patient's body forces ventricular tachycardia
 void Patient::vTac(){
@@ -89,6 +102,27 @@ void Patient::vFib(){
 void Patient::asystole(){
     heartRate = 0;
 }
+
+//Chance-based on how a patient responds to a shock
+void Patient::respondToShock(){
+    //3 pathways: a) Regular, b) Continued vfib/vtac, or c) asystole
+    //a) 50%, b) 40%, c) 10%
+    int response = -1;
+    int tempState = -1;
+
+    response = randomGen.bounded(0, 100-survivalAddition);
+    if (response < 50) //50% chance
+        tempState = 0; //Return to regular heartbeat
+    else if (response < 90) //40% chance
+        tempState = currState; //Keep the original state
+    else //10% chance
+        tempState = 3; //Set to asystole
+
+    currState = tempState;
+
+}
+
+
 
 int Patient::getHeartRate(){
     QMutexLocker locker(&heartMutex);

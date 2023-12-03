@@ -31,10 +31,12 @@ public:
 
 public slots:
     void updateHeartRate();
+    void updateSurvivalRate();
     void reg();
     void vTac();
     void vFib();
     void asystole();
+    void respondToShock();
 
 private:
 
@@ -46,8 +48,13 @@ private:
     QString name;
     int heartRate;
     QTimer* heartRateTimer;
+    QTimer* survivalTimer;
+
+    int survivalTime;
+    int survivalAddition = 0;
 
     QMutex heartMutex;
+
 
 signals:
     void sendHeartRate(int HR);
