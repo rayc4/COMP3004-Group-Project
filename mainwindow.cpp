@@ -10,6 +10,13 @@ MainWindow::MainWindow(QWidget *parent, Patient *patient, AED *aed)
     ui->setupUi(this);
 
 
+    QTimer* guiTimer = new QTimer();
+    connect(guiTimer, &QTimer::timeout, [=]() {
+        updateGUI();
+    });
+    guiTimer->start(300);
+
+    connect(patientRef, &Patient::sendHeartRate, aedRef->getSensor(), &Sensor::receiveHeartRate);
 }
 
 MainWindow::~MainWindow()
@@ -18,20 +25,14 @@ MainWindow::~MainWindow()
 }
 
 
+void MainWindow::updateGUI(){
+    //qDebug() << "Current GUI heartrate is " << aedRef->getSensor()->getHeartRate();
+    ui->heartRateLCD->display(aedRef->getSensor()->getHeartRate());
+}
+
 void MainWindow::on_pushButton1_clicked()
 {
     std::cout << "Button Pushed" << std::endl;
 }
 
-
-void MainWindow::on_pushButton_clicked()
-{
-    connect(patientRef, &Patient::sendHeartRate, aedRef->getSensor(), &Sensor::receiveHeartRate);
-}
-
-
-void MainWindow::on_pushButton_2_clicked()
-{
-    disconnect(patientRef, &Patient::sendHeartRate, aedRef->getSensor(), &Sensor::receiveHeartRate);
-}
 

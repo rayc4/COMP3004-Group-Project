@@ -21,11 +21,10 @@ private slots:
 
     void on_pushButton1_clicked();
 
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
 
 private:
+    void updateGUI();
+
     Ui::MainWindow *ui;
     Patient *patientRef;
     AED *aedRef;

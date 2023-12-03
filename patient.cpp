@@ -1,8 +1,13 @@
 #include "patient.h"
 
 
-Patient::Patient(bool iC, QString nm):isChild(iC), name(nm)
+Patient::Patient(int a, QString nm):age(a), name(nm)
 {
+
+    if (age < 18)
+        isChild = true;
+    else
+        isChild = false;
 
 
     //Let patient run on it's own thread:
@@ -50,8 +55,9 @@ void Patient::updateHeartRate(){
         vTac();
     else if (currState == 2)
         vFib();
-    else if (currState == 3)
+    else if (currState == 3){
         asystole();
+    }
     else
         currState = -1;
     emit sendHeartRate(heartRate);
@@ -100,7 +106,8 @@ void Patient::vFib(){
 
 //Patient flatlines
 void Patient::asystole(){
-    heartRate = 0;
+    if (!cpr)
+        heartRate = 0;
 }
 
 //Chance-based on how a patient responds to a shock
@@ -127,6 +134,16 @@ int Patient::getHeartRate(){
     return heartRate;
 }
 
+int Patient::getAge(){
+    QMutexLocker locker(&heartMutex);
+    return age;
+}
+
+QString Patient::getName(){
+    QMutexLocker locker(&heartMutex);
+    return name;
+}
+
 void Patient::setState(int state){
     QMutexLocker locker(&heartMutex);
     currState = state;
@@ -134,6 +151,7 @@ void Patient::setState(int state){
 
 //CPR Stuff
 void Patient::patientCPS(){
+    cpr = true;
     int cprBPM = 0;
     click++;
     if (click == 1){
@@ -146,6 +164,8 @@ void Patient::patientCPS(){
         clickTime = currentTime;
 //        qDebug() << cprBPM;
     }
-    emit sendBPM(cprBPM);
+    heartRate = cprBPM;
+
+    //emit sendBPM(cprBPM);
 }
 

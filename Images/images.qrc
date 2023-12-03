@@ -11,5 +11,6 @@
         <file>button5png</file>
         <file>AED.png</file>
         <file>middle button.png</file>
+        <file>human.png</file>
     </qresource>
 </RCC>

@@ -16,25 +16,25 @@ public:
     int getHeartRate();
     bool getCPRstatus() const;
     bool getgoodPlacement() const;
-    int getCPR() const;
+    //int getCPR() const;
 
     //Setters
     void setPlacement(bool placement);
     void setCPRStatus(bool status);
 
 signals:
-      void setCPR(int cBpm);
+      //void setCPR(int cBpm);
 
 public slots:
     void receiveHeartRate(int hr);
 
 private:
     int heartRate;
-    bool CPRStatus = false;
+    //bool CPRStatus = false;
     bool goodPlacement = false;
 
     //CPR
-    int cprBPM = 0;
+    //int cprBPM = 0;
 };
 
 #endif // SENSOR_H

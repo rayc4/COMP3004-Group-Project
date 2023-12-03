@@ -23,13 +23,27 @@ public:
     ~PatientWindow();
 
 private slots:
-    void on_vFibButton_pressed();
     void on_pushButton_clicked();
+
+    void on_killButton_clicked(bool checked);
+
+    void on_vFibButton_clicked(bool checked);
+
+    void on_vTacButton_clicked(bool checked);
+
+    void on_verticalSlider_valueChanged(int value);
+
+
+    void on_leftPadTable_cellPressed(int row, int column);
+
+    void on_rightPadTable_cellPressed(int row, int column);
 
 private:
     Ui::PatientWindow *ui;
     Patient *patient;
     AED *aed;
+
+//    void updateGUI();
 
 };
 

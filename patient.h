@@ -21,13 +21,17 @@ class Patient : public QObject
 {
     Q_OBJECT
 public:
-    Patient(bool iC=false, QString nm=NULL);
+    Patient(int a, QString nm);
     ~Patient();
 
     int getHeartRate();
+    int getAge();
+    QString getName();
+
     void setState(int state); 
 
     void patientCPS();
+
 
 
 
@@ -48,6 +52,7 @@ private:
 
     QRandomGenerator randomGen;
     int currState; //0 = reg, 1 = vtac, 2 = vfib, 3 = asys
+    int age;
     bool isChild;
     QString name;
     int heartRate;
@@ -63,7 +68,12 @@ private:
     QTime clickTime;
     int click = 0;
 
+    bool cpr=false;
+
+
+
 signals:
+
     void sendHeartRate(int HR);
     void sendBPM(int bpm);
 

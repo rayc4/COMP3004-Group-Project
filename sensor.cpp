@@ -17,32 +17,32 @@ void Sensor::setPlacement(bool placement){
     goodPlacement = placement;
 }
 
-//Is set from GUI
-void Sensor::setCPRStatus(bool status){
-    CPRStatus = status;
-    qDebug() << "Current Status: " << CPRStatus;
-}
+////Is set from GUI
+//void Sensor::setCPRStatus(bool status){
+//    CPRStatus = status;
+//    qDebug() << "Current Status: " << CPRStatus;
+//}
 
 //Analyzer will call this function
 bool Sensor::getgoodPlacement() const{
     return goodPlacement;
 }
 
-//Analyzer will call this function
-bool Sensor::getCPRstatus() const{
-    return CPRStatus;
-}
+////Analyzer will call this function
+//bool Sensor::getCPRstatus() const{
+//    return CPRStatus;
+//}
 
 int Sensor::getHeartRate(){
     //heartRate = patientRef->getHeartRate();
     return heartRate;
 }
 
-void Sensor::setCPR(int cBpm){
-    cprBPM = cBpm;
-}
+//void Sensor::setCPR(int cBpm){
+//    cprBPM = cBpm;
+//}
 
-int Sensor::getCPR() const{
-    return cprBPM;
-}
+//int Sensor::getCPR() const{
+//    return cprBPM;
+//}
 
