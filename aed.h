@@ -45,6 +45,9 @@ public:
     void setIsChild(bool child);
     void setBattery(int newBattery);
 
+
+
+
  //last second setters
 
 
