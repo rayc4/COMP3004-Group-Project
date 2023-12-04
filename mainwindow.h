@@ -21,6 +21,7 @@ public:
 
 AED* getAed();
 //last second setters and getters
+Patient* getpatient();
 
 
 void generateNewPatient(); //creates random data for a new patient and assigns it to the pointer in class

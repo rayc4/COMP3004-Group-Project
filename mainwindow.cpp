@@ -31,6 +31,15 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
+Patient* MainWindow::getpatient()
+{
+    if(patientRef)
+    {
+        return patientRef;
+    }
+    return nullptr;
+}
+
 void MainWindow::generateNewPatient()
 {
     //creates random data for a new patient and assigns it to the pointer in class
