@@ -32,7 +32,9 @@ public:
 
 
     Sensor* getSensor();
-    Analyzer* getAnalyzer() const;
+
+    Analyzer* getAnalyzer();
+
     int getCurrentState() const;
     bool getIsChild() const;
     int getBattery() const;
@@ -47,13 +49,14 @@ public:
 
 
 
+
 signals:
         //out
+
         void updatedStatus(QString status);
         void updateText(std::string s);
 
     public slots:
-        //in
         void receiveSensorData(int data);
         void determineCPRStatus();
         void power();

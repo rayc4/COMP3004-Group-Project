@@ -45,7 +45,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="cprPB">
    <property name="geometry">
     <rect>
      <x>270</x>
@@ -394,7 +394,7 @@
   <zorder>leftPadTable</zorder>
   <zorder>rightPadTable</zorder>
   <zorder>cardiacButton</zorder>
-  <zorder>pushButton</zorder>
+  <zorder>cprPB</zorder>
  </widget>
  <resources/>
  <connections/>

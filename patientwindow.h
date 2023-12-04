@@ -19,7 +19,7 @@ class PatientWindow : public QDialog
     Q_OBJECT
 
 public:
-    PatientWindow(QWidget *parent = nullptr,Patient* tempPatient =nullptr,AED *a = nullptr);
+    PatientWindow(QWidget *parent = nullptr);
     ~PatientWindow();
 
 
@@ -31,8 +31,6 @@ public:
 
 
 private slots:
-    void on_pushButton_clicked();
-
     void on_killButton_clicked(bool checked);
 
     void on_vFibButton_clicked(bool checked);

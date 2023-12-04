@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "patient.h"
 #include "aed.h"
+#include "patientwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,7 +18,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
+    void setPatientWindow(PatientWindow* pw);
 
 AED* getAed();
 //last second setters and getters
@@ -25,9 +26,9 @@ Patient* getpatient();
 
 
 void generateNewPatient(); //creates random data for a new patient and assigns it to the pointer in class
-void communicatenewPatient(); //calls the setter for all the functions that need to get the updated patient
+void communicateNewPatient(); //calls the setter for all the functions that need to get the updated patient
 
-void createNewPatient(); //deals with all the calls for creating and communicating the new patient
+void initPatient(); //deals with all the calls for creating and communicating the new patient
 
 
 private slots:
@@ -39,6 +40,7 @@ private:
     Ui::MainWindow *ui;
     Patient *patientRef;
     AED *aedRef;
+    PatientWindow* patientWindow;
 
 };
 #endif // MAINWINDOW_H

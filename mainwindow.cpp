@@ -10,8 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
     //mainwindow OWNS patient
     ui->setupUi(this);
 
-    patientRef = new Patient(69, "Bob");
-
     aedRef = new AED(this);
 
     QTimer* guiTimer = new QTimer();
@@ -26,9 +24,18 @@ MainWindow::MainWindow(QWidget *parent)
         //analyzer
 
     //connect(patientRef, &Patient::sendHeartRate, aedRef->getSensor(), &Sensor::receiveHeartRate);
-    //connect(ui->powerPB, SIGNAL(clicked()), aedRef, SLOT(power()));
+
+    // Power button
+    connect(ui->powerPB, SIGNAL(clicked()), aedRef, SLOT(power()));
     connect(aedRef, SIGNAL(updateText(std::string)), this, SLOT(updateText(std::string)));
 
+    // THIS NEEDS TO BE IN THE SENSOR CLASS
+    // connect(ui->cprPB, SIGNAL(clicked()), aed, SLOT(determineCPRStatus()));
+
+}
+
+void MainWindow::setPatientWindow(PatientWindow* pw){
+    patientWindow = pw;
 }
 
 Patient* MainWindow::getpatient()
@@ -47,24 +54,28 @@ void MainWindow::generateNewPatient()
     delete patientRef;
     patientRef = tempP;
 }
-void MainWindow::communicatenewPatient()
+
+void MainWindow::communicateNewPatient()
 {
     //calls the setter for all the functions that need to get the updated patient
+
 
     //TODO: Call the Connected function for setting patient to the SENSOR here
     //TODO: Pass the new Patient to patient window here
 
     aedRef->getSensor()->setPatient(patientRef);
+
+    patientWindow->setPatient(patientRef);
+
 }
 
 
-void MainWindow::createNewPatient()
+void MainWindow::initPatient()
 {
     //deals with all the calls for creating and communicating the new patient
     generateNewPatient();
-    communicatenewPatient();
+    communicateNewPatient();
 }
-
 
 
 MainWindow::~MainWindow()

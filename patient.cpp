@@ -166,6 +166,7 @@ void Patient::setState(int state){
 
 //CPR Stuff
 void Patient::patientCPS(){
+    qDebug() << "CPS";
     cpr = true;
 //    QTimer::singleShot(3000, this, &Patient::falseCPR);
     int cprBPM = 0;
