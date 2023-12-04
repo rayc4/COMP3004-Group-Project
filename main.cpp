@@ -10,17 +10,17 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 
+    //mainwindow creates AED
+    //mainwidnow has AED getter
 
+    //patientwindow is created, pass mainwindow getter through connt argument
 
+    MainWindow *w = new MainWindow(nullptr);
+    w->show();
 
-    Patient *patient = new Patient(48, "Bob");
-    AED *aed = new AED(nullptr);
-
-    PatientWindow *patientW = new PatientWindow(nullptr, patient, aed);
+    PatientWindow *patientW = new PatientWindow(w,w->getAed());
     patientW->show();
 
-    MainWindow *w = new MainWindow(nullptr, patient, aed);
-    w->show();
 
     //This does not work at the moment:
     //delete patient;

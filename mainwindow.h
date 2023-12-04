@@ -14,8 +14,13 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr, Patient *p = nullptr, AED *a = nullptr);
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+
+
+AED* getAed();
+
 
 private slots:
 
@@ -26,7 +31,8 @@ private:
     void updateGUI();
 
     Ui::MainWindow *ui;
-    Patient *patientRef;
+    //Patient *patientRef;
     AED *aedRef;
+
 };
 #endif // MAINWINDOW_H

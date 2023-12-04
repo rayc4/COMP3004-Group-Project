@@ -2,13 +2,13 @@
 #include "ui_mainwindow.h"
 #include "iostream"
 
-MainWindow::MainWindow(QWidget *parent, Patient *patient, AED *aed)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow),
-      patientRef(patient), aedRef(aed)
+    , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
+    aedRef = new AED(this);
 
     QTimer* guiTimer = new QTimer();
     connect(guiTimer, &QTimer::timeout, [=]() {
@@ -16,7 +16,11 @@ MainWindow::MainWindow(QWidget *parent, Patient *patient, AED *aed)
     });
     guiTimer->start(300);
 
-    connect(patientRef, &Patient::sendHeartRate, aedRef->getSensor(), &Sensor::receiveHeartRate);
+    //connect(patientRef, &Patient::sendHeartRate, aedRef->getSensor(), &Sensor::receiveHeartRate);
+    //replace with observer and logical steps from
+        //sensor
+        //analyzer
+
 }
 
 MainWindow::~MainWindow()
@@ -24,6 +28,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+AED* MainWindow::getAed()
+{
+    if(aedRef)
+    {
+        return aedRef;
+    }
+    return nullptr;
+}
 
 void MainWindow::updateGUI(){
     //qDebug() << "Current GUI heartrate is " << aedRef->getSensor()->getHeartRate();

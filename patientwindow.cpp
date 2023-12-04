@@ -2,14 +2,14 @@
 #include "patientwindow.h"
 
 
-PatientWindow::PatientWindow(QWidget *parent, Patient *p, AED *a)
-    :QDialog(parent)
-    , ui(new Ui::PatientWindow)
-      , patient(p), aed(a)
+PatientWindow::PatientWindow(QWidget *parent, AED *a)
+    :QDialog(parent),
+      ui(new Ui::PatientWindow),
+      aed(a)
 {
     ui->setupUi(this);
 
-
+    patient = new Patient(69, "Bob");
 
 //    QTimer* guiTimer = new QTimer();
 //    connect(guiTimer, &QTimer::timeout, [=]() {
@@ -37,7 +37,14 @@ void PatientWindow::on_pushButton_clicked(){
     aed->determineCPRStatus();
 }
 
-
+Patient* PatientWindow::getPatient()
+{
+    if(patient)
+    {
+    return patient;
+    }
+    return nullptr;
+}
 
 
 void PatientWindow::on_killButton_clicked(bool checked)
