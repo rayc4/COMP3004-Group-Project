@@ -51,7 +51,7 @@ void MainWindow::generateNewPatient()
 {
     //creates random data for a new patient and assigns it to the pointer in class
     Patient *tempP = new Patient(69, "Bob");
-    delete patientRef;
+    //delete patientRef;
     patientRef = tempP;
 }
 

@@ -123,7 +123,8 @@ void PatientWindow::on_vTacButton_clicked(bool checked)
 
 void PatientWindow::on_verticalSlider_valueChanged(int value)
 {
-    aed->getSensor()->setDepth(value);
+    //circular call
+    //aed->getSensor()->setDepth(value);
     //qDebug() << "Current value is " << value;
 }
 
