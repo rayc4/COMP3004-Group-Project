@@ -60,7 +60,7 @@ void AED::determineCPRStatus(){
     }
 }
 
-Sensor* AED::getSensor() const{
+Sensor* AED::getSensor(){
     return sensor;
 }
 

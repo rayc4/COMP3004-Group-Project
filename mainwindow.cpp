@@ -44,7 +44,8 @@ void MainWindow::generateNewPatient()
 {
     //creates random data for a new patient and assigns it to the pointer in class
     Patient *tempP = new Patient(69, "Bob");
-      patientRef = tempP;
+    delete patientRef;
+    patientRef = tempP;
 }
 void MainWindow::communicatenewPatient()
 {
@@ -52,6 +53,8 @@ void MainWindow::communicatenewPatient()
 
     //TODO: Call the Connected function for setting patient to the SENSOR here
     //TODO: Pass the new Patient to patient window here
+
+    aedRef->getSensor()->setPatient(patientRef);
 }
 
 

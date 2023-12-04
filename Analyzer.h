@@ -2,7 +2,9 @@
 #define ANALYZER_H
 
 #include <string>
+#include <deque>
 #include "sensor.h"
+
 
 class Analyzer : public QObject {
     Q_OBJECT
@@ -14,7 +16,7 @@ private:
     bool shockState;
     int cBPM;
     bool goodCPR;
-
+    std::deque<int> heartbits;
 
 
 public:
@@ -41,6 +43,9 @@ public:
     */
     bool checkCPR(int cBPM);
 
+
+
+    void CollectHeart(int hbit);
 
 
 //signals:
