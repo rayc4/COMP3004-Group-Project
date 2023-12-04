@@ -28,9 +28,9 @@ PatientWindow::~PatientWindow(){
 }
 
 
-//void PatientWindow::updateGUI(){
-
-//}
+void PatientWindow::updateGUI(){
+    //No implementation here yet
+}
 
 void PatientWindow::on_pushButton_clicked(){
     patient->patientCPS();
@@ -110,7 +110,8 @@ void PatientWindow::on_vTacButton_clicked(bool checked)
 
 void PatientWindow::on_verticalSlider_valueChanged(int value)
 {
-    qDebug() << "Current value is " << value;
+    aed->getSensor()->setDepth(value);
+    //qDebug() << "Current value is " << value;
 }
 
 

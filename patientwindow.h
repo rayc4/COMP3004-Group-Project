@@ -46,7 +46,7 @@ private:
     Patient *patient;
     AED *aed;
 
-//    void updateGUI();
+    void updateGUI();
 
 };
 

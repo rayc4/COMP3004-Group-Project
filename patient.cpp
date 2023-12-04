@@ -45,7 +45,7 @@ Patient::~Patient(){
 
 
 void Patient::updateHeartRate(){
-    qDebug() << "-----------" << cpr;
+    //qDebug() << "-----------" << cprReset;
     QMutexLocker locker(&heartMutex);
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
     if (cpr){
