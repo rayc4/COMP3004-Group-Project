@@ -46,8 +46,20 @@ public:
     void setBattery(int newBattery);
 
 
+//STEPS FOR EAD main steps
+    //chain logic
 
+    void checkResponsiveness();
+    void callEmergencyServices();
+    void checkAirway();
+    void attachDefibPad(bool padPlacement);
+    void checkForShock();
+    void instructCPR();
+    void checkAirBreathing();
 
+    //extra?
+
+    void prepareForShock(int i);
  //last second setters
 
 
