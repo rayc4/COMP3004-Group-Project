@@ -18,10 +18,11 @@ int main(int argc, char *argv[])
     MainWindow *w = new MainWindow(nullptr);
     w->show();
 
-    PatientWindow *patientW = new PatientWindow(w,w->getpatient(),w->getAed());
-
+    PatientWindow *patientW = new PatientWindow(w);
     patientW->show();
 
+    w->setPatientWindow(patientW);
+    w->initPatient();
 
     //This does not work at the moment:
     //delete patient;

@@ -32,12 +32,6 @@ public:
     void setState(int state); 
     void setCPR(bool c);
 
-    void patientCPS();
-
-
-
-
-
 public slots:
     void updateHeartRate();
     void updateSurvivalRate();
@@ -48,6 +42,8 @@ public slots:
     void asystole();
     void respondToShock();
     void falseCPR();
+
+    void patientCPS();
 
 private:
 

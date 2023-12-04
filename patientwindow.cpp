@@ -2,17 +2,10 @@
 #include "patientwindow.h"
 
 
-PatientWindow::PatientWindow(QWidget *parent, Patient* tempPatient,AED *a)
-    :QDialog(parent),
-      ui(new Ui::PatientWindow),
-      patient(tempPatient),
-      aed(a)
-
+PatientWindow::PatientWindow(QWidget *parent)
+    :QDialog(parent), ui(new Ui::PatientWindow)
 {
     ui->setupUi(this);
-
-    //patient = tempPatient;
-
 
 //    QTimer* guiTimer = new QTimer();
 //    connect(guiTimer, &QTimer::timeout, [=]() {
@@ -20,8 +13,10 @@ PatientWindow::PatientWindow(QWidget *parent, Patient* tempPatient,AED *a)
 //    });
 //    guiTimer->start(300);
 
-   ui->nameLabel->setText(QString("Patient Name: %1").arg(patient->getName()));
-   ui->ageLabel->setText(QString("Age: %1").arg(patient->getAge()));
+//    void PatientWindow::on_pushButton_clicked(){
+//        patient->patientCPS();
+//        aed->determineCPRStatus();
+//    }
 
 }
 
@@ -31,6 +26,10 @@ void PatientWindow::setPatient(Patient* tempPatient)
     {
         patient = tempPatient;
     }
+    ui->nameLabel->setText(QString("Patient Name: %1").arg(patient->getName()));
+    ui->ageLabel->setText(QString("Age: %1").arg(patient->getAge()));
+
+    connect(ui->cprPB, SIGNAL(clicked()), patient, SLOT(patientCPS()));
 }
 
 
@@ -41,12 +40,7 @@ PatientWindow::~PatientWindow(){
 
 
 void PatientWindow::updateGUI(){
-    //No implementation here yet
-}
 
-void PatientWindow::on_pushButton_clicked(){
-    patient->patientCPS();
-    aed->determineCPRStatus();
 }
 
 Patient* PatientWindow::getPatient()

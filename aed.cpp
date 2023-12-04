@@ -52,6 +52,7 @@ void AED::receiveSensorData(int data){
 
 //ONLY CALL THIS FUNCTION WHEN YOU WANT TO CHECK CPR (LOGIC MISSING)
 void AED::determineCPRStatus(){
+    qDebug() << analyzer;
     goodCPR = analyzer->checkCPR(sensor->getHeartRate());
     if (goodCPR){
         qDebug() << "GOOD";
@@ -60,7 +61,7 @@ void AED::determineCPRStatus(){
     }
 }
 
-Sensor* AED::getSensor() const{
+Sensor* AED::getSensor(){
     return sensor;
 }
 

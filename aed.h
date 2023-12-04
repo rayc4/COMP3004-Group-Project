@@ -31,8 +31,8 @@ public:
     void setWaveForm(); // temp
 
 
-    Sensor* getSensor() const;
-    Analyzer* getAnalyzer() const;
+    Sensor* getSensor();
+    Analyzer* getAnalyzer();
     int getCurrentState() const;
     bool getIsChild() const;
     int getBattery() const;
@@ -44,16 +44,12 @@ public:
     void setBattery(int newBattery);
 
  //last second setters
-    void
-
 
     signals:
-        //out
         void updatedStatus(QString status);
         void updateText(std::string s);
 
     public slots:
-        //in
         void receiveSensorData(int data);
         void determineCPRStatus();
         void power();
