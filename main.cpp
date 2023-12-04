@@ -9,7 +9,6 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-
     //mainwindow creates AED
     //mainwidnow has AED getter
 
@@ -19,6 +18,7 @@ int main(int argc, char *argv[])
     w->show();
 
     PatientWindow *patientW = new PatientWindow(w,w->getAed());
+
     patientW->show();
 
 

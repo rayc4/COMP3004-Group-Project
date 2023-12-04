@@ -1,4 +1,5 @@
 #include "aed.h"
+#include <QDebug>
 
 AED::AED(QObject *parent)
     : QObject(parent)
@@ -16,9 +17,15 @@ void AED::updateAED()
 
 }
 
-void AED::powerOn()
+void AED::power()
 {
-
+    if(poweredOn){
+        poweredOn = false;
+        updateText("");
+    }else{
+        poweredOn = true;
+        updateText("Powered On");
+    }
 }
 
 bool AED::guidePlacement(bool isChild)

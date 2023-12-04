@@ -7,9 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     aedRef = new AED(this);
-
     QTimer* guiTimer = new QTimer();
     connect(guiTimer, &QTimer::timeout, [=]() {
         updateGUI();
@@ -20,6 +18,10 @@ MainWindow::MainWindow(QWidget *parent)
     //replace with observer and logical steps from
         //sensor
         //analyzer
+
+    //connect(patientRef, &Patient::sendHeartRate, aedRef->getSensor(), &Sensor::receiveHeartRate);
+    //connect(ui->powerPB, SIGNAL(clicked()), aedRef, SLOT(power()));
+    connect(aedRef, SIGNAL(updateText(std::string)), this, SLOT(updateText(std::string)));
 
 }
 
@@ -43,9 +45,9 @@ void MainWindow::updateGUI(){
     ui->heartRateLCD->display(aedRef->getSensor()->getHeartRate());
 }
 
-void MainWindow::on_pushButton1_clicked()
-{
-    std::cout << "Button Pushed" << std::endl;
+void MainWindow::updateText(std::string s){
+    QString qs = QString::fromStdString(s);
+    ui->textBrowser->setText(qs);
 }
 
 
