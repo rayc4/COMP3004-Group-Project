@@ -18,9 +18,7 @@ public:
     ~MainWindow();
 
 private slots:
-
-    void on_pushButton1_clicked();
-
+    void updateText(std::string s);
 
 private:
     void updateGUI();

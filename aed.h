@@ -2,28 +2,29 @@
 #define AED_H
 
 #include <QObject>
+#include <QMainWindow>
 #include "sensor.h"
 #include "Analyzer.h"
-#include "patient.h"
 
 class AED : public QObject
 {
     Q_OBJECT
 
 private:
+    QMainWindow* window;
     Sensor* sensor;
     Analyzer* analyzer;
     int currentState;
     bool isChild;
     int battery;
     bool goodCPR;
+    bool poweredOn = false;
 
 public:
     explicit AED(QObject *parent = nullptr);
     ~AED();
 
     void updateAED();
-    void powerOn();
     bool guidePlacement(bool isChild);
     bool readyToShock();
     void setMessage(const std::string& audioMessage, const std::string& displayMessage);
@@ -46,11 +47,13 @@ public:
     signals:
         //out
         void updatedStatus(QString status);
+        void updateText(std::string s);
 
     public slots:
         //in
         void receiveSensorData(int data);
         void determineCPRStatus();
+        void power();
 
 };
 

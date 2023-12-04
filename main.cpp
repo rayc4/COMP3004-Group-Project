@@ -9,10 +9,6 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-
-
-
-
     Patient *patient = new Patient(48, "Bob");
     AED *aed = new AED(nullptr);
 
