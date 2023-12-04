@@ -2,14 +2,17 @@
 #include "patientwindow.h"
 
 
-PatientWindow::PatientWindow(QWidget *parent, AED *a)
+PatientWindow::PatientWindow(QWidget *parent, Patient* tempPatient,AED *a)
     :QDialog(parent),
       ui(new Ui::PatientWindow),
+      patient(tempPatient),
       aed(a)
+
 {
     ui->setupUi(this);
 
-    patient = new Patient(69, "Bob");
+    //patient = tempPatient;
+
 
 //    QTimer* guiTimer = new QTimer();
 //    connect(guiTimer, &QTimer::timeout, [=]() {
@@ -21,6 +24,15 @@ PatientWindow::PatientWindow(QWidget *parent, AED *a)
    ui->ageLabel->setText(QString("Age: %1").arg(patient->getAge()));
 
 }
+
+void PatientWindow::setPatient(Patient* tempPatient)
+{
+    if(tempPatient)
+    {
+        patient = tempPatient;
+    }
+}
+
 
 PatientWindow::~PatientWindow(){
     delete ui;

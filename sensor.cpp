@@ -1,9 +1,20 @@
 #include "sensor.h"
 
 
-Sensor::Sensor(){
+Sensor::Sensor(Patient* aPatient): pPatient(aPatient)
+{
     //Why am I here...
 }
+
+
+void Sensor::setPatient(Patient* tempPatient)
+{
+    if(tempPatient)
+    {
+        pPatient = tempPatient;
+    }
+}
+
 
 void Sensor::receiveHeartRate(int hr){
     heartRate = hr;

@@ -19,11 +19,16 @@ class PatientWindow : public QDialog
     Q_OBJECT
 
 public:
-    PatientWindow(QWidget *parent = nullptr, AED *a = nullptr);
+    PatientWindow(QWidget *parent = nullptr,Patient* tempPatient =nullptr,AED *a = nullptr);
     ~PatientWindow();
 
 
     Patient* getPatient();
+
+    //last second setters
+
+    void setPatient(Patient* aNewPatient);
+
 
 private slots:
     void on_pushButton_clicked();

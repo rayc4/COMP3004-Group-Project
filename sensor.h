@@ -10,7 +10,7 @@ class Sensor : public QObject
     Q_OBJECT
 
 public:
-    Sensor();
+    Sensor(Patient* aPatient = nullptr);
 
     //Getters
     int getHeartRate();
@@ -22,7 +22,10 @@ public:
     void setPlacement(bool placement);
     void setDepth(int depth);
 
+    //last second setters
+    void setPatient(Patient* tempPatient);
 
+    Patient* pPatient;
 signals:
       //void setCPR(int cBpm);
 
