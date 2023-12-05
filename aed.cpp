@@ -30,19 +30,17 @@ void AED::attachDefibPad()
 
     bool padPlacement = true;
 
-    //function 4
     if (padPlacement)
     {
         //next step
         checkForShock();
     } else {
-        qDebug() << "Try again place the pad correctly";
+        qDebug() << "[SPEAKER] Try again place the pad correctly";
         // Retry || bypass to different step
     }
 }
 void AED::checkForShock()
 {
-    //function 5
     int heartState = analyzer->analyzeHeart();
 
      // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
@@ -122,8 +120,6 @@ AED::AED(QObject *parent)
     waitTimer = new QTimer(this);
     waitTimer->setSingleShot(true);
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(enterNextState()));
-
-    connect(this, SIGNAL(stateDone()), this, SLOT(enterNextState())); // to avoid a large function call stack
 }
 
 AED::~AED(){
