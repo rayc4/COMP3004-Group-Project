@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QRadioButton>
 #include "patient.h"
 #include "aed.h"
 #include "patientwindow.h"
@@ -20,19 +21,20 @@ public:
 
     void setPatientWindow(PatientWindow* pw);
 
-AED* getAed();
-//last second setters and getters
-Patient* getpatient();
+    AED* getAed();
+    //last second setters and getters
+    Patient* getpatient();
 
 
-void generateNewPatient(); //creates random data for a new patient and assigns it to the pointer in class
-void communicateNewPatient(); //calls the setter for all the functions that need to get the updated patient
+    void generateNewPatient(); //creates random data for a new patient and assigns it to the pointer in class
+    void communicateNewPatient(); //calls the setter for all the functions that need to get the updated patient
 
-void initPatient(); //deals with all the calls for creating and communicating the new patient
+    void initPatient(); //deals with all the calls for creating and communicating the new patient
 
 
 private slots:
     void updateText(std::string s);
+    void updateState(int state);
 
 private:
     void updateGUI();
@@ -41,6 +43,7 @@ private:
     Patient *patientRef;
     AED *aedRef;
     PatientWindow* patientWindow;
+    QList<QRadioButton*> stateRBs;
 
 };
 #endif // MAINWINDOW_H

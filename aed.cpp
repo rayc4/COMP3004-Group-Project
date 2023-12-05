@@ -6,42 +6,40 @@ AED::AED(QObject *parent)
 {
     sensor = new Sensor();
     analyzer = new Analyzer();
+
+    stateFunctions.push_back(&AED::checkResponsiveness);
+
+//    functions.insert(functions.end(),
+//                      {&AED::checkResponsiveness,
+//                       &AED::callEmergencyServices,
+//                       &AED::checkAirway,
+//                       &AED::attachDefibPad,
+//                       &AED::checkForShock,
+//                       &AED::instructCPR,
+//                       &AED::checkAirBreathing
+//                      });
 }
+
+void AED::updateAED()
+{
+    for(auto func : stateFunctions)
+    {
+    (this->*func)();
+    }
+
+    for(FuncVector::iterator i = stateFunctions.begin(); i != stateFunctions.end(); i++) {
+        //(*i)();l
+        (this->**i)();
+    }
+}
+
 
 AED::~AED(){
 
 }
 
-void AED::updateAED()
-{
-    //    QTimer *timer = new QTimer(this);
-    //    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(updateAED()));
-    //    timer->start(1000);
-    //having this at the end will recreate a stereotypical engine Update function
 
 
-    //UPDATE HERE
-    //THIS CAN MIMIC UNITY UPDATE
-    //either this kickstart the checkers
-    //or
-    //step on step runs here
-
-
-    //option 1: options have returns that unless met, we keep calling from here
-
-    //option 2: here we run on a start point until the user has settle which step start at (1 or shock)
-}
-
-void AED::power()
-{
-    if(poweredOn){
-        poweredOn = false;
-        updateText("");
-    }else{
-        poweredOn = true;
-        updateText("Powered On");
-    }
-}
 
 bool AED::guidePlacement(bool isChild)
 {
@@ -60,9 +58,9 @@ void AED::setMessage(const std::string& audioMessage, const std::string& display
 
 }
 
-void AED::receiveSensorData(int data){
+//void AED::receiveSensorData(int data){
 
-}
+//}
 
 
 //ONLY CALL THIS FUNCTION WHEN YOU WANT TO CHECK CPR (LOGIC MISSING)
@@ -81,9 +79,8 @@ Sensor* AED::getSensor(){
 }
 
 
+
 //AED steps logic
-
-
 void AED::checkResponsiveness()
 {
     //function 1
@@ -113,17 +110,25 @@ void AED::checkAirway()
 {
     //function 3
     qDebug() << "Check for breathing and airway of patient";
+
     // Retry || bypass to different step
     QTimer* timer = new QTimer();
     connect(timer, &QTimer::timeout, [=]() {
     });
     timer->setSingleShot(true); //make sure single use timers are single shot
     timer->start(300);
-    attachDefibPad(/* padPlacement */ true); // l
+    attachDefibPad(/* padPlacement */); // l
+
+        // Retry || bypass to different step
+        attachDefibPad(); // l
 
 }
-void AED::attachDefibPad(bool padPlacement)
+void AED::attachDefibPad()
 {
+    // TODO: get padPlacement =============================================
+
+    bool padPlacement = true;
+
     //function 4
     if (padPlacement)
     {
@@ -239,3 +244,38 @@ void AED::checkAirBreathing()
     qDebug()<< "Check if the patient is breathing";
     // Logic for check breathing
 }
+
+
+
+
+
+
+void AED::power()
+{
+    if(state != -1){
+        state = -1;
+        updateText("");
+    }else{
+        state = 0;
+        updateText("Powered On");
+        // TODO: "self-check"
+        updateAED();
+    }
+}
+
+
+
+
+
+int AED::getState() const{
+    return state;
+}
+
+void AED::setState(int state){
+    this->state = state;
+    updateState(state);
+}
+
+
+
+

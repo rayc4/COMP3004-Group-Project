@@ -79,6 +79,14 @@ int Analyzer::analyzeHeart()
     return heartState; // Placeholder
 }
 
+bool Analyzer::checkCPR(int cBPM){
+    //qDebug() << cBPM;
+    //CPR BPM 100 - 120 (official requirement)
+    //For testing purposes, we did 90 - 130
+    // CPR BPM is considered good if it's between 90 and 130
+    return (cBPM >= 90 && cBPM <= 130);
+}
+
 
 bool Analyzer::CPRFeedback(const std::string& feedback) {
     return true; // Placeholder
@@ -119,15 +127,3 @@ void Analyzer::setShockState(bool state) {
     shockState = state;
 }
 
-bool Analyzer::checkCPR(int cBPM){
-    //qDebug() << cBPM;
-    //CPR BPM 100 - 120 (official requirement)
-    //For testing purposes, we did 90 - 130
-
-    if (cBPM >=  90 && cBPM <= 130){
-        goodCPR = true;
-    }else{
-        goodCPR = false;
-    }
-    return goodCPR;
-}
