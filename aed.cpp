@@ -14,7 +14,13 @@ AED::~AED(){
 
 void AED::updateAED()
 {
-//UPDATE HERE
+    //    QTimer *timer = new QTimer(this);
+    //    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(updateAED()));
+    //    timer->start(1000);
+    //having this at the end will recreate a stereotypical engine Update function
+
+
+    //UPDATE HERE
     //THIS CAN MIMIC UNITY UPDATE
     //either this kickstart the checkers
     //or
@@ -80,9 +86,15 @@ Sensor* AED::getSensor(){
 
 void AED::checkResponsiveness()
 {
-//function 1
+    //function 1
     qDebug() << "Check responsiveness of the patient.";
     // Next step
+
+    QTimer* timer = new QTimer();
+    connect(timer, &QTimer::timeout, [=]() {
+    });
+    timer->setSingleShot(true); //make sure single use timers are single shot
+    timer->start(300);
     callEmergencyServices();
 }
 void AED::callEmergencyServices()
@@ -90,14 +102,24 @@ void AED::callEmergencyServices()
     //function 2
     qDebug()  << "Call emergency services.";
     // Next step
+    QTimer* timer = new QTimer();
+    connect(timer, &QTimer::timeout, [=]() {
+    });
+    timer->setSingleShot(true); //make sure single use timers are single shot
+    timer->start(300);
     checkAirway();
 }
 void AED::checkAirway()
 {
     //function 3
     qDebug() << "Check for breathing and airway of patient";
-        // Retry || bypass to different step
-        attachDefibPad(/* padPlacement */ true); // l
+    // Retry || bypass to different step
+    QTimer* timer = new QTimer();
+    connect(timer, &QTimer::timeout, [=]() {
+    });
+    timer->setSingleShot(true); //make sure single use timers are single shot
+    timer->start(300);
+    attachDefibPad(/* padPlacement */ true); // l
 
 }
 void AED::attachDefibPad(bool padPlacement)
@@ -108,45 +130,80 @@ void AED::attachDefibPad(bool padPlacement)
         //next step
         checkForShock();
     } else {
+        QTimer* timer = new QTimer();
+        connect(timer, &QTimer::timeout, [=]() {
+        });
+        timer->setSingleShot(true); //make sure single use timers are single shot
+        timer->start(300);
+
         qDebug() << "Try again place the pad correctly";
         // Retry || bypass to different step
     }
 }
 void AED::checkForShock()
 {
+    QTimer* timer = new QTimer();
+    connect(timer, &QTimer::timeout, [=]() {
+    });
+    timer->setSingleShot(true); //make sure single use timers are single shot
+    timer->start(300);
+
     //function 5
     int heartState = analyzer->analyzeHeart();
 
-     // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
+    // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
     //TODO: talk to the others, pls i dont want switch case
     //Switch case implemented so it can mimic Zuhayr and Justin design thought process
 
-     switch(heartState) {
-         case 1: // Vtac
-         case 2: // Vfib
-             qDebug() << "Shock Advised. Preparing to shock.";
-             prepareForShock(0);
-             break;
-         case 0: // Regular
-         case 3: // Asystole
-         case 4: // Unknown
-         default:
-             qDebug() << "No shock advised.";
-             instructCPR(); //CPR instructions
-             break;
-     }
+    switch(heartState) {
+    case 1:// Vtac
+        qDebug() << "Shock Advised. Preparing to shock.";
+        prepareForShock(0);
+        qDebug() << "we are ready to shock...and you pressed it!";
+        instructCPR();
+        break;
+    case 2: // Vfib
+        qDebug() << "Shock Advised. Preparing to shock.";
+        prepareForShock(0);
+        qDebug() << "we are ready to shock...and you pressed it!";
+        instructCPR();
+        break;
+    case 0: // Regular
+        qDebug() << "regular bit, cant shock";
+        checkForShock();
+        break;
+    case 3: // Asystole.
+        qDebug() << "Asystole, cant shock";
+        checkForShock();
+        break;
+    case 4: // Unknown
+        qDebug() << "bip bop something went wrong";
+        checkForShock();
+        break;
+    default:
+        qDebug() << "No shock advised.";
+        //instructCPR(); //CPR instructions
+        break;
+    }
 }
 
 
 void AED::prepareForShock(int i)
 {
+//delete recursion
+//    QTimer* timer = new QTimer();
+//    connect(timer, &QTimer::timeout, [=]() {
+//    });
+//    timer->setSingleShot(true); //make sure single use timers are single shot
+//    timer->start(300);
+
     //function 5.5
     //function 5 helper
     if(i>=100)
     {
-    qDebug() << "Charge ready";
-    qDebug() << "Press the shock button now.";
-    return;
+        qDebug() << "Charge ready";
+        qDebug() << "Press the shock button now.";
+        return;
     }
     // Simulate battery charging
     qDebug() << "CHARGING";
@@ -160,11 +217,18 @@ void AED::prepareForShock(int i)
 void AED::instructCPR()
 {
     //function 6
+    QTimer* timer = new QTimer();
+    connect(timer, &QTimer::timeout, [=]() {
+    });
+    timer->setSingleShot(true); //make sure single use timers are single shot
+    timer->start(300);
 
     qDebug()<< "Instructing CPR!!!";
     // CPR instruction here
     //CPR quality here
 
+    timer->start(300);
+    qDebug()<< "thats crazy CPR you saved them!!!!";
     // Retry || bypass to different step
     checkAirBreathing();
 }
