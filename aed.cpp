@@ -1,83 +1,7 @@
 #include "aed.h"
 #include <QDebug>
 
-AED::AED(QObject *parent)
-    : QObject(parent)
-{
-    sensor = new Sensor();
-    analyzer = new Analyzer();
-}
-
-AED::~AED(){
-
-}
-
-void AED::updateAED()
-{
-//UPDATE HERE
-    //THIS CAN MIMIC UNITY UPDATE
-    //either this kickstart the checkers
-    //or
-    //step on step runs here
-
-
-    //option 1: options have returns that unless met, we keep calling from here
-
-    //option 2: here we run on a start point until the user has settle which step start at (1 or shock)
-}
-
-void AED::power()
-{
-    if(poweredOn){
-        poweredOn = false;
-        updateText("");
-    }else{
-        poweredOn = true;
-        updateText("Powered On");
-    }
-}
-
-bool AED::guidePlacement(bool isChild)
-{
-    // true or false
-    return true; // Placeholder
-}
-
-bool AED::readyToShock()
-{
-    //  true or false
-    return true; // Placeholder
-}
-
-void AED::setMessage(const std::string& audioMessage, const std::string& displayMessage)
-{
-
-}
-
-void AED::receiveSensorData(int data){
-
-}
-
-
-//ONLY CALL THIS FUNCTION WHEN YOU WANT TO CHECK CPR (LOGIC MISSING)
-void AED::determineCPRStatus(){
-    qDebug() << analyzer;
-    goodCPR = analyzer->checkCPR(sensor->getHeartRate());
-    if (goodCPR){
-        qDebug() << "GOOD";
-    }else{
-        qDebug() << "BAD";
-    }
-}
-
-Sensor* AED::getSensor(){
-    return sensor;
-}
-
-
 //AED steps logic
-
-
 void AED::checkResponsiveness()
 {
 //function 1
@@ -97,11 +21,15 @@ void AED::checkAirway()
     //function 3
     qDebug() << "Check for breathing and airway of patient";
         // Retry || bypass to different step
-        attachDefibPad(/* padPlacement */ true); // l
+        attachDefibPad(); // l
 
 }
-void AED::attachDefibPad(bool padPlacement)
+void AED::attachDefibPad()
 {
+    // TODO: get padPlacement =============================================
+
+    bool padPlacement = true;
+
     //function 4
     if (padPlacement)
     {
@@ -174,4 +102,87 @@ void AED::checkAirBreathing()
     //function 7
     qDebug()<< "Check if the patient is breathing";
     // Logic for check breathing
+}
+
+void test(){
+
+}
+AED::AED(QObject *parent)
+    : QObject(parent)
+{
+    sensor = new Sensor();
+    analyzer = new Analyzer();
+
+    stateFunctions.push_back(&AED::checkResponsiveness);
+
+//    functions.insert(functions.end(),
+//                      {&AED::checkResponsiveness,
+//                       &AED::callEmergencyServices,
+//                       &AED::checkAirway,
+//                       &AED::attachDefibPad,
+//                       &AED::checkForShock,
+//                       &AED::instructCPR,
+//                       &AED::checkAirBreathing
+//                      });
+}
+
+AED::~AED(){
+
+}
+
+void AED::updateAED()
+{
+    for(FuncVector::iterator i = stateFunctions.begin(); i != stateFunctions.end(); i++) {
+        (*i)();
+    }
+}
+
+void AED::power()
+{
+    if(state != -1){
+        state = -1;
+        updateText("");
+    }else{
+        state = 0;
+        updateText("Powered On");
+        // TODO: "self-check"
+        updateAED();
+    }
+}
+
+bool AED::guidePlacement(bool isChild)
+{
+    // true or false
+    return true; // Placeholder
+}
+
+bool AED::readyToShock()
+{
+    //  true or false
+    return true; // Placeholder
+}
+
+int AED::getState() const{
+    return state;
+}
+
+void AED::setState(int state){
+    this->state = state;
+    updateState(state);
+}
+
+
+//ONLY CALL THIS FUNCTION WHEN YOU WANT TO CHECK CPR (LOGIC MISSING)
+void AED::determineCPRStatus(){
+    qDebug() << analyzer;
+    goodCPR = analyzer->checkCPR(sensor->getHeartRate());
+    if (goodCPR){
+        qDebug() << "GOOD";
+    }else{
+        qDebug() << "BAD";
+    }
+}
+
+Sensor* AED::getSensor(){
+    return sensor;
 }

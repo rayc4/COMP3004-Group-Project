@@ -14,11 +14,12 @@ private:
     QMainWindow* window;
     Sensor* sensor;
     Analyzer* analyzer;
-    int currentState;
+    int state = -1;
     bool isChild;
     int battery;
     bool goodCPR;
-    bool poweredOn = false;
+    typedef std::vector<void(AED::*)()> FuncVector;
+    FuncVector stateFunctions;
 
 public:
     explicit AED(QObject *parent = nullptr);
@@ -35,13 +36,13 @@ public:
 
     Analyzer* getAnalyzer();
 
-    int getCurrentState() const;
+    int getState() const;
     bool getIsChild() const;
     int getBattery() const;
 
     void setSensor(Sensor* newSensor);
     void setAnalyzer(Analyzer* newAnalyzer);
-    void setCurrentState(int state);
+    void setState(int state);
     void setIsChild(bool child);
     void setBattery(int newBattery);
 
@@ -52,7 +53,7 @@ public:
     void checkResponsiveness();
     void callEmergencyServices();
     void checkAirway();
-    void attachDefibPad(bool padPlacement);
+    void attachDefibPad();
     void checkForShock();
     void instructCPR();
     void checkAirBreathing();
@@ -70,9 +71,10 @@ signals:
 
         void updatedStatus(QString status);
         void updateText(std::string s);
+        void updateState(int state);
 
     public slots:
-        void receiveSensorData(int data);
+//        void receiveSensorData(int data);
         void determineCPRStatus();
         void power();
 

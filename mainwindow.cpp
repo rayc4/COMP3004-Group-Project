@@ -25,13 +25,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     //connect(patientRef, &Patient::sendHeartRate, aedRef->getSensor(), &Sensor::receiveHeartRate);
 
+    // THIS NEEDS TO BE IN THE SENSOR CLASS
+    // connect(ui->cprPB, SIGNAL(clicked()), aed, SLOT(determineCPRStatus()));
+
     // Power button
     connect(ui->powerPB, SIGNAL(clicked()), aedRef, SLOT(power()));
     connect(aedRef, SIGNAL(updateText(std::string)), this, SLOT(updateText(std::string)));
 
-    // THIS NEEDS TO BE IN THE SENSOR CLASS
-    // connect(ui->cprPB, SIGNAL(clicked()), aed, SLOT(determineCPRStatus()));
+    connect(aedRef, SIGNAL(updateState(int)), this, SLOT(updateState(int)));
 
+    stateRBs = findChildren<QRadioButton*>();
 }
 
 void MainWindow::setPatientWindow(PatientWindow* pw){
@@ -101,6 +104,12 @@ void MainWindow::updateGUI(){
 void MainWindow::updateText(std::string s){
     QString qs = QString::fromStdString(s);
     ui->textBrowser->setText(qs);
+}
+
+void MainWindow::updateState(int state){
+    QString rbName = QString("radioButton") + QString::number(state);
+    QRadioButton* rb = findChild<QRadioButton*>(rbName);
+    rb->setChecked(true);
 }
 
 
