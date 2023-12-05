@@ -1,32 +1,32 @@
 #include "aed.h"
 #include <QDebug>
 
-//AED steps logic
+// state functions (in order) ====================================
+
 void AED::checkResponsiveness()
 {
-//function 1
-    qDebug() << "Check responsiveness of the patient.";
-    // Next step
-    callEmergencyServices();
+    qDebug() << "[SPEAKER] Check responsiveness of the patient.";
+    updateText("Check responsiveness of the patient.");
+    waitTimer->start(WAIT_MS);
 }
+
 void AED::callEmergencyServices()
 {
-    //function 2
-    qDebug()  << "Call emergency services.";
-    // Next step
-    checkAirway();
+    qDebug() << "[SPEAKER] Call emergency services.";
+    updateText("Call emergency services.");
+    waitTimer->start(WAIT_MS);
 }
+
 void AED::checkAirway()
 {
-    //function 3
-    qDebug() << "Check for breathing and airway of patient";
-        // Retry || bypass to different step
-        attachDefibPad(); // l
-
+    qDebug() << "[SPEAKER] Check for breathing and airway of patient.";
+    updateText("Check for breathing and airway of patient.");
+    waitTimer->start(WAIT_MS);
 }
+
 void AED::attachDefibPad()
 {
-    // TODO: get padPlacement =============================================
+    // TODO: get padPlacement !!!!!!!!!!!!!
 
     bool padPlacement = true;
 
@@ -94,7 +94,6 @@ void AED::instructCPR()
     //CPR quality here
 
     // Retry || bypass to different step
-    checkAirBreathing();
 }
 
 void AED::checkAirBreathing()
@@ -104,37 +103,39 @@ void AED::checkAirBreathing()
     // Logic for check breathing
 }
 
-void test(){
+// end of state functions =============================
 
-}
 AED::AED(QObject *parent)
     : QObject(parent)
 {
     sensor = new Sensor();
     analyzer = new Analyzer();
 
-    stateFunctions.push_back(&AED::checkResponsiveness);
+    stateFunctions = {&AED::checkResponsiveness,
+                      &AED::callEmergencyServices,
+                      &AED::checkAirway,
+                      &AED::attachDefibPad,
+                      &AED::checkForShock,
+                      &AED::instructCPR,
+                      &AED::checkAirBreathing};
 
-//    functions.insert(functions.end(),
-//                      {&AED::checkResponsiveness,
-//                       &AED::callEmergencyServices,
-//                       &AED::checkAirway,
-//                       &AED::attachDefibPad,
-//                       &AED::checkForShock,
-//                       &AED::instructCPR,
-//                       &AED::checkAirBreathing
-//                      });
+    waitTimer = new QTimer(this);
+    waitTimer->setSingleShot(true);
+    connect(waitTimer, SIGNAL(timeout()), this, SLOT(enterNextState()));
+
+    connect(this, SIGNAL(stateDone()), this, SLOT(enterNextState())); // to avoid a large function call stack
 }
 
 AED::~AED(){
 
 }
 
-void AED::updateAED()
-{
-    for(FuncVector::iterator i = stateFunctions.begin(); i != stateFunctions.end(); i++) {
-        (*i)();
+void AED::enterNextState(){
+    if(state == FINAL_STATE){
+        return;
     }
+    updateState(++state);
+    (this->*(stateFunctions[state]))();
 }
 
 void AED::power()
@@ -143,10 +144,8 @@ void AED::power()
         state = -1;
         updateText("");
     }else{
-        state = 0;
-        updateText("Powered On");
-        // TODO: "self-check"
-        updateAED();
+        updateText("Powered on, performing self-check");
+        waitTimer->start(WAIT_MS);
     }
 }
 

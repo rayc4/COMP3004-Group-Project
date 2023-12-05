@@ -6,6 +6,9 @@
 #include "sensor.h"
 #include "Analyzer.h"
 
+#define FINAL_STATE 6
+#define WAIT_MS 3000
+
 class AED : public QObject
 {
     Q_OBJECT
@@ -20,6 +23,9 @@ private:
     bool goodCPR;
     typedef std::vector<void(AED::*)()> FuncVector;
     FuncVector stateFunctions;
+
+    QTimer* waitTimer;
+
 
 public:
     explicit AED(QObject *parent = nullptr);
@@ -64,19 +70,17 @@ public:
  //last second setters
 
 
-
-
-signals:
-        //out
-
-        void updatedStatus(QString status);
+    signals:
         void updateText(std::string s);
         void updateState(int state);
+        void stateDone();
+
 
     public slots:
 //        void receiveSensorData(int data);
         void determineCPRStatus();
         void power();
+        void enterNextState();
 
 };
 
