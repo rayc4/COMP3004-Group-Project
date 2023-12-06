@@ -47,7 +47,7 @@ public slots:
 
 private:
 
-    Sensor* sensor;
+    Sensor* pSensor;
 
     QThread* patientThread;
 

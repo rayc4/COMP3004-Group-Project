@@ -52,8 +52,8 @@ signals:
 
 private:
     Ui::PatientWindow *ui;
-    Patient *patient;
-    AED *aed;
+    Patient *pPatient;
+    AED *pAED;
 
     void updateGUI();
 

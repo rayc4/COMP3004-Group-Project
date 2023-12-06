@@ -30,7 +30,7 @@ signals:
       //void setCPR(int cBpm);
 
 public slots:
-    void receiveHeartRate(int hr);
+    //void receiveHeartRate(int hr);
     void setLPlacement(int r,int c);
     void setRPlacement(int r,int c);
 

@@ -165,16 +165,16 @@ void Patient::setState(int state){
 }
 
 Sensor* Patient::getSensor(){
-    return sensor;
+    return pSensor;
 }
 
 void Patient::setSensor(Sensor* s){
-    sensor = s;
+    pSensor = s;
 }
 
 //CPR Stuff
 void Patient::patientCPS(){
-    qDebug() << "CPS";
+    //qDebug() << "CPS";
     cpr = true;
 //    QTimer::singleShot(3000, this, &Patient::falseCPR);
     int cprBPM = 0;

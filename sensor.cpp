@@ -16,9 +16,9 @@ void Sensor::setPatient(Patient* tempPatient)
 }
 
 
-void Sensor::receiveHeartRate(int hr){
-    heartRate = hr;
-}
+//void Sensor::receiveHeartRate(int hr){
+//    heartRate = hr;
+//}
 
 bool Sensor::getgoodPlacement(){
     checkPads();
@@ -27,7 +27,9 @@ bool Sensor::getgoodPlacement(){
 
 
 int Sensor::getHeartRate(){
-    return heartRate;
+    if (goodPlacement)
+        return pPatient->getHeartRate();
+    return -1;
 }
 
 int Sensor::getDepth() const{
@@ -43,7 +45,7 @@ void Sensor::setLPlacement(int row,int column){
     }else{
         leftPad = false;
     }
-
+    qDebug() << "Left pad: " << leftPad;
 }
 
 void Sensor::setRPlacement(int row,int column){
@@ -56,6 +58,8 @@ void Sensor::setRPlacement(int row,int column){
         rightPad =false;
         checkPads();
     }
+
+    qDebug() << "Right pad: " << rightPad;
 }
 
 void Sensor::checkPads(){
