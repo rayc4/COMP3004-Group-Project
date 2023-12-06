@@ -72,11 +72,7 @@ private:
     bool cpr=false;
     bool cprReset = false;
 
-
-
-
 signals:
-
     void sendHeartRate(int HR);
     void sendBPM(int bpm);
 

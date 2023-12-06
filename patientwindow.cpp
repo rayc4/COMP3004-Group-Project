@@ -30,8 +30,10 @@ void PatientWindow::setPatient(Patient* tempPatient)
     ui->ageLabel->setText(QString("Age: %1").arg(patient->getAge()));
 
     connect(ui->cprPB, SIGNAL(clicked()), patient, SLOT(patientCPS()));
-    connect(ui->leftPadTable,SIGNAL(cellClicked(int,int)),patient->getSensor(),SLOT(setPlacement(int,int)));
+    connect(ui->leftPadTable,SIGNAL(cellPressed(int,int)),patient->getSensor(),SLOT(setLPlacement(int,int)));
+    connect(ui->rightPadTable,SIGNAL(cellPressed(int,int)),patient->getSensor(),SLOT(setRPlacement(int,int)));
 }
+
 
 
 PatientWindow::~PatientWindow(){
@@ -153,15 +155,6 @@ void PatientWindow::on_leftPadTable_cellPressed(int row, int column)
             }
         }
     }
-//    //Threshold (+/-1) from row 5
-//    //Threshold (+/-2) from column 7
-//    //Correct Pad Placement
-//    if ((row >= 4 and row <= 6) && (column >= 6 and column <= 8)){
-//        qDebug() << "Proper Position Left ---------";
-//    }else{
-//        qDebug() <<"Wrong placement Left ----------";
-//    }
-
 }
 
 void PatientWindow::on_rightPadTable_cellPressed(int row, int column)
@@ -187,13 +180,5 @@ void PatientWindow::on_rightPadTable_cellPressed(int row, int column)
             }
         }
     }
-    //Threshold (+/-1) from row 10
-    //Threshold (+/-1) from column 4
-    //Correct Pad Placement
-//    if ((row >= 9 and row <= 11) && (column >= 3 and column <= 5)){
-//        qDebug() << "Proper Position Right ---------";
-//    }else{
-//        qDebug() <<"Wrong placement Right ----------";
-//    }
 }
 

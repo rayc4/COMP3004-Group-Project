@@ -15,7 +15,7 @@ public:
     //Getters
     int getHeartRate();
     bool getCPRstatus() const;
-    bool getgoodPlacement() const;
+    bool getgoodPlacement();
     int getDepth() const;
 
     //Setters
@@ -24,18 +24,22 @@ public:
 
     //last second setters
     void setPatient(Patient* tempPatient);
+    void checkPads();
 
 signals:
       //void setCPR(int cBpm);
 
 public slots:
     void receiveHeartRate(int hr);
-    void setPlacement(int r,int c);
+    void setLPlacement(int r,int c);
+    void setRPlacement(int r,int c);
 
 private:
     int heartRate;
     int cprDepth;
     bool goodPlacement = false;
+    bool leftPad = false;
+    bool rightPad = false;
     Patient* pPatient;
 
 };
