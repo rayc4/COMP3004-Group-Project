@@ -61,7 +61,7 @@ private:
     QTimer* survivalTimer;
 
     int survivalTime;
-    int survivalAddition = 0;
+    int survivalChance = 100;
 
     QMutex heartMutex;
 
