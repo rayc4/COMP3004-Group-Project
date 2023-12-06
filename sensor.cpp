@@ -34,8 +34,10 @@ int Sensor::getDepth() const{
 }
 
 
-void Sensor::setPlacement(bool placement){
-    goodPlacement = placement;
+void Sensor::setPlacement(int r,int c){
+    qDebug() << "Test";
+    qDebug() << r;
+    qDebug() << c;
 }
 
 void Sensor::setDepth(int depth){

@@ -67,7 +67,7 @@ void MainWindow::communicateNewPatient()
     //TODO: Pass the new Patient to patient window here
 
     aedRef->getSensor()->setPatient(patientRef);
-
+    patientRef->setSensor(aedRef->getSensor());
     patientWindow->setPatient(patientRef);
 
 }

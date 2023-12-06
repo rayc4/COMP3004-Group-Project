@@ -164,6 +164,14 @@ void Patient::setState(int state){
     currState = state;
 }
 
+Sensor* Patient::getSensor(){
+    return sensor;
+}
+
+void Patient::setSensor(Sensor* s){
+    sensor = s;
+}
+
 //CPR Stuff
 void Patient::patientCPS(){
     qDebug() << "CPS";

@@ -19,23 +19,25 @@ public:
     int getDepth() const;
 
     //Setters
-    void setPlacement(bool placement);
+//    void setPlacement(bool placement);
     void setDepth(int depth);
 
     //last second setters
     void setPatient(Patient* tempPatient);
 
-    Patient* pPatient;
 signals:
       //void setCPR(int cBpm);
 
 public slots:
     void receiveHeartRate(int hr);
+    void setPlacement(int r,int c);
 
 private:
     int heartRate;
     int cprDepth;
     bool goodPlacement = false;
+    Patient* pPatient;
+
 };
 
 #endif // SENSOR_H
