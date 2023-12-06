@@ -48,13 +48,10 @@ void Patient::updateHeartRate(){
     //qDebug() << "-----------" << cprReset;
     QMutexLocker locker(&heartMutex);
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
-    if (cpr){
-        if (!cprReset){
-             QTimer::singleShot(3000, this, &Patient::falseCPR);
-             cprReset = true;
-        }
-    }else{
-        cprReset = false;
+    if (cpr)
+        cpr = false;
+    else{
+        //cprReset = false;
         if (currState == 0)
             reg();
         else if (currState == 1)
@@ -176,7 +173,6 @@ void Patient::setSensor(Sensor* s){
 void Patient::patientCPS(){
     //qDebug() << "CPS";
     cpr = true;
-//    QTimer::singleShot(3000, this, &Patient::falseCPR);
     int cprBPM = 0;
     click++;
     if (click == 1){

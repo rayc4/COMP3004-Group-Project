@@ -15,7 +15,7 @@ void Sensor::setPatient(Patient* tempPatient)
     }
 }
 
-
+//Doesn't end up being used
 //void Sensor::receiveHeartRate(int hr){
 //    heartRate = hr;
 //}
