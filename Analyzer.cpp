@@ -20,6 +20,7 @@ void Analyzer::CollectHeart(int hbit)
 
 int Analyzer::analyzeHeart()
 {
+    //add only numbers once a second
     if(heartbits.empty() || (heartbits.size() <=60))
     {
         return -1;
@@ -27,7 +28,7 @@ int Analyzer::analyzeHeart()
 
 
     int sum = 0;
-    int minBit = 0;
+    int minBit = 60;
     int maxBit = 360;
 
     bool isErratic = false;

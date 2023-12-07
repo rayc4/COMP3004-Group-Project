@@ -46,14 +46,27 @@ void AED::checkForShock()
 
      switch(heartState) {
          case 1: // Vtac
+            qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
+            prepareForShock(0);
+            stageComplete();
+            break;
          case 2: // Vfib
              qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
              prepareForShock(0);
              stageComplete();
              break;
          case 0: // Regular
+            qDebug() << "[SPEAKER] Regular heartbeat.";
+            stageComplete();
+            break;
          case 3: // Asystole
+            qDebug() << "[SPEAKER] Asystole heartbeat.";
+            stageComplete();
+            break;
          case 4: // Unknown
+            qDebug() << "[SPEAKER] stuff broken, unkown heartbeat.";
+            stageComplete();
+            break;
          default:
              qDebug() << "[SPEAKER] No shock advised.";
              stageComplete();
@@ -174,7 +187,7 @@ void AED::determineCPRStatus(){
     if (goodCPR){
         qDebug() << "GOOD";
     }else{
-        qDebug() << "BAD";
+        qDebug() << "BAD"; //TODO: come back here later
     }
 }
 
