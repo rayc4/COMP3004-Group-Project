@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "aed.h"
 #include <QDebug>
 
@@ -185,3 +186,5 @@ Sensor* AED::getSensor(){
 
 
 //this is a comment
+=======
+>>>>>>> f82ca4e01773be62f6bc12f90c844674cdd94828
