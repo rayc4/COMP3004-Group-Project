@@ -13,6 +13,8 @@ PatientWindow::PatientWindow(QWidget *parent)
 //    });
 //    guiTimer->start(300);
 
+
+
 //    void PatientWindow::on_pushButton_clicked(){
 //        patient->patientCPS();
 //        aed->determineCPRStatus();
@@ -22,10 +24,11 @@ PatientWindow::PatientWindow(QWidget *parent)
 
 void PatientWindow::setPatient(Patient* tempPatient)
 {
-    if(tempPatient)
+    if(!tempPatient)
     {
-        pPatient = tempPatient;
+        return;
     }
+    pPatient = tempPatient;
     ui->nameLabel->setText(QString("Patient Name: %1").arg(pPatient->getName()));
     ui->ageLabel->setText(QString("Age: %1").arg(pPatient->getAge()));
 
@@ -42,8 +45,9 @@ PatientWindow::~PatientWindow(){
 }
 
 
-void PatientWindow::updateGUI(){
-
+void PatientWindow::updateGUI()
+{
+//main visual updates should happen here
 }
 
 Patient* PatientWindow::getPatient()
