@@ -47,10 +47,13 @@ private slots:
 
     void on_cardiacButton_clicked(bool checked);
 
+signals:
+    void declarePosition(bool placement);
+
 private:
     Ui::PatientWindow *ui;
-    Patient *patient;
-    AED *aed;
+    Patient *pPatient;
+    AED *pAED;
 
     void updateGUI();
 

@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     //mainwindow OWNS patient
     ui->setupUi(this);
 
-    aedRef = new AED(this);
+    pAED = new AED(this);
 
     QTimer* guiTimer = new QTimer();
     connect(guiTimer, &QTimer::timeout, [=]() {
@@ -29,10 +29,10 @@ MainWindow::MainWindow(QWidget *parent)
     // connect(ui->cprPB, SIGNAL(clicked()), aed, SLOT(determineCPRStatus()));
 
     // Power button
-    connect(ui->powerPB, SIGNAL(clicked()), aedRef, SLOT(power()));
-    connect(aedRef, SIGNAL(updateText(std::string)), this, SLOT(updateText(std::string)));
+    connect(ui->powerPB, SIGNAL(clicked()), pAED, SLOT(power()));
+    connect(pAED, SIGNAL(updateText(std::string)), this, SLOT(updateText(std::string)));
 
-    connect(aedRef, SIGNAL(updateState(int)), this, SLOT(updateState(int)));
+    connect(pAED, SIGNAL(updateState(int)), this, SLOT(updateState(int)));
 
     stateRBs = findChildren<QRadioButton*>();
 }
@@ -43,9 +43,9 @@ void MainWindow::setPatientWindow(PatientWindow* pw){
 
 Patient* MainWindow::getpatient()
 {
-    if(patientRef)
+    if(pPatient)
     {
-        return patientRef;
+        return pPatient;
     }
     return nullptr;
 }
@@ -55,7 +55,7 @@ void MainWindow::generateNewPatient()
     //creates random data for a new patient and assigns it to the pointer in class
     Patient *tempP = new Patient(69, "Bob");
     //delete patientRef;
-    patientRef = tempP;
+    pPatient = tempP;
 }
 
 void MainWindow::communicateNewPatient()
@@ -66,9 +66,9 @@ void MainWindow::communicateNewPatient()
     //TODO: Call the Connected function for setting patient to the SENSOR here
     //TODO: Pass the new Patient to patient window here
 
-    aedRef->getSensor()->setPatient(patientRef);
-
-    patientWindow->setPatient(patientRef);
+    pAED->getSensor()->setPatient(pPatient);
+    pPatient->setSensor(pAED->getSensor());
+    patientWindow->setPatient(pPatient);
 
 }
 
@@ -89,16 +89,16 @@ MainWindow::~MainWindow()
 
 AED* MainWindow::getAed()
 {
-    if(aedRef)
+    if(pAED)
     {
-        return aedRef;
+        return pAED;
     }
     return nullptr;
 }
 
 void MainWindow::updateGUI(){
     //qDebug() << "Current GUI heartrate is " << aedRef->getSensor()->getHeartRate();
-    ui->heartRateLCD->display(aedRef->getSensor()->getHeartRate());
+    ui->heartRateLCD->display(pAED->getSensor()->getHeartRate());
 }
 
 void MainWindow::updateText(std::string s){

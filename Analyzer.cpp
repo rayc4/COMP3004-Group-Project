@@ -1,12 +1,12 @@
 #include "Analyzer.h"
 
 
-Analyzer::Analyzer(QObject *parent) : QObject(parent), sensor(nullptr), heartState(0), shockState(false){
+Analyzer::Analyzer(QObject *parent) : QObject(parent), pSensor(nullptr), heartState(0), shockState(false){
 }
 
 Analyzer::~Analyzer() {
 
-    delete sensor;
+    delete pSensor;
 }
 
 void Analyzer::CollectHeart(int hbit)
@@ -113,9 +113,9 @@ bool Analyzer::getShockState() const {
 
 // Setters
 void Analyzer::setSensor(Sensor* newSensor) {
-    if (sensor != newSensor) {
-        delete sensor;
-        sensor = newSensor;
+    if (pSensor != newSensor) {
+        delete pSensor;
+        pSensor = newSensor;
     }
 }
 

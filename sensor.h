@@ -15,27 +15,33 @@ public:
     //Getters
     int getHeartRate();
     bool getCPRstatus() const;
-    bool getgoodPlacement() const;
+    bool getgoodPlacement();
     int getDepth() const;
 
     //Setters
-    void setPlacement(bool placement);
+//    void setPlacement(bool placement);
     void setDepth(int depth);
 
     //last second setters
     void setPatient(Patient* tempPatient);
+    void checkPads();
 
-    Patient* pPatient;
 signals:
       //void setCPR(int cBpm);
 
 public slots:
-    void receiveHeartRate(int hr);
+    //void receiveHeartRate(int hr);
+    void setLPlacement(int r,int c);
+    void setRPlacement(int r,int c);
 
 private:
     int heartRate;
     int cprDepth;
     bool goodPlacement = false;
+    bool leftPad = false;
+    bool rightPad = false;
+    Patient* pPatient;
+
 };
 
 #endif // SENSOR_H

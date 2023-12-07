@@ -30,10 +30,9 @@ Patient::Patient(int a, QString nm):age(a), name(nm)
     heartRateTimer->start(300);
 
 
-    QTimer* survivalTimer = new QTimer();
+    survivalTimer = new QTimer();
     connect(survivalTimer, &QTimer::timeout, this, &Patient::updateSurvivalRate);
     // Updates timer every 1 second
-    survivalTimer->start(1000);
 
 }
 
@@ -48,13 +47,12 @@ void Patient::updateHeartRate(){
     //qDebug() << "-----------" << cprReset;
     QMutexLocker locker(&heartMutex);
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
-    if (cpr){
-        if (!cprReset){
-             QTimer::singleShot(3000, this, &Patient::falseCPR);
-             cprReset = true;
-        }
-    }else{
-        cprReset = false;
+    if (cpr)
+        cpr = false;
+    else if (survivalChance == 0) //If there is no chance of survival, patient flatlines.
+        asystole();
+    else{
+        //cprReset = false;
         if (currState == 0)
             reg();
         else if (currState == 1)
@@ -69,7 +67,7 @@ void Patient::updateHeartRate(){
             currState = -1;
     }
 
-    emit sendHeartRate(heartRate);
+    //emit sendHeartRate(heartRate);
 
     //qDebug() << "Curent heartrate is" << heartRate;
 
@@ -77,12 +75,13 @@ void Patient::updateHeartRate(){
 }
 
 void Patient::updateSurvivalRate(){
+    //qDebug() << "Current chances of survival decreased to" << survivalChance << "%";
     survivalTime++; //Add one second to the timer.
     if (survivalTime %60 == 0) //Every minute
-        survivalAddition += 10; //Every minute, chances decrease by 10%
+        survivalChance -= 10; //Every minute, chances decrease by 10%
 
-    if (survivalAddition > 100)
-        survivalAddition = 100;
+    if (survivalChance < 0)
+        survivalChance = 0;
 
 
 }
@@ -108,14 +107,13 @@ void Patient::vTac(){
 void Patient::vFib(){
     int minHR = 150;
     int maxHR = 500;
-
     //Generate a value from 150 to 500
     heartRate = randomGen.bounded(minHR, maxHR+1);
 }
 
 //Patient flatlines
 void Patient::asystole(){
-
+    survivalChance = 0;
     heartRate = 0;
 }
 
@@ -132,13 +130,13 @@ void Patient::respondToShock(){
     int response = -1;
     int tempState = -1;
 
-    response = randomGen.bounded(0, 100-survivalAddition);
-    if (response < 50) //50% chance
+    response = randomGen.bounded(0, 100);
+    if (response < 10 * (survivalChance / 10)) //10% chance
+        tempState = 3; //asystole
+    else if (response < 50 * (survivalChance / 10)) //50% chance
+        tempState = currState; //Return to original state
+    else //50% chance
         tempState = 0; //Return to regular heartbeat
-    else if (response < 90) //40% chance
-        tempState = currState; //Keep the original state
-    else //10% chance
-        tempState = 3; //Set to asystole
 
     currState = tempState;
 
@@ -162,13 +160,26 @@ QString Patient::getName(){
 void Patient::setState(int state){
     QMutexLocker locker(&heartMutex);
     currState = state;
+    if (currState != 0) //If patient heartbeat isn't regular
+        survivalTimer->start(1000);
+    else{
+        survivalTimer->stop();
+        survivalChance = 100;
+    }
+}
+
+Sensor* Patient::getSensor(){
+    return pSensor;
+}
+
+void Patient::setSensor(Sensor* s){
+    pSensor = s;
 }
 
 //CPR Stuff
 void Patient::patientCPS(){
-    qDebug() << "CPS";
+    //qDebug() << "CPS";
     cpr = true;
-//    QTimer::singleShot(3000, this, &Patient::falseCPR);
     int cprBPM = 0;
     click++;
     if (click == 1){

@@ -13,9 +13,7 @@
 #include <QDialog>
 
 #include <QThread>
-
-
-
+class Sensor;
 
 class Patient : public QObject
 {
@@ -27,10 +25,12 @@ public:
     int getHeartRate();
     int getAge();
     QString getName();
+    Sensor* getSensor();
 
 
     void setState(int state); 
     void setCPR(bool c);
+    void setSensor(Sensor* s);
 
 public slots:
     void updateHeartRate();
@@ -47,6 +47,7 @@ public slots:
 
 private:
 
+    Sensor* pSensor;
 
     QThread* patientThread;
 
@@ -60,7 +61,7 @@ private:
     QTimer* survivalTimer;
 
     int survivalTime;
-    int survivalAddition = 0;
+    int survivalChance = 100;
 
     QMutex heartMutex;
 
@@ -71,10 +72,7 @@ private:
     bool cpr=false;
     bool cprReset = false;
 
-
-
 signals:
-
     void sendHeartRate(int HR);
     void sendBPM(int bpm);
 

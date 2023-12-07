@@ -40,8 +40,8 @@ private:
     void updateGUI();
 
     Ui::MainWindow *ui;
-    Patient *patientRef;
-    AED *aedRef;
+    Patient *pPatient;
+    AED *pAED;
     PatientWindow* patientWindow;
     QList<QRadioButton*> stateRBs;
 
