@@ -168,13 +168,22 @@ void Patient::setState(int state){
     }
 }
 
-Sensor* Patient::getSensor(){
-    return pSensor;
+//void leftPadUpdated(int, int){
+
+//}
+
+//void rightPadUpdated(int, int){
+
+//}
+
+void Patient::receiveLeftPad(int r, int c){
+    emit leftPadUpdated(r, c);
 }
 
-void Patient::setSensor(Sensor* s){
-    pSensor = s;
+void Patient::receiveRightPad(int r, int c){
+    emit rightPadUpdated(r, c);
 }
+
 
 //CPR Stuff
 void Patient::patientCPS(){

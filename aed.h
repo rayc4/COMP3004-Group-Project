@@ -74,6 +74,7 @@ public:
         void updateText(std::string s);
         void updateState(int state);
         void stateDone();
+        void stageComplete();
 
 
     public slots:

@@ -15,7 +15,7 @@ public:
     //Getters
     int getHeartRate();
     bool getCPRstatus() const;
-    bool getgoodPlacement();
+    bool getGoodPlacement();
     int getDepth() const;
 
     //Setters
@@ -26,7 +26,7 @@ public:
     void setPatient(Patient* tempPatient);
     void checkPads();
 
-signals:
+//signals:
       //void setCPR(int cBpm);
 
 public slots:

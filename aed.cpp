@@ -1,5 +1,6 @@
 #include "aed.h"
 #include <QDebug>
+#include <QCoreApplication>
 
 // state functions (in order) ====================================
 
@@ -26,39 +27,36 @@ void AED::checkAirway()
 
 void AED::attachDefibPad()
 {
-    // TODO: get padPlacement !!!!!!!!!!!!!
-
-    bool padPlacement = true;
-
-    if (padPlacement)
-    {
-        //next step
-        checkForShock();
-    } else {
-        qDebug() << "[SPEAKER] Try again place the pad correctly";
-        // Retry || bypass to different step
+    if (!pSensor->getGoodPlacement()){
+        qDebug() << "[SPEAKER] Bad pad placement. Waiting for good placement...";
     }
+    while(!pSensor->getGoodPlacement()){
+        QCoreApplication::processEvents();
+    }
+    stageComplete();
 }
+
 void AED::checkForShock()
 {
     int heartState = pAnalyzer->analyzeHeart();
 
-     // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
+    // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
     //TODO: talk to the others, pls i dont want switch case
     //Switch case implemented so it can mimic Zuhayr and Justin design thought process
 
      switch(heartState) {
          case 1: // Vtac
          case 2: // Vfib
-             qDebug() << "Shock Advised. Preparing to shock.";
+             qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
              prepareForShock(0);
+             stageComplete();
              break;
          case 0: // Regular
          case 3: // Asystole
          case 4: // Unknown
          default:
-             qDebug() << "No shock advised.";
-             instructCPR(); //CPR instructions
+             qDebug() << "[SPEAKER] No shock advised.";
+             stageComplete();
              break;
      }
 }
@@ -120,6 +118,8 @@ AED::AED(QObject *parent)
     waitTimer = new QTimer(this);
     waitTimer->setSingleShot(true);
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(enterNextState()));
+
+    connect(this, SIGNAL(stageComplete()), this, SLOT(enterNextState()));
 }
 
 AED::~AED(){

@@ -25,12 +25,9 @@ public:
     int getHeartRate();
     int getAge();
     QString getName();
-    Sensor* getSensor();
-
 
     void setState(int state); 
     void setCPR(bool c);
-    void setSensor(Sensor* s);
 
 public slots:
     void updateHeartRate();
@@ -42,13 +39,12 @@ public slots:
     void asystole();
     void respondToShock();
     void falseCPR();
+    void receiveLeftPad(int, int);
+    void receiveRightPad(int, int);
 
     void patientCPS();
 
 private:
-
-    Sensor* pSensor;
-
     QThread* patientThread;
 
     QRandomGenerator randomGen;
@@ -75,8 +71,8 @@ private:
 signals:
     void sendHeartRate(int HR);
     void sendBPM(int bpm);
-
-
+    void leftPadUpdated(int, int);
+    void rightPadUpdated(int, int);
 };
 
 #endif // PATIENT_H

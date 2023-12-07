@@ -9,10 +9,10 @@ Sensor::Sensor(Patient* aPatient): pPatient(aPatient)
 
 void Sensor::setPatient(Patient* tempPatient)
 {
-    if(tempPatient)
-    {
-        pPatient = tempPatient;
-    }
+    if(!tempPatient) return;
+    pPatient = tempPatient;
+    connect(pPatient, SIGNAL(leftPadUpdated(int,int)), this, SLOT(setLPlacement(int,int)));
+    connect(pPatient, SIGNAL(rightPadUpdated(int,int)), this, SLOT(setRPlacement(int,int)));
 }
 
 //Doesn't end up being used
@@ -20,7 +20,7 @@ void Sensor::setPatient(Patient* tempPatient)
 //    heartRate = hr;
 //}
 
-bool Sensor::getgoodPlacement(){
+bool Sensor::getGoodPlacement(){
     checkPads();
     return goodPlacement;
 }
@@ -63,11 +63,7 @@ void Sensor::setRPlacement(int row,int column){
 }
 
 void Sensor::checkPads(){
-    if (leftPad && rightPad){
-        goodPlacement = true;
-    }else{
-        goodPlacement = false;
-    }
+    goodPlacement = leftPad && rightPad;
 }
 
 void Sensor::setDepth(int depth){
