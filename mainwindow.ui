@@ -270,6 +270,19 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="shockPB">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>290</y>
+      <width>83</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SHOCK</string>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>textBrowser</zorder>
    <zorder>powerPB</zorder>
@@ -282,6 +295,7 @@ p, li { white-space: pre-wrap; }
    <zorder>radioButton6</zorder>
    <zorder>radioButton3</zorder>
    <zorder>heartRateLCD</zorder>
+   <zorder>shockPB</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

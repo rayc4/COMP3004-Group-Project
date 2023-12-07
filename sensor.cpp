@@ -20,7 +20,7 @@ void Sensor::receiveHeartRate(int hr){
     heartRate = hr;
 }
 
-bool Sensor::getgoodPlacement() const{
+bool Sensor::getGoodPlacement() const{
     return goodPlacement;
 }
 

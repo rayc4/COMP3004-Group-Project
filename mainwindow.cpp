@@ -69,7 +69,6 @@ void MainWindow::communicateNewPatient()
     aedRef->getSensor()->setPatient(patientRef);
     patientRef->setSensor(aedRef->getSensor());
     patientWindow->setPatient(patientRef);
-
 }
 
 
