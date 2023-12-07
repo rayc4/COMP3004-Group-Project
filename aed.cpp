@@ -38,7 +38,7 @@ void AED::attachDefibPad()
 
 void AED::checkForShock()
 {
-    int heartState = analyzer->analyzeHeart();
+    int heartState = pAnalyzer->analyzeHeart();
 
     // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
     //TODO: talk to the others, pls i dont want switch case
@@ -104,8 +104,8 @@ void AED::checkAirBreathing()
 AED::AED(QObject *parent)
     : QObject(parent)
 {
-    sensor = new Sensor();
-    analyzer = new Analyzer();
+    pSensor = new Sensor();
+    pAnalyzer = new Analyzer();
 
     stateFunctions = {&AED::checkResponsiveness,
                       &AED::callEmergencyServices,
@@ -169,8 +169,8 @@ void AED::setState(int state){
 
 //ONLY CALL THIS FUNCTION WHEN YOU WANT TO CHECK CPR (LOGIC MISSING)
 void AED::determineCPRStatus(){
-    qDebug() << analyzer;
-    goodCPR = analyzer->checkCPR(sensor->getHeartRate());
+    qDebug() << pAnalyzer;
+    goodCPR = pAnalyzer->checkCPR(pSensor->getHeartRate());
     if (goodCPR){
         qDebug() << "GOOD";
     }else{
@@ -179,5 +179,10 @@ void AED::determineCPRStatus(){
 }
 
 Sensor* AED::getSensor(){
-    return sensor;
+    return pSensor;
 }
+
+
+
+//this is a comment
+

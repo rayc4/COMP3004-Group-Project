@@ -24,14 +24,16 @@ void PatientWindow::setPatient(Patient* tempPatient)
 {
     if(tempPatient)
     {
-        patient = tempPatient;
+        pPatient = tempPatient;
     }
-    ui->nameLabel->setText(QString("Patient Name: %1").arg(patient->getName()));
-    ui->ageLabel->setText(QString("Age: %1").arg(patient->getAge()));
+    ui->nameLabel->setText(QString("Patient Name: %1").arg(pPatient->getName()));
+    ui->ageLabel->setText(QString("Age: %1").arg(pPatient->getAge()));
 
-    connect(ui->cprPB, SIGNAL(clicked()), patient, SLOT(patientCPS()));
-    connect(ui->leftPadTable, SIGNAL(cellPressed(int,int)), patient->getSensor(), SLOT(setPlacement(int,int)));
+    connect(ui->cprPB, SIGNAL(clicked()), pPatient, SLOT(patientCPS()));
+    connect(ui->leftPadTable,SIGNAL(cellPressed(int,int)),pPatient->getSensor(),SLOT(setLPlacement(int,int)));
+    connect(ui->rightPadTable,SIGNAL(cellPressed(int,int)),pPatient->getSensor(),SLOT(setRPlacement(int,int)));
 }
+
 
 
 PatientWindow::~PatientWindow(){
@@ -46,9 +48,9 @@ void PatientWindow::updateGUI(){
 
 Patient* PatientWindow::getPatient()
 {
-    if(patient)
+    if(pPatient)
     {
-    return patient;
+    return pPatient;
     }
     return nullptr;
 }
@@ -57,13 +59,13 @@ Patient* PatientWindow::getPatient()
 void PatientWindow::on_killButton_clicked(bool checked)
 {
     if (checked){
-        patient->setState(3);
+        pPatient->setState(3);
         ui->vFibButton->setDisabled(1);
         ui->vTacButton->setDisabled(1);
         ui->cardiacButton->setDisabled(1);
     }
     else{
-        patient->setState(0);
+        pPatient->setState(0);
         ui->vFibButton->setDisabled(0);
         ui->vTacButton->setDisabled(0);
         ui->cardiacButton->setDisabled(0);
@@ -75,13 +77,13 @@ void PatientWindow::on_killButton_clicked(bool checked)
 void PatientWindow::on_cardiacButton_clicked(bool checked)
 {
     if (checked){
-        patient->setState(4);
+        pPatient->setState(4);
         ui->vFibButton->setDisabled(1);
         ui->vTacButton->setDisabled(1);
         ui->killButton->setDisabled(1);
     }
     else{
-        patient->setState(0);
+        pPatient->setState(0);
         ui->vFibButton->setDisabled(0);
         ui->vTacButton->setDisabled(0);
         ui->killButton->setDisabled(0);
@@ -91,13 +93,13 @@ void PatientWindow::on_cardiacButton_clicked(bool checked)
 void PatientWindow::on_vFibButton_clicked(bool checked)
 {
     if (checked){
-        patient->setState(2);
+        pPatient->setState(2);
         ui->killButton->setDisabled(1);
         ui->vTacButton->setDisabled(1);
         ui->cardiacButton->setDisabled(1);
     }
     else{
-        patient->setState(0);
+        pPatient->setState(0);
         ui->killButton->setDisabled(0);
         ui->vTacButton->setDisabled(0);
         ui->cardiacButton->setDisabled(0);
@@ -108,13 +110,13 @@ void PatientWindow::on_vFibButton_clicked(bool checked)
 void PatientWindow::on_vTacButton_clicked(bool checked)
 {
     if (checked){
-        patient->setState(1);
+        pPatient->setState(1);
         ui->vFibButton->setDisabled(1);
         ui->killButton->setDisabled(1);
         ui->cardiacButton->setDisabled(1);
     }
     else{
-        patient->setState(0);
+        pPatient->setState(0);
         ui->vFibButton->setDisabled(0);
         ui->killButton->setDisabled(0);
         ui->cardiacButton->setDisabled(0);
@@ -153,15 +155,6 @@ void PatientWindow::on_leftPadTable_cellPressed(int row, int column)
             }
         }
     }
-//    //Threshold (+/-1) from row 5
-//    //Threshold (+/-2) from column 7
-//    //Correct Pad Placement
-//    if ((row >= 4 and row <= 6) && (column >= 6 and column <= 8)){
-//        qDebug() << "Proper Position Left ---------";
-//    }else{
-//        qDebug() <<"Wrong placement Left ----------";
-//    }
-
 }
 
 void PatientWindow::on_rightPadTable_cellPressed(int row, int column)
@@ -187,13 +180,5 @@ void PatientWindow::on_rightPadTable_cellPressed(int row, int column)
             }
         }
     }
-    //Threshold (+/-1) from row 10
-    //Threshold (+/-1) from column 4
-    //Correct Pad Placement
-//    if ((row >= 9 and row <= 11) && (column >= 3 and column <= 5)){
-//        qDebug() << "Proper Position Right ---------";
-//    }else{
-//        qDebug() <<"Wrong placement Right ----------";
-//    }
 }
 

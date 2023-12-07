@@ -1,12 +1,12 @@
 #include "Analyzer.h"
 
 
-Analyzer::Analyzer(QObject *parent) : QObject(parent), sensor(nullptr), heartState(0), shockState(false){
+Analyzer::Analyzer(QObject *parent) : QObject(parent), pSensor(nullptr), heartState(0), shockState(false){
 }
 
 Analyzer::~Analyzer() {
 
-    delete sensor;
+    delete pSensor;
 }
 
 void Analyzer::CollectHeart(int hbit)
@@ -79,6 +79,14 @@ int Analyzer::analyzeHeart()
     return heartState; // Placeholder
 }
 
+bool Analyzer::checkCPR(int cBPM){
+    //qDebug() << cBPM;
+    //CPR BPM 100 - 120 (official requirement)
+    //For testing purposes, we did 90 - 130
+    // CPR BPM is considered good if it's between 90 and 130
+    return (cBPM >= 90 && cBPM <= 130);
+}
+
 
 bool Analyzer::CPRFeedback(const std::string& feedback) {
     return true; // Placeholder
@@ -105,9 +113,9 @@ bool Analyzer::getShockState() const {
 
 // Setters
 void Analyzer::setSensor(Sensor* newSensor) {
-    if (sensor != newSensor) {
-        delete sensor;
-        sensor = newSensor;
+    if (pSensor != newSensor) {
+        delete pSensor;
+        pSensor = newSensor;
     }
 }
 
@@ -119,15 +127,3 @@ void Analyzer::setShockState(bool state) {
     shockState = state;
 }
 
-bool Analyzer::checkCPR(int cBPM){
-    //qDebug() << cBPM;
-    //CPR BPM 100 - 120 (official requirement)
-    //For testing purposes, we did 90 - 130
-
-    if (cBPM >=  90 && cBPM <= 130){
-        goodCPR = true;
-    }else{
-        goodCPR = false;
-    }
-    return goodCPR;
-}

@@ -47,7 +47,7 @@ public slots:
 
 private:
 
-    Sensor* sensor;
+    Sensor* pSensor;
 
     QThread* patientThread;
 
@@ -61,7 +61,7 @@ private:
     QTimer* survivalTimer;
 
     int survivalTime;
-    int survivalAddition = 0;
+    int survivalChance = 100;
 
     QMutex heartMutex;
 
@@ -72,11 +72,7 @@ private:
     bool cpr=false;
     bool cprReset = false;
 
-
-
-
 signals:
-
     void sendHeartRate(int HR);
     void sendBPM(int bpm);
 

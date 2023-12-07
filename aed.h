@@ -15,8 +15,8 @@ class AED : public QObject
 
 private:
     QMainWindow* window;
-    Sensor* sensor;
-    Analyzer* analyzer;
+    Sensor* pSensor;
+    Analyzer* pAnalyzer;
     int state = -1;
     bool isChild;
     int battery;

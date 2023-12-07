@@ -11,7 +11,7 @@ class Analyzer : public QObject {
 
 
 private:
-    Sensor* sensor;
+    Sensor* pSensor;
     int heartState;
     bool shockState;
     int cBPM;
