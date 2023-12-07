@@ -62,12 +62,10 @@ void MainWindow::communicateNewPatient()
 {
     //calls the setter for all the functions that need to get the updated patient
 
-
     //TODO: Call the Connected function for setting patient to the SENSOR here
     //TODO: Pass the new Patient to patient window here
 
     pAED->getSensor()->setPatient(pPatient);
-    pPatient->setSensor(pAED->getSensor());
     patientWindow->setPatient(pPatient);
 
 }

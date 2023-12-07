@@ -27,10 +27,10 @@ void AED::checkAirway()
 
 void AED::attachDefibPad()
 {
-    if (!sensor->getGoodPlacement()){
+    if (!pSensor->getGoodPlacement()){
         qDebug() << "[SPEAKER] Bad pad placement. Waiting for good placement...";
     }
-    while(!sensor->getGoodPlacement()){
+    while(!pSensor->getGoodPlacement()){
         QCoreApplication::processEvents();
     }
     stageComplete();

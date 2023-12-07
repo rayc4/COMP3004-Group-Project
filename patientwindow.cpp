@@ -30,8 +30,8 @@ void PatientWindow::setPatient(Patient* tempPatient)
     ui->ageLabel->setText(QString("Age: %1").arg(pPatient->getAge()));
 
     connect(ui->cprPB, SIGNAL(clicked()), pPatient, SLOT(patientCPS()));
-    connect(ui->leftPadTable,SIGNAL(cellPressed(int,int)),pPatient->getSensor(),SLOT(setLPlacement(int,int)));
-    connect(ui->rightPadTable,SIGNAL(cellPressed(int,int)),pPatient->getSensor(),SLOT(setRPlacement(int,int)));
+    connect(ui->leftPadTable, SIGNAL(cellPressed(int,int)), pPatient, SLOT(receiveLeftPad(int,int)));
+    connect(ui->rightPadTable, SIGNAL(cellPressed(int,int)), pPatient, SLOT(receiveRightPad(int,int)));
 }
 
 

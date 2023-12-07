@@ -9,10 +9,10 @@ Sensor::Sensor(Patient* aPatient): pPatient(aPatient)
 
 void Sensor::setPatient(Patient* tempPatient)
 {
-    if(tempPatient)
-    {
-        pPatient = tempPatient;
-    }
+    if(!tempPatient) return;
+    pPatient = tempPatient;
+    connect(pPatient, SIGNAL(leftPadUpdated(int,int)), this, SLOT(setLPlacement(int,int)));
+    connect(pPatient, SIGNAL(rightPadUpdated(int,int)), this, SLOT(setRPlacement(int,int)));
 }
 
 //Doesn't end up being used
