@@ -184,6 +184,10 @@ void Patient::receiveRightPad(int r, int c){
     emit rightPadUpdated(r, c);
 }
 
+void Patient::receiveDepth(int depth){
+    emit sendDepth(depth);
+}
+
 
 //CPR Stuff
 void Patient::patientCPS(){
@@ -199,10 +203,8 @@ void Patient::patientCPS(){
         int timeDifference = clickTime.msecsTo(currentTime);
         cprBPM = 60000/ timeDifference;
         clickTime = currentTime;
-//        qDebug() << cprBPM;
     }
     heartRate = cprBPM;
-//    emit sendBPM(cprBPM);
 }
 
 void Patient::setCPR(bool c){
@@ -212,3 +214,5 @@ void Patient::setCPR(bool c){
 void Patient::falseCPR(){
     cpr = false;
 }
+
+
