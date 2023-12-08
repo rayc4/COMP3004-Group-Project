@@ -29,8 +29,8 @@ void PatientWindow::setPatient(Patient* tempPatient)
         return;
     }
     pPatient = tempPatient;
-    ui->nameLabel->setText(QString("Patient Name: %1").arg(pPatient->getName()));
-    ui->ageLabel->setText(QString("Age: %1").arg(pPatient->getAge()));
+    ui->nameLine->setText(pPatient->getName());
+    ui->ageLine->setText(QString::number(pPatient->getAge()));
 
     connect(ui->cprPB, SIGNAL(clicked()), pPatient, SLOT(patientCPS()));
     connect(ui->leftPadTable, SIGNAL(cellPressed(int,int)), pPatient, SLOT(receiveLeftPad(int,int)));
@@ -197,5 +197,13 @@ void PatientWindow::on_rightPadTable_cellPressed(int row, int column)
             }
         }
     }
+}
+
+
+void PatientWindow::on_pushButton_clicked()
+{
+    pPatient->setAge(ui->ageLine->text().toInt());
+    pPatient->setName(ui->nameLine->text());
+
 }
 

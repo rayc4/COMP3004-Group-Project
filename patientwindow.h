@@ -47,6 +47,8 @@ private slots:
 
     void on_cardiacButton_clicked(bool checked);
 
+    void on_pushButton_clicked();
+
 signals:
     void declarePosition(bool placement);
 

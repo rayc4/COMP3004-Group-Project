@@ -30,6 +30,9 @@ public:
     void setState(int state); 
     void setCPR(bool c);
 
+    void setAge(int a);
+    void setName(QString n);
+
 public slots:
     void updateHeartRate();
     void updateSurvivalRate();

@@ -4,10 +4,8 @@
 Patient::Patient(int a, QString nm):age(a), name(nm)
 {
 
-    if (age < 8)
-        isChild = true;
-    else
-        isChild = false;
+    setAge(age);
+
 
 
     //Let patient run on it's own thread:
@@ -171,6 +169,19 @@ void Patient::setState(int state){
         survivalTimer->stop();
         survivalChance = 100;
     }
+}
+
+
+void Patient::setAge(int a){
+    if (a < 8)
+        isChild = true;
+    else
+        isChild = false;
+    age = a;
+}
+
+void Patient::setName(QString n){
+    name = n;
 }
 
 //void leftPadUpdated(int, int){
