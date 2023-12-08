@@ -12,5 +12,10 @@
         <file>AED.png</file>
         <file>middle button.png</file>
         <file>human.png</file>
+        <file>infantfront.png</file>
+        <file>infantside.png</file>
+        <file>manfront.png</file>
+        <file>manside.png</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

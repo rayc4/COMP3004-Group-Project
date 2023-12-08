@@ -156,7 +156,7 @@ void AED::updateAED(){
     pAnalyzer->CollectHeart(pSensor->getHeartRate());
     QString feedback;
     pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), feedback);
-    qDebug() << feedback;
+    //qDebug() << feedback;
 }
 
 

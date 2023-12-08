@@ -116,9 +116,9 @@ void Analyzer::checkCPR(int depth, bool isChild, QString &feedback) {
     bool isGoodDepth = (depth >= lowerBound) && (depth <= upperBound);
 
     if (isGoodDepth) {
-        feedbackString.append("\nGood depth.");
+        feedbackString.append("Good depth.");
     } else {
-        feedbackString.append("\nPoor depth.");
+        feedbackString.append("Poor depth.");
         feedbackString.append((depthOffset > 0) ? QString("Lower hands by ~%1mm.").arg(depthOffset)
                                                  : QString("Raise hands by ~%1mm.").arg(qAbs(depthOffset)));
     }

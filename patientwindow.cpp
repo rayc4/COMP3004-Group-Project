@@ -141,14 +141,19 @@ void PatientWindow::on_leftPadTable_cellPressed(int row, int column)
 {
     //Note, the current row/column for this is the position of the pad!!
 
+    //Reduce size of pads if child...
+    int size = 0;
+    if (pPatient->getChild())
+        size = -1;
+
     ui->leftPadTable->clear();
     ui->leftPadTable->clearSelection();
 
-    int startRow = row - 2;
-    int startColumn = column - 2;
+    int startRow = row - 2 - size;
+    int startColumn = column - 2 - size;
 
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 4; j++) {
+    for (int i = 0; i < 4+size; i++) {
+        for (int j = 0; j < 5+size; j++) {
             int tempRow = startRow + i;
             int tempColumn = startColumn + j;
 
@@ -164,16 +169,23 @@ void PatientWindow::on_leftPadTable_cellPressed(int row, int column)
 
 void PatientWindow::on_rightPadTable_cellPressed(int row, int column)
 {
+
     //Note, the current row/column for this is the position of the pad!!
+
+    //Reduce size of pads if child...
+    int size = 0;
+    if (pPatient->getChild())
+        size = -1;
+
 
     ui->rightPadTable->clear();
     ui->rightPadTable->clearSelection();
 
-    int startRow = row - 2;
-    int startColumn = column - 2;
+    int startRow = row - 2 - size;
+    int startColumn = column - 2 - size;
 
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 4; j++) {
+    for (int i = 0; i < 4+size; i++) {
+        for (int j = 0; j < 5+size; j++) {
             int tempRow = startRow + i;
             int tempColumn = startColumn + j;
 

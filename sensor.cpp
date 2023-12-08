@@ -35,17 +35,19 @@ int Sensor::getHeartRate(){
 void Sensor::setLPlacement(int row,int column){
     //Threshold (+/-1) from row 5
     //Threshold (+/-2) from column 7
-    if ((row >= 4 and row <= 6) && (column >= 6 and column <= 8)){
+    if ((row >= 4 and row <= 7) && (column >= 4 and column <= 6)){
         leftPad = true;
+        checkPads();
     }else{
         leftPad = false;
+        checkPads();
     }
 }
 
 void Sensor::setRPlacement(int row,int column){
 //    Threshold (+/-1) from row 10
 //    Threshold (+/-1) from column 4
-    if ((row >= 9 and row <= 11) && (column >= 3 and column <= 5)){
+    if ((row >= 9 and row <= 13) && (column >= 2 and column <= 5)){
         rightPad = true;
         checkPads();
     }else{
