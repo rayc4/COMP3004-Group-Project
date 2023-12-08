@@ -145,6 +145,8 @@ void AED::enterNextState(){
     }
     updateState(++state);
     (this->*(stateFunctions[state]))();
+    //this-> compile issue
+    //this->* is definetly derreferring the iterator
 }
 
 void AED::power()
