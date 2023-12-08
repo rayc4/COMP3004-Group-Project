@@ -16,11 +16,7 @@ public:
     int getHeartRate();
     bool getCPRstatus() const;
     bool getGoodPlacement();
-    int getDepth() const;
-
-    //Setters
-//    void setPlacement(bool placement);
-    void setDepth(int depth);
+    int getDepth();
 
     //last second setters
     void setPatient(Patient* tempPatient);
@@ -33,13 +29,15 @@ public slots:
     //void receiveHeartRate(int hr);
     void setLPlacement(int r,int c);
     void setRPlacement(int r,int c);
+    void setDepth(int depth);
 
 private:
     int heartRate;
-    int cprDepth;
+    int cprDepth = 0;
     bool goodPlacement = false;
     bool leftPad = false;
     bool rightPad = false;
+    bool pressureCPR = false;
     Patient* pPatient;
 
 };

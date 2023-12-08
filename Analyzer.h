@@ -43,9 +43,8 @@ public:
     */
     bool checkCPR(int cBPM);
 
-
-
     void CollectHeart(int hbit);
+    int callDepth();
 
 
 //signals:

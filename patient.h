@@ -41,7 +41,7 @@ public slots:
     void falseCPR();
     void receiveLeftPad(int, int);
     void receiveRightPad(int, int);
-
+    void receiveDepth(int);
     void patientCPS();
 
 private:
@@ -67,12 +67,12 @@ private:
 
     bool cpr=false;
     bool cprReset = false;
-
 signals:
     void sendHeartRate(int HR);
     void sendBPM(int bpm);
     void leftPadUpdated(int, int);
     void rightPadUpdated(int, int);
+    void sendDepth (int);
 };
 
 #endif // PATIENT_H

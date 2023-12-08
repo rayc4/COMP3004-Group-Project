@@ -13,6 +13,7 @@ void Sensor::setPatient(Patient* tempPatient)
     pPatient = tempPatient;
     connect(pPatient, SIGNAL(leftPadUpdated(int,int)), this, SLOT(setLPlacement(int,int)));
     connect(pPatient, SIGNAL(rightPadUpdated(int,int)), this, SLOT(setRPlacement(int,int)));
+    connect(pPatient, SIGNAL(sendDepth(int)), this, SLOT(setDepth(int)));
 }
 
 //Doesn't end up being used
@@ -25,17 +26,11 @@ bool Sensor::getGoodPlacement(){
     return goodPlacement;
 }
 
-
 int Sensor::getHeartRate(){
     if (goodPlacement)
         return pPatient->getHeartRate();
     return -1;
 }
-
-int Sensor::getDepth() const{
-    return cprDepth;
-}
-
 
 void Sensor::setLPlacement(int row,int column){
     //Threshold (+/-1) from row 5
@@ -45,7 +40,6 @@ void Sensor::setLPlacement(int row,int column){
     }else{
         leftPad = false;
     }
-    qDebug() << "Left pad: " << leftPad;
 }
 
 void Sensor::setRPlacement(int row,int column){
@@ -58,8 +52,6 @@ void Sensor::setRPlacement(int row,int column){
         rightPad =false;
         checkPads();
     }
-
-    qDebug() << "Right pad: " << rightPad;
 }
 
 void Sensor::checkPads(){
@@ -68,4 +60,13 @@ void Sensor::checkPads(){
 
 void Sensor::setDepth(int depth){
     cprDepth = depth;
+    pressureCPR = true;
+    qDebug() << cprDepth;
 }
+
+int Sensor::getDepth(){
+    return cprDepth;
+}
+
+
+

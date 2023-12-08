@@ -35,6 +35,7 @@ void PatientWindow::setPatient(Patient* tempPatient)
     connect(ui->cprPB, SIGNAL(clicked()), pPatient, SLOT(patientCPS()));
     connect(ui->leftPadTable, SIGNAL(cellPressed(int,int)), pPatient, SLOT(receiveLeftPad(int,int)));
     connect(ui->rightPadTable, SIGNAL(cellPressed(int,int)), pPatient, SLOT(receiveRightPad(int,int)));
+    connect(ui->verticalSlider, SIGNAL(valueChanged(int)), pPatient, SLOT(receiveDepth(int)));
 }
 
 

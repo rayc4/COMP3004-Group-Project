@@ -81,7 +81,7 @@ int Analyzer::analyzeHeart()
 }
 
 bool Analyzer::checkCPR(int cBPM){
-    //qDebug() << cBPM;
+//    qDebug() << cBPM;
     //CPR BPM 100 - 120 (official requirement)
     //For testing purposes, we did 90 - 130
     // CPR BPM is considered good if it's between 90 and 130
@@ -128,3 +128,6 @@ void Analyzer::setShockState(bool state) {
     shockState = state;
 }
 
+int Analyzer::callDepth(){
+    return (pSensor->getDepth());
+}
