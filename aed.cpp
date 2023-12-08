@@ -103,6 +103,10 @@ void AED::instructCPR()
     //CPR quality here
 
     // Retry || bypass to different step
+//    QString feedback;
+//    pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), feedback);
+//    qDebug() << feedback;
+
 }
 
 void AED::checkAirBreathing()
@@ -133,11 +137,28 @@ AED::AED(QObject *parent)
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(enterNextState()));
 
     connect(this, SIGNAL(stageComplete()), this, SLOT(enterNextState()));
+
+    //Zuhayr
+    updateTimer = new QTimer();
+    connect(updateTimer, &QTimer::timeout, [=]() {
+        updateAED();
+    });
+    updateTimer->start(300);
+    // Zuhayr
 }
 
 AED::~AED(){
 
 }
+
+//Function added by Zuhayr
+void AED::updateAED(){
+    pAnalyzer->CollectHeart(pSensor->getHeartRate());
+    QString feedback;
+    pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), feedback);
+    qDebug() << feedback;
+}
+
 
 void AED::enterNextState(){
     if(state == FINAL_STATE){
@@ -185,7 +206,7 @@ void AED::setState(int state){
 //ONLY CALL THIS FUNCTION WHEN YOU WANT TO CHECK CPR (LOGIC MISSING)
 void AED::determineCPRStatus(){
     qDebug() << pAnalyzer;
-    goodCPR = pAnalyzer->checkCPR(pSensor->getHeartRate());
+    //goodCPR = pAnalyzer->checkCPR(pSensor->getHeartRate());
     if (goodCPR){
         qDebug() << "GOOD";
     }else{

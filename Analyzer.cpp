@@ -11,17 +11,20 @@ Analyzer::~Analyzer() {
 
 void Analyzer::CollectHeart(int hbit)
 {
-    if(heartbits.size() >= 120)
-    {
-        heartbits.pop_front();
+    if (hbit != -1){
+        if(heartbeats.size() >= 120)
+        {
+            heartbeats.pop_front();
+            //qDebug() << "Popped" << heartbits.front();
+        }
+        heartbeats.push_back(hbit);
     }
-    heartbits.push_back(hbit);
 }
 
 int Analyzer::analyzeHeart()
 {
     //add only numbers once a second
-    if(heartbits.empty() || (heartbits.size() <=60))
+    if(heartbeats.empty() || (heartbeats.size() <=60))
     {
         return -1;
     }
@@ -33,10 +36,10 @@ int Analyzer::analyzeHeart()
 
     bool isErratic = false;
 
-    int previousBeat = heartbits.front();
-    for(int i = 0; i < heartbits.size(); i++)
+    int previousBeat = heartbeats.front();
+    for(int i = 0; i < heartbeats.size(); i++)
     {
-        int beat = heartbits.at(i);
+        int beat = heartbeats.at(i);
         sum += beat;
 
         //double if in case of flat line
@@ -52,7 +55,7 @@ int Analyzer::analyzeHeart()
 
     }
 
-    double average = sum / static_cast<double>(heartbits.size());
+    double average = sum / static_cast<double>(heartbeats.size());
 
     // Detect conditions
     if (average < 30) {
@@ -80,18 +83,49 @@ int Analyzer::analyzeHeart()
     return heartState; // Placeholder
 }
 
-bool Analyzer::checkCPR(int cBPM){
-//    qDebug() << cBPM;
-    //CPR BPM 100 - 120 (official requirement)
-    //For testing purposes, we did 90 - 130
-    // CPR BPM is considered good if it's between 90 and 130
-    return (cBPM >= 90 && cBPM <= 130);
+//Done by Zuhayr
+void Analyzer::checkCPR(int depth, bool isChild, QString &feedback) {
+    int cprSum = 0;
+
+    //Require a minimum of 5 values to check cpr
+    int numValues = std::min(5, static_cast<int>(heartbeats.size()));
+
+    for (int i = 0; i < numValues; ++i) {
+        cprSum += heartbeats[heartbeats.size() - 1 - i];
+    }
+
+    double average = cprSum / static_cast<double>(numValues);
+    feedbackString = "";
+
+    //Whilst typical cpr is between 100-120 bpm, to make it easy we'll do 90-130
+    bool isGoodCPR = (average >= 90) && (average <= 130);
+    if (isGoodCPR) {
+        feedbackString.append("Good CPR speed. ");
+    } else {
+        feedbackString.append("Poor CPR speed. ");
+        if (average < 90)
+            feedbackString.append("Pump faster. Aim for at least 100 BPM. ");
+        else
+            feedbackString.append("Slow down! Aim for at most 120BPM. ");
+
+    }
+
+    int lowerBound = isChild ? 45 : 50;
+    int upperBound = isChild ? 55 : 60;
+    int depthOffset = (depth < lowerBound) ? (depth - 45) : ((depth > upperBound) ? (depth - 55) : -1);
+    bool isGoodDepth = (depth >= lowerBound) && (depth <= upperBound);
+
+    if (isGoodDepth) {
+        feedbackString.append("\nGood depth.");
+    } else {
+        feedbackString.append("\nPoor depth.");
+        feedbackString.append((depthOffset > 0) ? QString("Lower hands by ~%1mm.").arg(depthOffset)
+                                                 : QString("Raise hands by ~%1mm.").arg(qAbs(depthOffset)));
+    }
+
+    feedback = feedbackString;
 }
 
-
-bool Analyzer::CPRFeedback(const std::string& feedback) {
-    return true; // Placeholder
-}
 
 void Analyzer::setShock(bool shock) {
     shockState = shock;

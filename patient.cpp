@@ -27,7 +27,7 @@ Patient::Patient(int a, QString nm):age(a), name(nm)
     connect(heartRateTimer, &QTimer::timeout, [=]() {
         updateHeartRate();
     });
-    heartRateTimer->start(300);
+    heartRateTimer->start(1000);
 
 
     survivalTimer = new QTimer();
@@ -150,6 +150,11 @@ int Patient::getHeartRate(){
 int Patient::getAge(){
     QMutexLocker locker(&heartMutex);
     return age;
+}
+
+bool Patient::getChild(){
+    QMutexLocker locker(&heartMutex);
+    return isChild;
 }
 
 QString Patient::getName(){

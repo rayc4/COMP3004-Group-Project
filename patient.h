@@ -24,6 +24,7 @@ public:
 
     int getHeartRate();
     int getAge();
+    bool getChild();
     QString getName();
 
     void setState(int state); 

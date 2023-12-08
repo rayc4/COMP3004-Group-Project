@@ -16,7 +16,9 @@ private:
     bool shockState;
     int cBPM;
     bool goodCPR;
-    std::deque<int> heartbits;
+    std::deque<int> heartbeats;
+
+    QString feedbackString;
 
 
 public:
@@ -25,7 +27,6 @@ public:
 
  
     int analyzeHeart();
-    bool CPRFeedback(const std::string& feedback);
     void setShock(bool shock);
     bool checkPlacement();
 
@@ -41,7 +42,7 @@ public:
     /* Regular, asystole, vtac, vfib
      * Check for placement, check for cpr (depth AND speed)
     */
-    bool checkCPR(int cBPM);
+    void checkCPR(int depth, bool isChild, QString &feedback);
 
     void CollectHeart(int hbit);
     int callDepth();

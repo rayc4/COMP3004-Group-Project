@@ -14,6 +14,8 @@ class AED : public QObject
     Q_OBJECT
 
 private:
+    void updateAED();
+
     QMainWindow* window;
     Sensor* pSensor;
     Analyzer* pAnalyzer;
@@ -25,13 +27,13 @@ private:
     FuncVector stateFunctions;
 
     QTimer* waitTimer;
+    QTimer* updateTimer;
 
 
 public:
     explicit AED(QObject *parent = nullptr);
     ~AED();
 
-    void updateAED();
     bool guidePlacement(bool isChild);
     bool readyToShock();
     void setMessage(const std::string& audioMessage, const std::string& displayMessage);

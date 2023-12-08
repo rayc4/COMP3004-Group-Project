@@ -68,5 +68,7 @@ int Sensor::getDepth(){
     return cprDepth;
 }
 
-
+bool Sensor::getChild(){
+    return pPatient->getChild();
+}
 

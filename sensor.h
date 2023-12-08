@@ -17,6 +17,7 @@ public:
     bool getCPRstatus() const;
     bool getGoodPlacement();
     int getDepth();
+    bool getChild();
 
     //last second setters
     void setPatient(Patient* tempPatient);
@@ -38,6 +39,7 @@ private:
     bool leftPad = false;
     bool rightPad = false;
     bool pressureCPR = false;
+    bool isChild = false;
     Patient* pPatient;
 
 };
