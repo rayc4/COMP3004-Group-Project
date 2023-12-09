@@ -15,20 +15,21 @@ class AED : public QObject
 
 private:
     void updateAED();
+    void batteryUpdate();
 
     QMainWindow* window;
     Sensor* pSensor;
     Analyzer* pAnalyzer;
     int state = -1;
     bool isChild;
-    int battery;
+    int battery = 100;
     bool goodCPR;
     typedef std::vector<void(AED::*)()> FuncVector;
     FuncVector stateFunctions;
 
     QTimer* waitTimer;
     QTimer* updateTimer;
-
+    QTimer *batteryTimer;
 
 public:
     explicit AED(QObject *parent = nullptr);
@@ -77,14 +78,14 @@ public:
         void updateState(int state);
         void stateDone();
         void stageComplete();
-
+        void updateBattery(int battery);
 
     public slots:
 //        void receiveSensorData(int data);
         void determineCPRStatus();
         void power();
         void enterNextState();
-
+        void batteryLogic(int value);
 };
 
 #endif // AED_H

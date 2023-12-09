@@ -31,9 +31,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Power button
     connect(ui->powerPB, SIGNAL(clicked()), pAED, SLOT(power()));
     connect(pAED, SIGNAL(updateText(std::string)), this, SLOT(updateText(std::string)));
-
     connect(pAED, SIGNAL(updateState(int)), this, SLOT(updateState(int)));
-
+    connect(ui->batterySlider, SIGNAL(sliderMoved(int)), pAED, SLOT(batteryLogic(int)));
+    connect(pAED, SIGNAL(updateBattery(int)), this, SLOT(updateBatteryStatus(int)));
     stateRBs = findChildren<QRadioButton*>();
 }
 
@@ -108,6 +108,10 @@ void MainWindow::updateState(int state){
     QString rbName = QString("radioButton") + QString::number(state);
     QRadioButton* rb = findChild<QRadioButton*>(rbName);
     rb->setChecked(true);
+}
+
+void MainWindow::updateBatteryStatus(int value){
+    ui->batteryStatus->setValue(value);
 }
 
 

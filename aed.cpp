@@ -145,10 +145,23 @@ AED::AED(QObject *parent)
     });
     updateTimer->start(300);
     // Zuhayr
+
+    batteryTimer = new QTimer(this);
+    connect(batteryTimer, &QTimer::timeout, [=](){
+        batteryUpdate();
+    });
+    batteryTimer->start(15000);
 }
 
 AED::~AED(){
 
+}
+
+void AED::batteryUpdate(){
+    if (battery > 0){
+        battery --;
+        batteryLogic(battery);
+    }
 }
 
 //Function added by Zuhayr
@@ -171,14 +184,19 @@ void AED::enterNextState(){
 }
 
 void AED::power()
-{
-    if(state != -1){
-        state = -1;
-        updateText("");
+{  
+    if (battery <= 0){
+        updateText("Please Charge. There is no battery");
     }else{
-        updateText("Powered on, performing self-check");
-        waitTimer->start(WAIT_MS);
+        if(state != -1){
+            state = -1;
+            updateText("");
+        }else{
+            updateText("Powered on, performing self-check");
+            waitTimer->start(WAIT_MS);
+        }
     }
+
 }
 
 bool AED::guidePlacement(bool isChild)
@@ -218,7 +236,9 @@ Sensor* AED::getSensor(){
     return pSensor;
 }
 
+void AED::batteryLogic(int value){
+    battery = value;
+    updateBattery(battery);
+}
 
-
-//this is a comment
 
