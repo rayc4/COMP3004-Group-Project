@@ -240,7 +240,6 @@ void Patient::patientCPS(){
     cpr = true;
     int cprBPM = 0;
     click++;
-    cprCount++;
 
     if (click == 1){
         clickTime = QTime::currentTime();
@@ -251,6 +250,8 @@ void Patient::patientCPS(){
         cprBPM = 60000/ timeDifference;
         clickTime = currentTime;
     }
+    if (cprBPM > 100 && cprBPM < 120)
+        cprCount++; //If its good CPR, make it count
     heartRate = cprBPM;
 }
 
