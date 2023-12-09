@@ -147,8 +147,6 @@ void Patient::cardiacArrest(){
 
 //Chance-based on how a patient responds to a shock
 void Patient::respondToShock(){
-    QMutexLocker locker(&heartMutex);
-
     //3 pathways: a) Regular, b) Continued vfib/vtac, or c) asystole
     //a) 50%, b) 40%, c) 10%
     int response = -1;
