@@ -7,11 +7,11 @@ PatientWindow::PatientWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-//    QTimer* guiTimer = new QTimer();
-//    connect(guiTimer, &QTimer::timeout, [=]() {
-//        updateGUI();
-//    });
-//    guiTimer->start(300);
+    QTimer* guiTimer = new QTimer();
+    connect(guiTimer, &QTimer::timeout, [=]() {
+        updateGUI();
+    });
+    guiTimer->start(300);
 
 
 
@@ -49,6 +49,57 @@ PatientWindow::~PatientWindow(){
 void PatientWindow::updateGUI()
 {
 //main visual updates should happen here
+
+
+
+    //Update survival chance:
+    QString survivalString = QString("<html><head/><body>"
+                        "<p><span style=\"font-weight:600;\">SURVIVAL<br/>CHANCE<br/></span>"
+                        "<span style=\"font-size:20pt; font-weight:600;\">%1%</span></p>"
+                        "</body></html>").arg(pPatient->getSurvival());
+    ui->survivalLabel->setText(survivalString);
+
+
+
+    //Update current state on GUI
+    QString stateString = "<html><head/><body>"
+                         "<p><span style=\"font-weight:600;\">CURRENT<br/>STATE<br/></span>"
+                         "<span style=\"font-size:20pt; font-weight:600;\">%1</span></p>"
+                         "</body></html>";
+    switch (pPatient->getState()) {
+        case 0:
+            ui->stateLabel->setText(stateString.arg("REG"));
+            ui->killButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                             "color: rgb(0,0,0);");
+            ui->vTacButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                             "color: rgb(0,0,0);");
+            ui->vFibButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                             "color: rgb(0,0,0);");
+            ui->cardiacButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                             "color: rgb(0,0,0);");
+            break;
+        case 1:
+            ui->stateLabel->setText(stateString.arg("VTAC"));
+            break;
+        case 2:
+            ui->stateLabel->setText(stateString.arg("VFIB"));
+            break;
+        case 3:
+            ui->stateLabel->setText(stateString.arg("DEAD"));
+            break;
+        case 4:
+            ui->stateLabel->setText(stateString.arg("CARR"));
+            break;
+        default:    //Not sure how it would get to this state
+            ui->stateLabel->setText(stateString.arg("?"));
+
+    }
+
+
+
+
+
+
 }
 
 Patient* PatientWindow::getPatient()
@@ -64,16 +115,18 @@ Patient* PatientWindow::getPatient()
 void PatientWindow::on_killButton_clicked(bool checked)
 {
     if (checked){
-        pPatient->setState(3);
-        ui->vFibButton->setDisabled(1);
-        ui->vTacButton->setDisabled(1);
-        ui->cardiacButton->setDisabled(1);
+        if (pPatient->getState() == 0){ // Only allowed if in regular state
+            pPatient->setState(3);
+            ui->killButton->setStyleSheet("border: 4px solid rgb(0, 0, 0);"
+                                             "color: rgb(0,0,0);");
+        }
+        else
+            ui->killButton->setChecked(false);
     }
     else{
         pPatient->setState(0);
-        ui->vFibButton->setDisabled(0);
-        ui->vTacButton->setDisabled(0);
-        ui->cardiacButton->setDisabled(0);
+        ui->killButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                         "color: rgb(0,0,0);");
     }
 
 
@@ -82,50 +135,59 @@ void PatientWindow::on_killButton_clicked(bool checked)
 void PatientWindow::on_cardiacButton_clicked(bool checked)
 {
     if (checked){
-        pPatient->setState(4);
-        ui->vFibButton->setDisabled(1);
-        ui->vTacButton->setDisabled(1);
-        ui->killButton->setDisabled(1);
+        if (pPatient->getState() == 0){ // Only allowed if in regular state
+            ui->cardiacButton->setStyleSheet("border: 4px solid rgb(237, 51, 59);"
+                                             "color: rgb(237, 51, 59);");
+            pPatient->setState(4);
+        }
+        else
+            ui->cardiacButton->setChecked(false);
     }
     else{
+        ui->cardiacButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                         "color: rgb(0,0,0);");
         pPatient->setState(0);
-        ui->vFibButton->setDisabled(0);
-        ui->vTacButton->setDisabled(0);
-        ui->killButton->setDisabled(0);
     }
+    updateGUI();
 }
 
 void PatientWindow::on_vFibButton_clicked(bool checked)
 {
     if (checked){
-        pPatient->setState(2);
-        ui->killButton->setDisabled(1);
-        ui->vTacButton->setDisabled(1);
-        ui->cardiacButton->setDisabled(1);
+        if (pPatient->getState() == 0){ // Only allowed if in regular state
+            pPatient->setState(2);
+            ui->vFibButton->setStyleSheet("border: 4px solid rgb(53, 132, 228);"
+                                             "color: rgb(53, 132, 228);");
+        }
+        else
+            ui->vFibButton->setChecked(false);
     }
     else{
+        ui->vFibButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                         "color: rgb(0,0,0);");
         pPatient->setState(0);
-        ui->killButton->setDisabled(0);
-        ui->vTacButton->setDisabled(0);
-        ui->cardiacButton->setDisabled(0);
     }
+    updateGUI();
 }
 
 
 void PatientWindow::on_vTacButton_clicked(bool checked)
 {
     if (checked){
-        pPatient->setState(1);
-        ui->vFibButton->setDisabled(1);
-        ui->killButton->setDisabled(1);
-        ui->cardiacButton->setDisabled(1);
+        if (pPatient->getState() == 0){ // Only allowed if in regular state
+            pPatient->setState(1);
+            ui->vTacButton->setStyleSheet("border: 4px solid rgb(129, 61, 156);"
+                                             "color: rgb(129, 61, 156);");
+        }
+        else
+            ui->vTacButton->setChecked(false);
     }
     else{
+        ui->vTacButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                         "color: rgb(0,0,0);");
         pPatient->setState(0);
-        ui->vFibButton->setDisabled(0);
-        ui->killButton->setDisabled(0);
-        ui->cardiacButton->setDisabled(0);
     }
+    updateGUI();
 }
 
 
@@ -200,10 +262,40 @@ void PatientWindow::on_rightPadTable_cellPressed(int row, int column)
 }
 
 
-void PatientWindow::on_pushButton_clicked()
+
+
+
+void PatientWindow::on_updateButton_pressed()
+{
+    ui->updateButton->setStyleSheet("border: 4px solid rgb(200, 200, 200);"
+                                     "color: rgb(200,200,200);");
+}
+
+
+void PatientWindow::on_updateButton_released()
+{
+    ui->updateButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                     "color: rgb(0,0,0);");
+}
+
+
+void PatientWindow::on_updateButton_clicked()
 {
     pPatient->setAge(ui->ageLine->text().toInt());
     pPatient->setName(ui->nameLine->text());
+    updateGUI();
+}
 
+
+void PatientWindow::on_breathButton_clicked()
+{
+    pPatient->addBreath();
+    updateGUI();
+}
+
+
+void PatientWindow::on_shockTestButton_clicked()
+{
+    pPatient->respondToShock();
 }
 

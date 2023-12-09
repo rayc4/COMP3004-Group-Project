@@ -44,10 +44,26 @@ Patient::~Patient(){
 void Patient::updateHeartRate(){
     //qDebug() << "-----------" << cprReset;
     QMutexLocker locker(&heartMutex);
+
+    //qDebug() << "Cpr count: " << cprCount << "Breath count: " << breathCount;
+
+    if (baseSurvivalChance+survivalBonus > 100)
+        baseSurvivalChance = 100;
+
+    //Check with cpr affecting survival rate:
+    if (cprCount >= 30 && breathCount >= 2){
+        cprCount = 0;
+        breathCount = 0;
+        survivalBonus+= 10; //If given 30 compressions + 2 breaths, survival chance goes up
+        baseSurvivalChance += survivalBonus;
+        if (baseSurvivalChance > 100)
+            baseSurvivalChance = 100;
+    }
+
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
     if (cpr)
         cpr = false;
-    else if (survivalChance == 0) //If there is no chance of survival, patient flatlines.
+    else if (baseSurvivalChance == 0) //If there is no chance of survival, patient flatlines.
         asystole();
     else{
         //cprReset = false;
@@ -76,15 +92,17 @@ void Patient::updateSurvivalRate(){
     //qDebug() << "Current chances of survival decreased to" << survivalChance << "%";
     survivalTime++; //Add one second to the timer.
     if (survivalTime %60 == 0) //Every minute
-        survivalChance -= 10; //Every minute, chances decrease by 10%
+        baseSurvivalChance -= 10; //Every minute, chances decrease by 10%
 
-    if (survivalChance < 0)
-        survivalChance = 0;
+    if (baseSurvivalChance < 0)
+        baseSurvivalChance = 0;
 
 
 }
 
 void Patient::reg(){
+    baseSurvivalChance = 100;
+    survivalBonus = 0;
 
     int minHR = 70;
     int maxHR = 75;
@@ -95,6 +113,8 @@ void Patient::reg(){
 
 //Patient's body forces ventricular tachycardia
 void Patient::vTac(){
+    baseSurvivalChance = 40 + survivalBonus;
+
     int minHR = 240;
     int maxHR = 250;
 
@@ -103,6 +123,8 @@ void Patient::vTac(){
 
 //Patient's body forces ventricular fibrillation
 void Patient::vFib(){
+    baseSurvivalChance = 30 + survivalBonus;
+
     int minHR = 150;
     int maxHR = 500;
     //Generate a value from 150 to 500
@@ -111,11 +133,13 @@ void Patient::vFib(){
 
 //Patient flatlines
 void Patient::asystole(){
-    survivalChance = 0;
+    baseSurvivalChance = 0;
     heartRate = 0;
 }
 
 void Patient::cardiacArrest(){
+    baseSurvivalChance = 20 + survivalBonus;;
+
     int minHR = 40;
     int maxHR = 50;
     heartRate = randomGen.bounded(minHR, maxHR+1);
@@ -123,20 +147,25 @@ void Patient::cardiacArrest(){
 
 //Chance-based on how a patient responds to a shock
 void Patient::respondToShock(){
+    QMutexLocker locker(&heartMutex);
+
     //3 pathways: a) Regular, b) Continued vfib/vtac, or c) asystole
     //a) 50%, b) 40%, c) 10%
     int response = -1;
-    int tempState = -1;
 
     response = randomGen.bounded(0, 100);
-    if (response < 10 * (survivalChance / 10)) //10% chance
-        tempState = 3; //asystole
-    else if (response < 50 * (survivalChance / 10)) //50% chance
-        tempState = currState; //Return to original state
-    else //50% chance
-        tempState = 0; //Return to regular heartbeat
+    response = static_cast<int>(response * (baseSurvivalChance+survivalBonus) / 100.0);
 
-    currState = tempState;
+    qDebug() << response;
+
+    if (response < 10) // 10% chance
+        setState(3); // asystole
+    else if (response < 50) { // 50% chance
+        setState(currState); // Return to original state
+        survivalBonus += 10; // 10% survival bonus for trying
+    }
+    else // 40% chance (50% - 10%)
+        setState(0); // Return to regular heartbeat
 
 }
 
@@ -160,6 +189,16 @@ QString Patient::getName(){
     return name;
 }
 
+int Patient::getSurvival(){
+    QMutexLocker locker(&heartMutex);
+    return baseSurvivalChance;
+}
+
+int Patient::getState(){
+    QMutexLocker locker(&heartMutex);
+    return currState;
+}
+
 void Patient::setState(int state){
     QMutexLocker locker(&heartMutex);
     currState = state;
@@ -167,7 +206,7 @@ void Patient::setState(int state){
         survivalTimer->start(1000);
     else{
         survivalTimer->stop();
-        survivalChance = 100;
+        baseSurvivalChance = 100;
     }
 }
 
@@ -183,14 +222,6 @@ void Patient::setAge(int a){
 void Patient::setName(QString n){
     name = n;
 }
-
-//void leftPadUpdated(int, int){
-
-//}
-
-//void rightPadUpdated(int, int){
-
-//}
 
 void Patient::receiveLeftPad(int r, int c){
     emit leftPadUpdated(r, c);
@@ -211,6 +242,8 @@ void Patient::patientCPS(){
     cpr = true;
     int cprBPM = 0;
     click++;
+    cprCount++;
+
     if (click == 1){
         clickTime = QTime::currentTime();
         cprBPM = 60;
@@ -224,7 +257,14 @@ void Patient::patientCPS(){
 }
 
 void Patient::setCPR(bool c){
+    QMutexLocker locker(&heartMutex);
     cpr = c;
+}
+
+void Patient::addBreath(){
+    QMutexLocker locker(&heartMutex);
+    if (cprCount >= 30) //Breaths only effective after 30 compressions
+        breathCount++;
 }
 
 void Patient::falseCPR(){

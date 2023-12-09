@@ -26,12 +26,16 @@ public:
     int getAge();
     bool getChild();
     QString getName();
+    int getSurvival();
+    int getState();
 
     void setState(int state); 
     void setCPR(bool c);
+    void addBreath();
 
     void setAge(int a);
     void setName(QString n);
+
 
 public slots:
     void updateHeartRate();
@@ -52,7 +56,7 @@ private:
     QThread* patientThread;
 
     QRandomGenerator randomGen;
-    int currState; //0 = reg, 1 = vtac, 2 = vfib, 3 = asys
+    int currState; //0 = reg, 1 = vtac, 2 = vfib, 3 = asys, 4 = carr
     int age;
     bool isChild;
     QString name;
@@ -61,13 +65,16 @@ private:
     QTimer* survivalTimer;
 
     int survivalTime;
-    int survivalChance = 100;
+    int baseSurvivalChance = 100;
+    int survivalBonus = 0;
 
     QMutex heartMutex;
 
     //CPR Stuff
     QTime clickTime;
     int click = 0;
+    int cprCount = 0;
+    int breathCount = 0;
 
     bool cpr=false;
     bool cprReset = false;
