@@ -173,17 +173,21 @@ void Patient::respondToShock(){
     //a) 50%, b) 40%, c) 10%
     int response = -1;
 
-    response = randomGen.bounded(0, 100);
-    response = static_cast<int>(response * (baseSurvivalChance+survivalBonus) / 100.0);
+    if (!(currentState == ASYS)){ //Should not be able to be shocked if dead!
+        response = randomGen.bounded(0, 100);
+        response = static_cast<int>(response * (baseSurvivalChance+survivalBonus) / 100.0);
 
-    qDebug() << response;
+        //qDebug() << response;
 
-    if (response < 60) { // 50% chance
-        setState(currentState); // Return to original state
-        survivalBonus += 10; // 10% survival bonus for trying
+        if (response < 60) { // 50% chance
+            //Do nothing
+            survivalBonus += 10; // 10% survival bonus for trying
+        }
+        else // 40% chance (50% - 10%)
+            baseSurvivalChance = 100; //Patient lives!
     }
-    else // 40% chance (50% - 10%)
-        setState(REG); // Return to regular heartbeat
+
+    backToLife();
 
 }
 
