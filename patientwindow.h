@@ -57,6 +57,8 @@ private slots:
 
     void on_shockTestButton_clicked();
 
+    void on_autoCPRButton_clicked();
+
 signals:
     void declarePosition(bool placement);
 

@@ -47,14 +47,15 @@ void Patient::updateHeartRate(){
 
     //qDebug() << "Cpr count: " << cprCount << "Breath count: " << breathCount;
 
-    qDebug() << "Base survival: " << baseSurvivalChance;
-    qDebug() << "Bonus: " << survivalBonus;
+    //qDebug() << "Base survival: " << baseSurvivalChance;
+    //qDebug() << "Bonus: " << survivalBonus;
 
     //Check with cpr affecting survival rate:
     if (cprCount >= 30 && breathCount >= 2){
         cprCount = 0;
         breathCount = 0;
         survivalBonus += 10; //If given 30 compressions + 2 breaths, survival chance goes up
+        backToLife();
     }
 
 
@@ -101,14 +102,10 @@ void Patient::updateHeartRate(){
 
     //qDebug() << "Current survival addition is " << survivalAddition;
 
-    if (baseSurvivalChance + survivalBonus >= 100)
-        reg();
-
     if (currentState == ASYS){
         baseSurvivalChance = 0;
         survivalBonus = 0;
     }
-
 
 
 }
@@ -295,4 +292,27 @@ void Patient::falseCPR(){
     cpr = false;
 }
 
+//This function looks at current survival rate and decides if the patient can come back to life
+void Patient::backToLife(){
+    //Choose if based on the current survival chance the person can come back:
+    int tempSurvival = baseSurvivalChance + survivalBonus;
+    int survivalChange = 0;
+    if (tempSurvival < 100){
+        survivalChange = randomGen.bounded(0, 100);
+        qDebug() << "Survival change is" << survivalChange;
+        qDebug() << "temp survival is" << tempSurvival;
+        if (survivalChange <= tempSurvival){
+            currentState = REG;
+        }
+    }
+}
 
+
+//Only for testing purposes:
+void Patient::autoCPR(){
+    qDebug() << "Auto CPR called";
+    cpr = true;
+    heartRate = 110;
+    cprCount = 30;
+    breathCount = 2;
+}

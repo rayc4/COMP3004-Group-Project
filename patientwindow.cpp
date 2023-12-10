@@ -71,10 +71,13 @@ void PatientWindow::updateGUI()
             ui->stateLabel->setText(stateString.arg("REG"));
             ui->killButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                              "color: rgb(0,0,0);");
+            ui->vTacButton->setChecked(false);
             ui->vTacButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                              "color: rgb(0,0,0);");
+            ui->vFibButton->setChecked(false);
             ui->vFibButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                              "color: rgb(0,0,0);");
+            ui->cardiacButton->setChecked(false);
             ui->cardiacButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                              "color: rgb(0,0,0);");
             break;
@@ -297,5 +300,11 @@ void PatientWindow::on_breathButton_clicked()
 void PatientWindow::on_shockTestButton_clicked()
 {
     pPatient->respondToShock();
+}
+
+
+void PatientWindow::on_autoCPRButton_clicked()
+{
+    pPatient->autoCPR();
 }
 

@@ -894,6 +894,20 @@ color: rgb(154, 153, 150);</string>
 AREA</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="autoCPRButton">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>100</y>
+     <width>51</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>AUTO
+CPR</string>
+   </property>
+  </widget>
   <zorder>adultFrontLabel</zorder>
   <zorder>line_3</zorder>
   <zorder>nameLabel</zorder>
@@ -920,6 +934,7 @@ AREA</string>
   <zorder>shockTestButton</zorder>
   <zorder>line_8</zorder>
   <zorder>nameLabel_3</zorder>
+  <zorder>autoCPRButton</zorder>
  </widget>
  <resources/>
  <connections/>

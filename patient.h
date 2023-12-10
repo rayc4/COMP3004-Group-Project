@@ -38,6 +38,7 @@ public:
     void setAge(int a);
     void setName(QString n);
 
+    void autoCPR(); //Only a test function
 
 public slots:
     void updateHeartRate();
@@ -85,12 +86,15 @@ private:
 
     bool cpr=false;
     bool cprReset = false;
+    void backToLife();
+
 signals:
     void sendHeartRate(int HR);
     void sendBPM(int bpm);
     void leftPadUpdated(int, int);
     void rightPadUpdated(int, int);
     void sendDepth (int);
+
 };
 
 #endif // PATIENT_H
