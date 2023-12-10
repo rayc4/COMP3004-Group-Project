@@ -52,6 +52,7 @@ void Patient::updateHeartRate(){
 
     //Check with cpr affecting survival rate:
     if (cprCount >= 30 && breathCount >= 2){
+        oneCPR = true;
         cprCount = 0;
         breathCount = 0;
         survivalBonus += 10; //If given 30 compressions + 2 breaths, survival chance goes up
@@ -125,6 +126,9 @@ void Patient::updateSurvivalRate(){
 void Patient::reg(){
     baseSurvivalChance = 100;
     survivalBonus = 0;
+    cpr = false;
+    oneCPR = false;
+    cprCount = 0;
 
     int minHR = 70;
     int maxHR = 75;
@@ -172,18 +176,14 @@ void Patient::respondToShock(){
     //3 pathways: a) Regular, b) Continued vfib/vtac, or c) asystole
     //a) 50%, b) 40%, c) 10%
     int response = -1;
-
-    if (!(currentState == ASYS)){ //Should not be able to be shocked if dead!
+    if (!(currentState == ASYS)){
         response = randomGen.bounded(0, 100);
-        response = static_cast<int>(response * (baseSurvivalChance+survivalBonus) / 100.0);
-
         //qDebug() << response;
-
-        if (response < 60) { // 50% chance
+        if (response < 70) { // 70% chance that it fails and falls back to original survival chance
             //Do nothing
             survivalBonus += 10; // 10% survival bonus for trying
         }
-        else // 40% chance (50% - 10%)
+        else // 30% chance patient comes back to life
             baseSurvivalChance = 100; //Patient lives!
     }
 
@@ -296,17 +296,22 @@ void Patient::falseCPR(){
 
 //This function looks at current survival rate and decides if the patient can come back to life
 void Patient::backToLife(){
-    //Choose if based on the current survival chance the person can come back:
-    int tempSurvival = baseSurvivalChance + survivalBonus;
-    int survivalChange = 0;
-    if (tempSurvival < 100){
-        survivalChange = randomGen.bounded(0, 100);
-        //qDebug() << "Survival change is" << survivalChange;
-        //qDebug() << "temp survival is" << tempSurvival;
-        if (survivalChange <= tempSurvival){
-            currentState = REG;
+    if ((baseSurvivalChance + survivalBonus >= 100) && oneCPR)
+        currentState = REG;
+    else if (oneCPR && !(currentState == ASYS || currentState == REG)){ //If CPR occured at least once
+        //Choose if based on the current survival chance the person can come back:
+        int tempSurvival = baseSurvivalChance + survivalBonus;
+        int survivalChange = 0;
+        if (tempSurvival < 100){
+            survivalChange = randomGen.bounded(0, 100);
+            qDebug() << "Survival change is" << survivalChange;
+            qDebug() << "temp survival is" << tempSurvival;
+            if ((survivalChange <= tempSurvival) && oneCPR){
+                currentState = REG;
+            }
         }
     }
+
 }
 
 

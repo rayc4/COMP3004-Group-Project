@@ -85,8 +85,10 @@ private:
     int breathCount = 0;
 
     bool cpr=false;
-    bool cprReset = false;
     void backToLife();
+
+    //Is set to true when at least once cpr+shock is done
+    bool oneCPR = false;
 
 signals:
     void sendHeartRate(int HR);
