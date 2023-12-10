@@ -160,6 +160,7 @@ void Patient::vFib(){
 //Patient flatlines
 void Patient::asystole(){
     baseSurvivalChance = 0;
+    survivalBonus = 0;
     heartRate = 0;
 }
 
@@ -309,6 +310,14 @@ void Patient::backToLife(){
             if ((survivalChange <= tempSurvival) && oneCPR){
                 currentState = REG;
             }
+        }
+    }
+
+    //Adding a 5% chance for death here...
+    if (!(currentState == REG || currentState == ASYS)) {
+        int deathChange = randomGen.bounded(0, 100);
+        if (deathChange < 5){
+             currentState = ASYS;
         }
     }
 
