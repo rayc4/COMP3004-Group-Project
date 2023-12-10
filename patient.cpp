@@ -19,7 +19,7 @@ Patient::Patient(int a, QString nm):age(a), name(nm)
     randomGen.seed(QTime::currentTime().msec());
 
     //Patient first initialized with a regular heartbeat
-    currState = 0; //Set to regular heartbeat
+    currentState = REG; //Set to regular heartbeat
 
     QTimer* heartRateTimer = new QTimer();
     connect(heartRateTimer, &QTimer::timeout, [=]() {
@@ -60,6 +60,16 @@ void Patient::updateHeartRate(){
             baseSurvivalChance = 100;
     }
 
+    //There is a 5% chance that the state changes...
+    int stateChange = -1;
+    stateChange = randomGen.bounded(0, 100);
+    if (stateChange < 5){
+        if (!(currentState == REG || currentState == ASYS)) {
+            HeartState newState = static_cast<HeartState>(randomGen.bounded(1, 5));
+            currentState = newState;
+        }
+    }
+
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
     if (cpr)
         cpr = false;
@@ -67,18 +77,18 @@ void Patient::updateHeartRate(){
         asystole();
     else{
         //cprReset = false;
-        if (currState == 0)
+        if (currentState == REG)
             reg();
-        else if (currState == 1)
+        else if (currentState == VTAC)
             vTac();
-        else if (currState == 2)
+        else if (currentState == VFIB)
             vFib();
-        else if (currState == 3)
-            asystole();
-        else if (currState == 4)
+        else if (currentState == CARR)
             cardiacArrest();
+        else if (currentState == ASYS)
+            asystole();
         else
-            currState = -1;
+            currentState = NEG;
     }
 
     //emit sendHeartRate(heartRate);
@@ -157,13 +167,13 @@ void Patient::respondToShock(){
     qDebug() << response;
 
     if (response < 10) // 10% chance
-        setState(3); // asystole
+        setState(ASYS); // asystole
     else if (response < 50) { // 50% chance
-        setState(currState); // Return to original state
+        setState(currentState); // Return to original state
         survivalBonus += 10; // 10% survival bonus for trying
     }
     else // 40% chance (50% - 10%)
-        setState(0); // Return to regular heartbeat
+        setState(REG); // Return to regular heartbeat
 
 }
 
@@ -192,15 +202,15 @@ int Patient::getSurvival(){
     return baseSurvivalChance;
 }
 
-int Patient::getState(){
+HeartState Patient::getState(){
     QMutexLocker locker(&heartMutex);
-    return currState;
+    return currentState;
 }
 
-void Patient::setState(int state){
+void Patient::setState(HeartState state){
     QMutexLocker locker(&heartMutex);
-    currState = state;
-    if (currState != 0) //If patient heartbeat isn't regular
+    currentState = state;
+    if (currentState != REG) //If patient heartbeat isn't regular
         survivalTimer->start(1000);
     else{
         survivalTimer->stop();

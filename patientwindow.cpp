@@ -67,7 +67,7 @@ void PatientWindow::updateGUI()
                          "<span style=\"font-size:20pt; font-weight:600;\">%1</span></p>"
                          "</body></html>";
     switch (pPatient->getState()) {
-        case 0:
+        case REG:
             ui->stateLabel->setText(stateString.arg("REG"));
             ui->killButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                              "color: rgb(0,0,0);");
@@ -78,16 +78,16 @@ void PatientWindow::updateGUI()
             ui->cardiacButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                              "color: rgb(0,0,0);");
             break;
-        case 1:
+        case VTAC:
             ui->stateLabel->setText(stateString.arg("VTAC"));
             break;
-        case 2:
+        case VFIB:
             ui->stateLabel->setText(stateString.arg("VFIB"));
             break;
-        case 3:
+        case ASYS:
             ui->stateLabel->setText(stateString.arg("DEAD"));
             break;
-        case 4:
+        case CARR:
             ui->stateLabel->setText(stateString.arg("CARR"));
             break;
         default:    //Not sure how it would get to this state
@@ -115,8 +115,8 @@ Patient* PatientWindow::getPatient()
 void PatientWindow::on_killButton_clicked(bool checked)
 {
     if (checked){
-        if (pPatient->getState() == 0){ // Only allowed if in regular state
-            pPatient->setState(3);
+        if (pPatient->getState() == REG){ // Only allowed if in regular state
+            pPatient->setState(ASYS);
             ui->killButton->setStyleSheet("border: 4px solid rgb(0, 0, 0);"
                                              "color: rgb(0,0,0);");
         }
@@ -124,21 +124,21 @@ void PatientWindow::on_killButton_clicked(bool checked)
             ui->killButton->setChecked(false);
     }
     else{
-        pPatient->setState(0);
+        pPatient->setState(REG);
         ui->killButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                          "color: rgb(0,0,0);");
     }
-
+    updateGUI();
 
 }
 
 void PatientWindow::on_cardiacButton_clicked(bool checked)
 {
     if (checked){
-        if (pPatient->getState() == 0){ // Only allowed if in regular state
+        if (pPatient->getState() == REG){ // Only allowed if in regular state
             ui->cardiacButton->setStyleSheet("border: 4px solid rgb(237, 51, 59);"
                                              "color: rgb(237, 51, 59);");
-            pPatient->setState(4);
+            pPatient->setState(CARR);
         }
         else
             ui->cardiacButton->setChecked(false);
@@ -146,7 +146,7 @@ void PatientWindow::on_cardiacButton_clicked(bool checked)
     else{
         ui->cardiacButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                          "color: rgb(0,0,0);");
-        pPatient->setState(0);
+        pPatient->setState(REG);
     }
     updateGUI();
 }
@@ -154,8 +154,8 @@ void PatientWindow::on_cardiacButton_clicked(bool checked)
 void PatientWindow::on_vFibButton_clicked(bool checked)
 {
     if (checked){
-        if (pPatient->getState() == 0){ // Only allowed if in regular state
-            pPatient->setState(2);
+        if (pPatient->getState() == REG){ // Only allowed if in regular state
+            pPatient->setState(VFIB);
             ui->vFibButton->setStyleSheet("border: 4px solid rgb(53, 132, 228);"
                                              "color: rgb(53, 132, 228);");
         }
@@ -165,7 +165,7 @@ void PatientWindow::on_vFibButton_clicked(bool checked)
     else{
         ui->vFibButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                          "color: rgb(0,0,0);");
-        pPatient->setState(0);
+        pPatient->setState(REG);
     }
     updateGUI();
 }
@@ -174,8 +174,8 @@ void PatientWindow::on_vFibButton_clicked(bool checked)
 void PatientWindow::on_vTacButton_clicked(bool checked)
 {
     if (checked){
-        if (pPatient->getState() == 0){ // Only allowed if in regular state
-            pPatient->setState(1);
+        if (pPatient->getState() == REG){ // Only allowed if in regular state
+            pPatient->setState(VTAC);
             ui->vTacButton->setStyleSheet("border: 4px solid rgb(129, 61, 156);"
                                              "color: rgb(129, 61, 156);");
         }
@@ -185,7 +185,7 @@ void PatientWindow::on_vTacButton_clicked(bool checked)
     else{
         ui->vTacButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                          "color: rgb(0,0,0);");
-        pPatient->setState(0);
+        pPatient->setState(REG);
     }
     updateGUI();
 }

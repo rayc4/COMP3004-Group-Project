@@ -13,6 +13,8 @@
 #include <QDialog>
 
 #include <QThread>
+#include "enums.h"
+
 class Sensor;
 
 class Patient : public QObject
@@ -27,9 +29,9 @@ public:
     bool getChild();
     QString getName();
     int getSurvival();
-    int getState();
+    HeartState getState();
 
-    void setState(int state); 
+    void setState(HeartState state);
     void setCPR(bool c);
     void addBreath();
 
@@ -56,7 +58,12 @@ private:
     QThread* patientThread;
 
     QRandomGenerator randomGen;
-    int currState; //0 = reg, 1 = vtac, 2 = vfib, 3 = asys, 4 = carr
+
+
+    HeartState currentState;
+
+
+    //int currState; //0 = reg, 1 = vtac, 2 = vfib, 3 = asys, 4 = carr
     int age;
     bool isChild;
     QString name;
