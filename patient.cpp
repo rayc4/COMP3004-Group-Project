@@ -139,7 +139,7 @@ void Patient::reg(){
 
 //Patient's body forces ventricular tachycardia
 void Patient::vTac(){
-    baseSurvivalChance = 40;
+    baseSurvivalChance = 30;
 
     int minHR = 240;
     int maxHR = 250;
@@ -149,7 +149,7 @@ void Patient::vTac(){
 
 //Patient's body forces ventricular fibrillation
 void Patient::vFib(){
-    baseSurvivalChance = 30;
+    baseSurvivalChance = 20;
 
     int minHR = 150;
     int maxHR = 500;
@@ -164,7 +164,7 @@ void Patient::asystole(){
 }
 
 void Patient::cardiacArrest(){
-    baseSurvivalChance = 20;
+    baseSurvivalChance = 10;
 
     int minHR = 40;
     int maxHR = 50;
@@ -304,8 +304,8 @@ void Patient::backToLife(){
         int survivalChange = 0;
         if (tempSurvival < 100){
             survivalChange = randomGen.bounded(0, 100);
-            qDebug() << "Survival change is" << survivalChange;
-            qDebug() << "temp survival is" << tempSurvival;
+            //qDebug() << "Survival change is" << survivalChange;
+            //qDebug() << "temp survival is" << tempSurvival;
             if ((survivalChange <= tempSurvival) && oneCPR){
                 currentState = REG;
             }
