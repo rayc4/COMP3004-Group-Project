@@ -260,7 +260,7 @@ void Patient::patientCPS(){
         cprBPM = 60000/ timeDifference;
         clickTime = currentTime;
     }
-    if (cprBPM > 100 && cprBPM < 120)
+    if (cprBPM > 80 && cprBPM < 140) //Supposed to be 100-120, but made easier here.
         cprCount++; //If its good CPR, make it count
     heartRate = cprBPM;
 }
