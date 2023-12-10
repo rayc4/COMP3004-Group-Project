@@ -178,9 +178,7 @@ void Patient::respondToShock(){
 
     qDebug() << response;
 
-    if (response < 10) // 10% chance
-        setState(ASYS); // asystole
-    else if (response < 50) { // 50% chance
+    if (response < 60) { // 50% chance
         setState(currentState); // Return to original state
         survivalBonus += 10; // 10% survival bonus for trying
     }
@@ -299,8 +297,8 @@ void Patient::backToLife(){
     int survivalChange = 0;
     if (tempSurvival < 100){
         survivalChange = randomGen.bounded(0, 100);
-        qDebug() << "Survival change is" << survivalChange;
-        qDebug() << "temp survival is" << tempSurvival;
+        //qDebug() << "Survival change is" << survivalChange;
+        //qDebug() << "temp survival is" << tempSurvival;
         if (survivalChange <= tempSurvival){
             currentState = REG;
         }

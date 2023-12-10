@@ -68,6 +68,7 @@ private:
     AED *pAED;
 
     void updateGUI();
+    void resetAllButtons();
 
 };
 
