@@ -64,14 +64,13 @@ private:
 
     HeartState currentState;
 
-
-    //int currState; //0 = reg, 1 = vtac, 2 = vfib, 3 = asys, 4 = carr
     int age;
     bool isChild;
     QString name;
     int heartRate;
     QTimer* heartRateTimer;
     QTimer* survivalTimer;
+    QTimer* breathTimer;
 
     int survivalTime;
     int baseSurvivalChance = 100;
@@ -87,9 +86,13 @@ private:
 
     bool cpr=false;
     void backToLife();
+    void breath();
 
     //Is set to true when at least once cpr+shock is done
     bool oneCPR = false;
+
+    int breathState = 1; //0 = no breath, 1 = regular breathing, 2 = irregular breathing
+    int breathTime = 0;
 
 signals:
     void sendHeartRate(int HR);
@@ -97,6 +100,7 @@ signals:
     void leftPadUpdated(int, int);
     void rightPadUpdated(int, int);
     void sendDepth (int);
+    void sendBreath();
 
 };
 

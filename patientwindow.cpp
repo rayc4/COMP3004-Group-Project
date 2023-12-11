@@ -15,6 +15,8 @@ PatientWindow::PatientWindow(QWidget *parent)
 
 
 
+
+
 //    void PatientWindow::on_pushButton_clicked(){
 //        patient->patientCPS();
 //        aed->determineCPRStatus();
@@ -37,6 +39,7 @@ void PatientWindow::setPatient(Patient* tempPatient)
     connect(ui->leftPadTable, SIGNAL(cellPressed(int,int)), pPatient, SLOT(receiveLeftPad(int,int)));
     connect(ui->rightPadTable, SIGNAL(cellPressed(int,int)), pPatient, SLOT(receiveRightPad(int,int)));
     connect(ui->verticalSlider, SIGNAL(valueChanged(int)), pPatient, SLOT(receiveDepth(int)));
+    connect(pPatient, &Patient::sendBreath, this, &PatientWindow::receiveBreath);
 }
 
 
@@ -370,3 +373,15 @@ void PatientWindow::on_tiltButton_clicked(bool checked)
     }
 }
 
+void PatientWindow::receiveBreath(){
+    if (ui->breathButton->isEnabled()){
+        ui->breathButton->setStyleSheet("border: 4px solid rgb(0,150,200);"
+                                        "color: rgb(0,150,200);");
+        QTimer::singleShot(1000, this, &PatientWindow::breathOff);
+    }
+}
+
+void PatientWindow::breathOff(){
+    ui->breathButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                     "color: rgb(0,0,0);");
+}

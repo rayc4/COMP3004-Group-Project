@@ -67,6 +67,8 @@ private slots:
 
     void on_tiltButton_clicked(bool checked);
 
+    void receiveBreath();
+
 signals:
     void declarePosition(bool placement);
 
@@ -77,6 +79,7 @@ private:
 
     void updateGUI();
     void resetAllButtons();
+    void breathOff();
 
 };
 

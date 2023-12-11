@@ -21,7 +21,7 @@ Patient::Patient(int a, QString nm):age(a), name(nm)
     //Patient first initialized with a regular heartbeat
     currentState = REG; //Set to regular heartbeat
 
-    QTimer* heartRateTimer = new QTimer();
+    heartRateTimer = new QTimer();
     connect(heartRateTimer, &QTimer::timeout, [=]() {
         updateHeartRate();
     });
@@ -30,7 +30,16 @@ Patient::Patient(int a, QString nm):age(a), name(nm)
 
     survivalTimer = new QTimer();
     connect(survivalTimer, &QTimer::timeout, this, &Patient::updateSurvivalRate);
-    // Updates timer every 1 second
+    // Survival timer is started in setState function
+
+    breathTime = 4000;
+
+
+    breathTimer = new QTimer();
+    connect(breathTimer, &QTimer::timeout, this, &Patient::breath);
+    breathTimer->start(breathTime);
+
+    //Breath timer is started in updateHeartRate() function.
 
 }
 
@@ -39,11 +48,23 @@ Patient::~Patient(){
     delete patientThread;
 }
 
-
-
 void Patient::updateHeartRate(){
     //qDebug() << "-----------" << cprReset;
     QMutexLocker locker(&heartMutex);
+
+
+    if (breathState == 0){
+        breathTimer->stop();
+        breathTime = 0;
+    }
+    else if (breathState == 1 && breathTime != 4000){
+        breathTime = 4000;
+        breathTimer->start(breathTime);
+    }
+    else if (breathState == 2){
+        breathTime = randomGen.bounded(10000, 40000);
+        breathTimer->start(breathTime);// Breath between 10-40 sec
+    }
 
     //qDebug() << "Cpr count: " << cprCount << "Breath count: " << breathCount;
 
@@ -129,6 +150,7 @@ void Patient::reg(){
     cpr = false;
     oneCPR = false;
     cprCount = 0;
+    breathState = 1;
 
     int minHR = 70;
     int maxHR = 75;
@@ -140,6 +162,7 @@ void Patient::reg(){
 //Patient's body forces ventricular tachycardia
 void Patient::vTac(){
     baseSurvivalChance = 30;
+    breathState = 2;
 
     int minHR = 240;
     int maxHR = 250;
@@ -150,6 +173,7 @@ void Patient::vTac(){
 //Patient's body forces ventricular fibrillation
 void Patient::vFib(){
     baseSurvivalChance = 20;
+    breathState = 2;
 
     int minHR = 150;
     int maxHR = 500;
@@ -162,10 +186,12 @@ void Patient::asystole(){
     baseSurvivalChance = 0;
     survivalBonus = 0;
     heartRate = 0;
+    breathState = 0;
 }
 
 void Patient::pulselessEA(){
     baseSurvivalChance = 10;
+    breathState = 2;
 
     int minHR = 40;
     int maxHR = 50;
@@ -324,6 +350,11 @@ void Patient::backToLife(){
 }
 
 
+void Patient::breath(){
+    qDebug() << "Patient breathes";
+    emit sendBreath();
+}
+
 //Only for testing purposes:
 void Patient::autoCPR(){
     qDebug() << "Auto CPR called";
@@ -332,3 +363,5 @@ void Patient::autoCPR(){
     cprCount = 30;
     breathCount = 2;
 }
+
+
