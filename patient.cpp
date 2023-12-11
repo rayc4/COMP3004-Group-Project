@@ -61,9 +61,9 @@ void Patient::updateHeartRate(){
         breathTime = 4000;
         breathTimer->start(breathTime);
     }
-    else if (breathState == 2){
-        breathTime = randomGen.bounded(10000, 40000);
-        breathTimer->start(breathTime);// Breath between 10-40 sec
+    else if (breathState == 2 && breathTime != 15000){
+        breathTime = 15000;
+        breathTimer->start(breathTime);// Breath every 15 sec
     }
 
     //qDebug() << "Cpr count: " << cprCount << "Breath count: " << breathCount;
@@ -351,7 +351,10 @@ void Patient::backToLife(){
 
 
 void Patient::breath(){
-    qDebug() << "Patient breathes";
+    if (breathState == 1)
+        qDebug() << "Patient breathes";
+    else if (breathState == 2)
+        qDebug() << "Patient breathes unsteadily";
     emit sendBreath();
 }
 
