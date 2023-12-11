@@ -312,3 +312,61 @@ void PatientWindow::on_autoCPRButton_clicked()
     pPatient->autoCPR();
 }
 
+
+void PatientWindow::on_breathButton_pressed()
+{
+    ui->breathButton->setStyleSheet("border: 4px solid rgb(200, 200, 200);"
+                                     "color: rgb(200,200,200);");
+}
+
+
+void PatientWindow::on_breathButton_released()
+{
+    ui->breathButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                     "color: rgb(0,0,0);");
+}
+
+
+void PatientWindow::on_airwayButton_clicked(bool checked)
+{
+    if (checked)
+        ui->airwayButton->setStyleSheet("border: 4px solid rgb(200, 200, 200);"
+                                     "color: rgb(200,200,200);");
+    else
+        ui->airwayButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                         "color: rgb(0,0,0);");
+
+
+
+    if (ui->tiltButton->isChecked() && checked){
+        ui->breathButton->setEnabled(true);
+        ui->breathButton->setText("BREATH");
+    }
+    else{
+        ui->breathButton->setEnabled(false);
+        ui->breathButton->setText("");
+    }
+
+}
+
+
+void PatientWindow::on_tiltButton_clicked(bool checked)
+{
+    if (checked)
+        ui->tiltButton->setStyleSheet("border: 4px solid rgb(200, 200, 200);"
+                                     "color: rgb(200,200,200);");
+    else
+        ui->tiltButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                         "color: rgb(0,0,0);");
+
+
+    if (ui->airwayButton->isChecked() && checked){
+        ui->breathButton->setEnabled(true);
+        ui->breathButton->setText("BREATH");
+    }
+    else{
+        ui->breathButton->setEnabled(false);
+        ui->breathButton->setText("");
+    }
+}
+

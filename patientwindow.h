@@ -59,6 +59,14 @@ private slots:
 
     void on_autoCPRButton_clicked();
 
+    void on_breathButton_pressed();
+
+    void on_breathButton_released();
+
+    void on_airwayButton_clicked(bool checked);
+
+    void on_tiltButton_clicked(bool checked);
+
 signals:
     void declarePosition(bool placement);
 
