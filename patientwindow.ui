@@ -705,7 +705,7 @@ border-color: rgb(154, 153, 150);
 color: rgb(0,0,0);</string>
     </property>
     <property name="text">
-     <string>PEA (new)</string>
+     <string>PEA</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
@@ -985,7 +985,6 @@ BACK</string>
   <zorder>ageLabel</zorder>
   <zorder>adultSideLabel</zorder>
   <zorder>label</zorder>
-  <zorder>cprPB</zorder>
   <zorder>leftPadTable</zorder>
   <zorder>rightPadTable</zorder>
   <zorder>line</zorder>
@@ -1008,6 +1007,7 @@ BACK</string>
   <zorder>helpButton</zorder>
   <zorder>airwayButton</zorder>
   <zorder>tiltButton</zorder>
+  <zorder>cprPB</zorder>
  </widget>
  <resources/>
  <connections/>

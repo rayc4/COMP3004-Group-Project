@@ -100,8 +100,10 @@ void Patient::updateHeartRate(){
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
     if (cpr)
         cpr = false;
-    else if (baseSurvivalChance+survivalBonus <= 0) //If there is no chance of survival, patient flatlines.
+    else if (baseSurvivalChance+survivalBonus <= 0){ //If there is no chance of survival, patient flatlines.
+        currentState = ASYS;
         asystole();
+    }
     else{
         //cprReset = false;
         if (currentState == REG)
@@ -133,9 +135,9 @@ void Patient::updateHeartRate(){
 }
 
 void Patient::updateSurvivalRate(){
-    //qDebug() << "Current chances of survival decreased to" << survivalChance << "%";
+    //qDebug() << "Current chances of survival decreased to" << baseSurvivalChance+survivalOffset<< "%";
     survivalTime++; //Add one second to the timer.
-    if (survivalTime %60 == 0) //Every minute
+    if (survivalTime %6 == 0) //Every minute
         baseSurvivalChance -= 10; //Every minute, chances decrease by 10%
 
     if (baseSurvivalChance < 0)
@@ -145,7 +147,6 @@ void Patient::updateSurvivalRate(){
 }
 
 void Patient::reg(){
-    baseSurvivalChance = 100;
     survivalBonus = 0;
     cpr = false;
     oneCPR = false;
@@ -161,7 +162,6 @@ void Patient::reg(){
 
 //Patient's body forces ventricular tachycardia
 void Patient::vTac(){
-    baseSurvivalChance = 30;
     breathState = 2;
 
     int minHR = 240;
@@ -172,7 +172,6 @@ void Patient::vTac(){
 
 //Patient's body forces ventricular fibrillation
 void Patient::vFib(){
-    baseSurvivalChance = 20;
     breathState = 2;
 
     int minHR = 150;
@@ -183,14 +182,12 @@ void Patient::vFib(){
 
 //Patient flatlines
 void Patient::asystole(){
-    baseSurvivalChance = 0;
     survivalBonus = 0;
     heartRate = 0;
     breathState = 0;
 }
 
 void Patient::pulselessEA(){
-    baseSurvivalChance = 10;
     breathState = 2;
 
     int minHR = 40;
@@ -251,12 +248,31 @@ HeartState Patient::getState(){
 void Patient::setState(HeartState state){
     QMutexLocker locker(&heartMutex);
     currentState = state;
-    if (currentState != REG) //If patient heartbeat isn't regular
+    if (currentState != REG){ //If patient heartbeat isn't regular
         survivalTimer->start(1000);
+        switch (currentState) {
+            case VTAC:
+                baseSurvivalChance = 30;
+                break;
+            case VFIB:
+                baseSurvivalChance = 20;
+                break;
+            case ASYS:
+                baseSurvivalChance = 0;
+                break;
+            case PEA:
+                baseSurvivalChance = 10;
+                break;
+            default:    //Not sure how it would get to this state
+                baseSurvivalChance = -1;
+        }
+    }
     else{
         survivalTimer->stop();
         baseSurvivalChance = 100;
     }
+
+
 }
 
 
