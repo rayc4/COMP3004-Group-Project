@@ -5,7 +5,7 @@ enum HeartState {
     REG,
     VTAC,
     VFIB,
-    CARR,
+    PEA,
     ASYS,
     NEG
 };

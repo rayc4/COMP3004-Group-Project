@@ -89,8 +89,8 @@ void Patient::updateHeartRate(){
             vTac();
         else if (currentState == VFIB)
             vFib();
-        else if (currentState == CARR)
-            cardiacArrest();
+        else if (currentState == PEA)
+            pulselessEA();
         else if (currentState == ASYS)
             asystole();
         else
@@ -164,7 +164,7 @@ void Patient::asystole(){
     heartRate = 0;
 }
 
-void Patient::cardiacArrest(){
+void Patient::pulselessEA(){
     baseSurvivalChance = 10;
 
     int minHR = 40;

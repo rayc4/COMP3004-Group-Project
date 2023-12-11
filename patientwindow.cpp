@@ -20,6 +20,7 @@ PatientWindow::PatientWindow(QWidget *parent)
 //        aed->determineCPRStatus();
 //    }
 
+
 }
 
 void PatientWindow::setPatient(Patient* tempPatient)
@@ -45,12 +46,9 @@ PatientWindow::~PatientWindow(){
     //delete patient;
 }
 
-
 void PatientWindow::updateGUI()
 {
-//main visual updates should happen here
-
-
+    //main visual updates should happen here
 
     //Update survival chance:
     QString survivalString = QString("<html><head/><body>"
@@ -80,8 +78,8 @@ void PatientWindow::updateGUI()
         case ASYS:
             ui->stateLabel->setText(stateString.arg("DEAD"));
             break;
-        case CARR:
-            ui->stateLabel->setText(stateString.arg("CARR"));
+        case PEA:
+            ui->stateLabel->setText(stateString.arg("PEA"));
             break;
         default:    //Not sure how it would get to this state
             ui->stateLabel->setText(stateString.arg("?"));
@@ -147,7 +145,7 @@ void PatientWindow::on_cardiacButton_clicked(bool checked)
         if (pPatient->getState() == REG){ // Only allowed if in regular state
             ui->cardiacButton->setStyleSheet("border: 4px solid rgb(237, 51, 59);"
                                              "color: rgb(237, 51, 59);");
-            pPatient->setState(CARR);
+            pPatient->setState(PEA);
         }
         else
             ui->cardiacButton->setChecked(false);

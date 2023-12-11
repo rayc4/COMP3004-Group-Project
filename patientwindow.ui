@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
+    <width>415</width>
     <height>630</height>
    </rect>
   </property>
@@ -697,8 +697,7 @@ border-color: rgb(154, 153, 150);
 color: rgb(0,0,0);</string>
     </property>
     <property name="text">
-     <string>CARDIAC
- ARREST</string>
+     <string>PEA (new)</string>
     </property>
     <property name="checkable">
      <bool>true</bool>

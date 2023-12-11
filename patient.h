@@ -15,6 +15,7 @@
 #include <QThread>
 #include "enums.h"
 
+
 class Sensor;
 
 class Patient : public QObject
@@ -46,7 +47,7 @@ public slots:
     void reg();
     void vTac();
     void vFib();
-    void cardiacArrest();
+    void pulselessEA();
     void asystole();
     void respondToShock();
     void falseCPR();
