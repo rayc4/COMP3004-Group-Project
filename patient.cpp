@@ -137,7 +137,7 @@ void Patient::updateHeartRate(){
 void Patient::updateSurvivalRate(){
     //qDebug() << "Current chances of survival decreased to" << baseSurvivalChance+survivalOffset<< "%";
     survivalTime++; //Add one second to the timer.
-    if (survivalTime %6 == 0) //Every minute
+    if (survivalTime %60 == 0) //Every minute
         baseSurvivalChance -= 10; //Every minute, chances decrease by 10%
 
     if (baseSurvivalChance < 0)
@@ -206,6 +206,8 @@ void Patient::respondToShock(){
         if (response < 70) { // 70% chance that it fails and falls back to original survival chance
             //Do nothing
             survivalBonus += 10; // 10% survival bonus for trying
+            //int response2 = randomGen.bounded(0,3);
+            //if (response = 0)
         }
         else // 30% chance patient comes back to life
             baseSurvivalChance = 100; //Patient lives!
