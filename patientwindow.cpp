@@ -55,10 +55,12 @@ void PatientWindow::updateGUI()
 
     //Update survival chance:
     QString survivalString = QString("<html><head/><body>"
-                        "<p><span style=\"font-weight:600;\">SURVIVAL<br/>CHANCE<br/></span>"
-                        "<span style=\"font-size:20pt; font-weight:600;\">%1%</span></p>"
+                        "<p><span style=\"font-size:9pt; font-weight:600;\">SURVIVAL<br/>CHANCE<br/></span>"
+                        "<span style=\"font-size:16pt; font-weight:600;\">%1%</span></p>"
                         "</body></html>").arg(pPatient->getSurvival());
     ui->survivalLabel->setText(survivalString);
+
+
 
 
 
@@ -387,3 +389,16 @@ void PatientWindow::breathOff(){
     ui->breathButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
                                      "color: rgb(0,0,0);");
 }
+
+void PatientWindow::on_disableSurvivalButton_clicked(bool checked)
+{
+    if (checked)
+        ui->disableSurvivalButton->setStyleSheet("border: 4px solid rgb(255, 50, 50);"
+                                     "color: rgb(255, 50, 50);");
+    else
+        ui->disableSurvivalButton->setStyleSheet("border: 4px solid rgb(154, 153, 150);"
+                                         "color: rgb(0,0,0);");
+
+    pPatient->setSurvivalTimer(checked);
+}
+

@@ -69,6 +69,8 @@ private slots:
 
     void receiveBreath();
 
+    void on_disableSurvivalButton_clicked(bool checked);
+
 signals:
     void declarePosition(bool placement);
 

@@ -203,17 +203,12 @@ void Patient::respondToShock(){
     if (!(currentState == ASYS)){
         response = randomGen.bounded(0, 100);
         //qDebug() << response;
-        if (response < 70) { // 70% chance that it fails and falls back to original survival chance
-            //Do nothing
-            survivalBonus += 10; // 10% survival bonus for trying
-            //int response2 = randomGen.bounded(0,3);
-            //if (response = 0)
-        }
-        else // 30% chance patient comes back to life
-            baseSurvivalChance = 100; //Patient lives!
+        if (response > 30)
+            currentState = PEA; // 30% chance that it degrades to PEA
+         survivalBonus += 10; // 10% survival bonus for trying
     }
 
-    backToLife();
+    backToLife(); // Check to see if patient can be brought back to life
 
 }
 
@@ -239,8 +234,8 @@ QString Patient::getName(){
 
 int Patient::getSurvival(){
     QMutexLocker locker(&heartMutex);
-    //return baseSurvivalChance+survivalBonus;
-    return 100; //TODO: swap to normal later. hard code for testing
+    return baseSurvivalChance+survivalBonus;
+    //return 100; //NOTE: This did not change internal logic for hard-code testing
 }
 
 HeartState Patient::getState(){
@@ -252,7 +247,8 @@ void Patient::setState(HeartState state){
     QMutexLocker locker(&heartMutex);
     currentState = state;
     if (currentState != REG){ //If patient heartbeat isn't regular
-        survivalTimer->start(1000);
+        if (!survivalDisabled)
+            survivalTimer->start(1000);
         switch (currentState) {
             case VTAC:
                 baseSurvivalChance = 30;
@@ -273,6 +269,7 @@ void Patient::setState(HeartState state){
     else{
         survivalTimer->stop();
         baseSurvivalChance = 100;
+        survivalBonus = 0;
     }
 
 
@@ -386,4 +383,10 @@ void Patient::autoCPR(){
     breathCount = 2;
 }
 
+void Patient::setSurvivalTimer(bool enabled){
+    if (enabled)
+        survivalDisabled = true;
+    else
+        survivalDisabled = false;
+}
 

@@ -41,6 +41,8 @@ public:
 
     void autoCPR(); //Only a test function
 
+    void setSurvivalTimer(bool enabled);
+
 public slots:
     void updateHeartRate();
     void updateSurvivalRate();
@@ -93,6 +95,9 @@ private:
 
     int breathState = 1; //0 = no breath, 1 = regular breathing, 2 = irregular breathing
     int breathTime = 0;
+
+    //Added in to help during debugging
+    bool survivalDisabled = false;
 
 signals:
     void sendHeartRate(int HR);
