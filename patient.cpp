@@ -106,8 +106,11 @@ void Patient::updateHeartRate(){
     }
     else{
         //cprReset = false;
-        if (currentState == REG)
+        if (currentState == REG){
             reg();
+            baseSurvivalChance = 100;
+            survivalBonus = 0;
+        }
         else if (currentState == VTAC)
             vTac();
         else if (currentState == VFIB)
