@@ -81,10 +81,6 @@ void AED::standClear()
     emit stageComplete();
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 89ae777684a3ff3f814ae8dfb5f2ef88de8e7617
 void AED::instructCPR()
 {
     //function 6
