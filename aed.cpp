@@ -35,33 +35,16 @@ void AED::attachDefibPad()
     while(!pSensor->getGoodPlacement()){
         QCoreApplication::processEvents();
     }
+    communicateWithUser("Good placement detected. Analyzing heart rate. Stand back.");
+    checkForShock();
+    shockPressed = true;
     emit stageComplete();
 }
 
 void AED::standClear(){
-    qDebug() << "[SPEAKER] Stand clear. Schock commencing.";
-    updateText("Stand clear. Schock commencing.");
+    communicateWithUser("Stand clear. Schock commencing.");
     waitTimer->start(WAIT_MS);
 }
-
-void AED::prepareForShock(int i)
-{
-    //function 5.5
-    //function 5 helper
-    if(i>=100)
-    {
-    qDebug() << "Charge ready";
-    qDebug() << "Press the shock button now.";
-    return;
-    }
-    // Simulate battery charging
-    qDebug() << "CHARGING";
-    prepareForShock(i+1);
-
-    // simulate pressing shock button
-    // After pressing button, call deliverShock()
-}
-
 
 void AED::instructCPR()
 {
@@ -114,10 +97,34 @@ AED::AED(QObject *parent)
     });
     updateTimer->start(300);
     // Zuhayr
+
+    batteryTimer = new QTimer(this);
+    connect(batteryTimer, &QTimer::timeout, [=](){
+        batteryUpdate();
+    });
+    batteryTimer->start(15000);
 }
 
 AED::~AED(){
 
+}
+
+void AED::prepareForShock(int i)
+{
+    //function 5.5
+    //function 5 helper
+    if(i>=100)
+    {
+    qDebug() << "Charge ready";
+    qDebug() << "Press the shock button now.";
+    return;
+    }
+    // Simulate battery charging
+    qDebug() << "CHARGING";
+    prepareForShock(i+1);
+
+    // simulate pressing shock button
+    // After pressing button, call deliverShock()
 }
 
 void AED::communicateWithUser(std::string const & s){
@@ -164,6 +171,13 @@ void AED::checkForShock()
      }
 }
 
+void AED::batteryUpdate(){
+    if (battery > 0){
+        battery --;
+        batteryLogic(battery);
+    }
+}
+
 //Function added by Zuhayr
 void AED::updateAED(){
     pAnalyzer->CollectHeart(pSensor->getHeartRate());
@@ -174,9 +188,7 @@ void AED::updateAED(){
 
 
 void AED::enterNextState(){
-    if(state == FINAL_STATE){
-        return;
-    }
+    if(state == FINAL_STATE) return;
     updateState(++state);
     (this->*(stateFunctions[state]))();
     //this-> compile issue
@@ -184,26 +196,19 @@ void AED::enterNextState(){
 }
 
 void AED::power()
-{
-    if(state != -1){
-        state = -1;
-        updateText("");
+{  
+    if (battery <= 0){
+        updateText("Please Charge. There is no battery");
     }else{
-        updateText("Powered on, performing self-check");
-        waitTimer->start(WAIT_MS);
+        if(state != -1){
+            state = -1;
+            updateText("");
+        }else{
+            updateText("Powered on, performing self-check");
+            waitTimer->start(WAIT_MS);
+        }
     }
-}
 
-bool AED::guidePlacement(bool isChild)
-{
-    // true or false
-    return true; // Placeholder
-}
-
-bool AED::readyToShock()
-{
-    //  true or false
-    return true; // Placeholder
 }
 
 int AED::getState() const{
@@ -215,23 +220,16 @@ void AED::setState(int state){
     updateState(state);
 }
 
-
-//ONLY CALL THIS FUNCTION WHEN YOU WANT TO CHECK CPR (LOGIC MISSING)
-void AED::determineCPRStatus(){
-    qDebug() << pAnalyzer;
-    //goodCPR = pAnalyzer->checkCPR(pSensor->getHeartRate());
-    if (goodCPR){
-        qDebug() << "GOOD";
-    }else{
-        qDebug() << "BAD"; //TODO: come back here later
-    }
-}
-
 Sensor* AED::getSensor(){
     return pSensor;
 }
 
+void AED::batteryLogic(int value){
+    battery = value;
+    updateBattery(battery);
+}
 
-
-//this is a comment
+void AED::setShockPressed(){
+    shockPressed = true;
+}
 

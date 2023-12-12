@@ -47,7 +47,27 @@ private slots:
 
     void on_cardiacButton_clicked(bool checked);
 
-    void on_pushButton_clicked();
+    void on_updateButton_pressed();
+
+    void on_updateButton_released();
+
+    void on_updateButton_clicked();
+
+    void on_breathButton_clicked();
+
+    void on_shockTestButton_clicked();
+
+    void on_autoCPRButton_clicked();
+
+    void on_breathButton_pressed();
+
+    void on_breathButton_released();
+
+    void on_airwayButton_clicked(bool checked);
+
+    void on_tiltButton_clicked(bool checked);
+
+    void receiveBreath();
 
 signals:
     void declarePosition(bool placement);
@@ -58,6 +78,8 @@ private:
     AED *pAED;
 
     void updateGUI();
+    void resetAllButtons();
+    void breathOff();
 
 };
 

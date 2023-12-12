@@ -19,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     aed.h \
+    enums.h \
     patientwindow.h \
     sensor.h \
     Analyzer.h \

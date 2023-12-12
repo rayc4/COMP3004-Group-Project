@@ -19,9 +19,9 @@ Patient::Patient(int a, QString nm):age(a), name(nm)
     randomGen.seed(QTime::currentTime().msec());
 
     //Patient first initialized with a regular heartbeat
-    currState = 0; //Set to regular heartbeat
+    currentState = REG; //Set to regular heartbeat
 
-    QTimer* heartRateTimer = new QTimer();
+    heartRateTimer = new QTimer();
     connect(heartRateTimer, &QTimer::timeout, [=]() {
         updateHeartRate();
     });
@@ -30,7 +30,16 @@ Patient::Patient(int a, QString nm):age(a), name(nm)
 
     survivalTimer = new QTimer();
     connect(survivalTimer, &QTimer::timeout, this, &Patient::updateSurvivalRate);
-    // Updates timer every 1 second
+    // Survival timer is started in setState function
+
+    breathTime = 4000;
+
+
+    breathTimer = new QTimer();
+    connect(breathTimer, &QTimer::timeout, this, &Patient::breath);
+    breathTimer->start(breathTime);
+
+    //Breath timer is started in updateHeartRate() function.
 
 }
 
@@ -39,30 +48,76 @@ Patient::~Patient(){
     delete patientThread;
 }
 
-
-
 void Patient::updateHeartRate(){
     //qDebug() << "-----------" << cprReset;
     QMutexLocker locker(&heartMutex);
+
+
+    if (breathState == 0){
+        breathTimer->stop();
+        breathTime = 0;
+    }
+    else if (breathState == 1 && breathTime != 4000){
+        breathTime = 4000;
+        breathTimer->start(breathTime);
+    }
+    else if (breathState == 2 && breathTime != 15000){
+        breathTime = 15000;
+        breathTimer->start(breathTime);// Breath every 15 sec
+    }
+
+    //qDebug() << "Cpr count: " << cprCount << "Breath count: " << breathCount;
+
+    //qDebug() << "Base survival: " << baseSurvivalChance;
+    //qDebug() << "Bonus: " << survivalBonus;
+
+    //Check with cpr affecting survival rate:
+    if (cprCount >= 30 && breathCount >= 2){
+        oneCPR = true;
+        cprCount = 0;
+        breathCount = 0;
+        survivalBonus += 10; //If given 30 compressions + 2 breaths, survival chance goes up
+        backToLife();
+    }
+
+
+    if (baseSurvivalChance+survivalBonus > 100){
+        baseSurvivalChance = 100;
+        survivalBonus = 0;
+    }
+
+    //Too complex and unecessary
+//    //There is a 5% chance that the state changes...
+//    int stateChange = -1;
+//    stateChange = randomGen.bounded(0, 100);
+//    if (stateChange < 5){
+//        if (!(currentState == REG || currentState == ASYS || currentState == CARR)) {
+//            HeartState newState = static_cast<HeartState>(randomGen.bounded(1, 5));
+//            currentState = newState;
+//        }
+//    }
+
     //Implement logic here to either set patient to reg, vTac, vFib, or asystole
     if (cpr)
         cpr = false;
-    else if (survivalChance == 0) //If there is no chance of survival, patient flatlines.
+    else if (baseSurvivalChance+survivalBonus <= 0){ //If there is no chance of survival, patient flatlines.
+        currentState = ASYS;
         asystole();
+    }
     else{
         //cprReset = false;
-        if (currState == 0)
+        if (currentState == REG)
             reg();
-        else if (currState == 1)
+        else if (currentState == VTAC)
             vTac();
-        else if (currState == 2)
+        else if (currentState == VFIB)
             vFib();
-        else if (currState == 3)
+        else if (currentState == PEA)
+            pulselessEA();
+        else if (currentState == ASYS)
             asystole();
-        else if (currState == 4)
-            cardiacArrest();
         else
-            currState = -1;
+            currentState = NEG;
     }
 
     //emit sendHeartRate(heartRate);
@@ -70,21 +125,33 @@ void Patient::updateHeartRate(){
     //qDebug() << "Curent heartrate is" << heartRate;
 
     //qDebug() << "Current survival addition is " << survivalAddition;
+
+    if (currentState == ASYS){
+        baseSurvivalChance = 0;
+        survivalBonus = 0;
+    }
+
+
 }
 
 void Patient::updateSurvivalRate(){
-    //qDebug() << "Current chances of survival decreased to" << survivalChance << "%";
+    //qDebug() << "Current chances of survival decreased to" << baseSurvivalChance+survivalOffset<< "%";
     survivalTime++; //Add one second to the timer.
-    if (survivalTime %60 == 0) //Every minute
-        survivalChance -= 10; //Every minute, chances decrease by 10%
+    if (survivalTime %6 == 0) //Every minute
+        baseSurvivalChance -= 10; //Every minute, chances decrease by 10%
 
-    if (survivalChance < 0)
-        survivalChance = 0;
+    if (baseSurvivalChance < 0)
+        baseSurvivalChance = 0;
 
 
 }
 
 void Patient::reg(){
+    survivalBonus = 0;
+    cpr = false;
+    oneCPR = false;
+    cprCount = 0;
+    breathState = 1;
 
     int minHR = 70;
     int maxHR = 75;
@@ -95,6 +162,8 @@ void Patient::reg(){
 
 //Patient's body forces ventricular tachycardia
 void Patient::vTac(){
+    breathState = 2;
+
     int minHR = 240;
     int maxHR = 250;
 
@@ -103,6 +172,8 @@ void Patient::vTac(){
 
 //Patient's body forces ventricular fibrillation
 void Patient::vFib(){
+    breathState = 2;
+
     int minHR = 150;
     int maxHR = 500;
     //Generate a value from 150 to 500
@@ -111,11 +182,14 @@ void Patient::vFib(){
 
 //Patient flatlines
 void Patient::asystole(){
-    survivalChance = 0;
+    survivalBonus = 0;
     heartRate = 0;
+    breathState = 0;
 }
 
-void Patient::cardiacArrest(){
+void Patient::pulselessEA(){
+    breathState = 2;
+
     int minHR = 40;
     int maxHR = 50;
     heartRate = randomGen.bounded(minHR, maxHR+1);
@@ -126,17 +200,18 @@ void Patient::respondToShock(){
     //3 pathways: a) Regular, b) Continued vfib/vtac, or c) asystole
     //a) 50%, b) 40%, c) 10%
     int response = -1;
-    int tempState = -1;
+    if (!(currentState == ASYS)){
+        response = randomGen.bounded(0, 100);
+        //qDebug() << response;
+        if (response < 70) { // 70% chance that it fails and falls back to original survival chance
+            //Do nothing
+            survivalBonus += 10; // 10% survival bonus for trying
+        }
+        else // 30% chance patient comes back to life
+            baseSurvivalChance = 100; //Patient lives!
+    }
 
-    response = randomGen.bounded(0, 100);
-    if (response < 10 * (survivalChance / 10)) //10% chance
-        tempState = 3; //asystole
-    else if (response < 50 * (survivalChance / 10)) //50% chance
-        tempState = currState; //Return to original state
-    else //50% chance
-        tempState = 0; //Return to regular heartbeat
-
-    currState = tempState;
+    backToLife();
 
 }
 
@@ -160,15 +235,44 @@ QString Patient::getName(){
     return name;
 }
 
-void Patient::setState(int state){
+int Patient::getSurvival(){
     QMutexLocker locker(&heartMutex);
-    currState = state;
-    if (currState != 0) //If patient heartbeat isn't regular
+    return baseSurvivalChance+survivalBonus;
+}
+
+HeartState Patient::getState(){
+    QMutexLocker locker(&heartMutex);
+    return currentState;
+}
+
+void Patient::setState(HeartState state){
+    QMutexLocker locker(&heartMutex);
+    currentState = state;
+    if (currentState != REG){ //If patient heartbeat isn't regular
         survivalTimer->start(1000);
+        switch (currentState) {
+            case VTAC:
+                baseSurvivalChance = 30;
+                break;
+            case VFIB:
+                baseSurvivalChance = 20;
+                break;
+            case ASYS:
+                baseSurvivalChance = 0;
+                break;
+            case PEA:
+                baseSurvivalChance = 10;
+                break;
+            default:    //Not sure how it would get to this state
+                baseSurvivalChance = -1;
+        }
+    }
     else{
         survivalTimer->stop();
-        survivalChance = 100;
+        baseSurvivalChance = 100;
     }
+
+
 }
 
 
@@ -183,14 +287,6 @@ void Patient::setAge(int a){
 void Patient::setName(QString n){
     name = n;
 }
-
-//void leftPadUpdated(int, int){
-
-//}
-
-//void rightPadUpdated(int, int){
-
-//}
 
 void Patient::receiveLeftPad(int r, int c){
     emit leftPadUpdated(r, c);
@@ -211,6 +307,7 @@ void Patient::patientCPS(){
     cpr = true;
     int cprBPM = 0;
     click++;
+
     if (click == 1){
         clickTime = QTime::currentTime();
         cprBPM = 60;
@@ -220,15 +317,70 @@ void Patient::patientCPS(){
         cprBPM = 60000/ timeDifference;
         clickTime = currentTime;
     }
+    if (cprBPM > 80 && cprBPM < 140) //Supposed to be 100-120, but made easier here.
+        cprCount++; //If its good CPR, make it count
     heartRate = cprBPM;
 }
 
 void Patient::setCPR(bool c){
+    QMutexLocker locker(&heartMutex);
     cpr = c;
+}
+
+void Patient::addBreath(){
+    QMutexLocker locker(&heartMutex);
+    if (cprCount >= 30) //Breaths only effective after 30 compressions
+        breathCount++;
 }
 
 void Patient::falseCPR(){
     cpr = false;
+}
+
+//This function looks at current survival rate and decides if the patient can come back to life
+void Patient::backToLife(){
+    if ((baseSurvivalChance + survivalBonus >= 100) && oneCPR)
+        currentState = REG;
+    else if (oneCPR && !(currentState == ASYS || currentState == REG)){ //If CPR occured at least once
+        //Choose if based on the current survival chance the person can come back:
+        int tempSurvival = baseSurvivalChance + survivalBonus;
+        int survivalChange = 0;
+        if (tempSurvival < 100){
+            survivalChange = randomGen.bounded(0, 100);
+            //qDebug() << "Survival change is" << survivalChange;
+            //qDebug() << "temp survival is" << tempSurvival;
+            if ((survivalChange <= tempSurvival) && oneCPR){
+                currentState = REG;
+            }
+        }
+    }
+
+    //Adding a 5% chance for death here...
+    if (!(currentState == REG || currentState == ASYS)) {
+        int deathChange = randomGen.bounded(0, 100);
+        if (deathChange < 5){
+             currentState = ASYS;
+        }
+    }
+
+}
+
+
+void Patient::breath(){
+    if (breathState == 1)
+        qDebug() << "Patient breathes";
+    else if (breathState == 2)
+        qDebug() << "Patient breathes unsteadily";
+    emit sendBreath();
+}
+
+//Only for testing purposes:
+void Patient::autoCPR(){
+    qDebug() << "Auto CPR called";
+    cpr = true;
+    heartRate = 110;
+    cprCount = 30;
+    breathCount = 2;
 }
 
 
