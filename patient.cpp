@@ -193,8 +193,8 @@ void Patient::asystole(){
 void Patient::pulselessEA(){
     breathState = 2;
 
-    int minHR = 40;
-    int maxHR = 50;
+    int minHR = 1;
+    int maxHR = 5;
     heartRate = randomGen.bounded(minHR, maxHR+1);
 }
 
