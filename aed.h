@@ -30,6 +30,13 @@ private:
     FuncVector stateFunctions;
     bool shockPressed;
 
+    QString feedback; // Added feedback as a member variable
+
+
+
+
+
+    int chargeLevel = 0;
     QTimer* waitTimer;
     QTimer* updateTimer;
     QTimer *batteryTimer;
@@ -47,6 +54,9 @@ public:
     Sensor* getSensor();
 
     Analyzer* getAnalyzer();
+
+
+    void incrementCharge();
 
     int getState() const;
     bool getIsChild() const;
@@ -67,10 +77,8 @@ public:
     void standClear();
     void instructCPR();
     void checkAirBreathing();
-
+   void prepareForShock();
     //extra?
-
-    void prepareForShock(int i);
  //last second setters
 
 

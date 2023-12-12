@@ -36,14 +36,86 @@ void AED::attachDefibPad()
         QCoreApplication::processEvents();
     }
     communicateWithUser("Good placement detected. Analyzing heart rate. Stand back.");
-    checkForShock();
+    //checkForShock();
     shockPressed = true;
     emit stageComplete();
 }
 
-void AED::standClear(){
-    communicateWithUser("Stand clear. Schock commencing.");
+void AED::standClear()
+{
     waitTimer->start(WAIT_MS);
+
+    //does analyzer have enough data to produce a result?
+
+    int heartState = pAnalyzer->analyzeHeart();
+
+    if(heartState== -1)
+    {
+        standClear();
+    }
+    // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
+    //TODO: talk to the others, pls i dont want switch case
+    //Switch case implemented so it can mimic Zuhayr and Justin design thought process
+    switch(heartState) {
+        case 0: // Regular
+            qDebug() << "[SPEAKER] Regular heartbeat.";
+            break;
+        case 1: // Vtac
+            qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
+            //prepareForShock(0);
+        case 2: // Vfib
+            qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
+            //prepareForShock(0);
+            break;
+        case 3: // Asystole
+            qDebug() << "[SPEAKER] Asystole heartbeat.";
+            break;
+        case 4: // Unknown
+            qDebug() << "[SPEAKER] Unknown heartbeat. Unable to advise.";
+            break;
+        default:
+            qDebug() << "[SPEAKER] No shock advised.";
+            break;
+    }
+    emit stageComplete();
+}
+
+void AED::checkForShock()
+{
+    int heartState = pAnalyzer->analyzeHeart();
+
+    // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
+    //TODO: talk to the others, pls i dont want switch case
+    //Switch case implemented so it can mimic Zuhayr and Justin design thought process
+
+     switch(heartState) {
+         case 1: // Vtac
+            qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
+            prepareForShock();
+            stageComplete();
+            break;
+         case 2: // Vfib
+             qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
+             prepareForShock();
+             stageComplete();
+             break;
+         case 0: // Regular
+            qDebug() << "[SPEAKER] Regular heartbeat.";
+            stageComplete();
+            break;
+         case 3: // Asystole
+            qDebug() << "[SPEAKER] Asystole heartbeat.";
+            stageComplete();
+            break;
+         case 4: // Unknown
+            qDebug() << "[SPEAKER] stuff broken, unkown heartbeat.";
+            stageComplete();
+            break;
+         default:
+             qDebug() << "[SPEAKER] No shock advised.";
+             stageComplete();
+             break;
+     }
 }
 
 void AED::instructCPR()
@@ -102,73 +174,33 @@ AED::AED(QObject *parent)
     connect(batteryTimer, &QTimer::timeout, [=](){
         batteryUpdate();
     });
-    batteryTimer->start(15000);
-}
+    batteryTimer->start(15000);}
 
 AED::~AED(){
 
 }
 
-void AED::prepareForShock(int i)
-{
-    //function 5.5
-    //function 5 helper
-    if(i>=100)
-    {
-    qDebug() << "Charge ready";
-    qDebug() << "Press the shock button now.";
-    return;
-    }
-    // Simulate battery charging
-    qDebug() << "CHARGING";
-    prepareForShock(i+1);
+void AED::prepareForShock() {
+    chargeLevel = 0;
+    incrementCharge(); // Start the charging process
+}
 
-    // simulate pressing shock button
-    // After pressing button, call deliverShock()
+void AED::incrementCharge() {
+    chargeLevel += 10;
+    if (chargeLevel >= 100) {
+        chargeLevel = 100;
+        qDebug() << "Charge ready. Press the shock button now.";
+        // Optionally emit a signal or enable the shock button here
+    } else {
+        qDebug() << "CHARGING: " << chargeLevel << "%";
+        waitTimer->start(3000); // Wait for 3 seconds before incrementing charge again
+    }
 }
 
 void AED::communicateWithUser(std::string const & s){
     QString qs = QString::fromStdString("[SPEAKER] " + s);
     qDebug() << qs;
     updateText(s);
-}
-
-void AED::checkForShock()
-{
-    int heartState = pAnalyzer->analyzeHeart();
-
-    // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
-    //TODO: talk to the others, pls i dont want switch case
-    //Switch case implemented so it can mimic Zuhayr and Justin design thought process
-
-     switch(heartState) {
-         case 1: // Vtac
-            qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
-            prepareForShock(0);
-            stageComplete();
-            break;
-         case 2: // Vfib
-             qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
-             prepareForShock(0);
-             stageComplete();
-             break;
-         case 0: // Regular
-            qDebug() << "[SPEAKER] Regular heartbeat.";
-            stageComplete();
-            break;
-         case 3: // Asystole
-            qDebug() << "[SPEAKER] Asystole heartbeat.";
-            stageComplete();
-            break;
-         case 4: // Unknown
-            qDebug() << "[SPEAKER] stuff broken, unkown heartbeat.";
-            stageComplete();
-            break;
-         default:
-             qDebug() << "[SPEAKER] No shock advised.";
-             stageComplete();
-             break;
-     }
 }
 
 void AED::batteryUpdate(){
@@ -230,6 +262,12 @@ void AED::batteryLogic(int value){
 }
 
 void AED::setShockPressed(){
+    if (chargeLevel >= 100) {
+        // Logic to handle the shock delivery
+        qDebug() << "Delivering shock...";
+    } else {
+        qDebug() << "Charge not ready. Current charge level: " << chargeLevel << "%";
+    }
     shockPressed = true;
 }
 

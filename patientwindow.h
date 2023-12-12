@@ -37,7 +37,7 @@ private slots:
 
     void on_vTacButton_clicked(bool checked);
 
-    void on_verticalSlider_valueChanged(int value);
+    //void on_verticalSlider_valueChanged(int value);
 
 
     void on_leftPadTable_cellPressed(int row, int column);

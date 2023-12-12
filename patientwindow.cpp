@@ -201,12 +201,14 @@ void PatientWindow::on_vTacButton_clicked(bool checked)
 }
 
 
-void PatientWindow::on_verticalSlider_valueChanged(int value)
-{
-    //circular call
-    //aed->getSensor()->setDepth(value);
-    //qDebug() << "Current value is " << value;
-}
+//void PatientWindow::on_verticalSlider_valueChanged(int value)
+//{
+//    //circular call
+//    //aed->getSensor()->setDepth(value);
+//    //qDebug() << "Current value is " << value;
+
+//    //TODO: delete this
+//}
 
 
 void PatientWindow::on_leftPadTable_cellPressed(int row, int column)
