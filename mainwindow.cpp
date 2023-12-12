@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Power button
     connect(ui->powerPB, SIGNAL(clicked()), pAED, SLOT(power()));
-    connect(pAED, SIGNAL(updateText(std::string)), this, SLOT(updateText(std::string)));
+    connect(pAED, SIGNAL(updateText(std::string const &)), this, SLOT(updateText(std::string const &)));
 
     connect(pAED, SIGNAL(updateState(int)), this, SLOT(updateState(int)));
 
@@ -105,7 +105,8 @@ void MainWindow::updateText(std::string s){
 }
 
 void MainWindow::updateState(int state){
-    QString rbName = QString("radioButton") + QString::number(state);
+    int indicatorNum = state == -1 ? 0 : state;
+    QString rbName = QString("radioButton") + QString::number(indicatorNum);
     QRadioButton* rb = findChild<QRadioButton*>(rbName);
     rb->setChecked(true);
 }

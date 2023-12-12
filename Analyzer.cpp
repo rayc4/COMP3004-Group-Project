@@ -52,7 +52,6 @@ int Analyzer::analyzeHeart()
             isErratic = true;
         }
         previousBeat= beat;
-
     }
 
     double average = sum / static_cast<double>(heartbeats.size());

@@ -2,78 +2,47 @@
 #include <QDebug>
 #include <QCoreApplication>
 
-// state functions (in order) ====================================
+// stage functions (in order) ====================================
 
 void AED::checkResponsiveness()
 {
-    qDebug() << "[SPEAKER] Check responsiveness of the patient.";
-    updateText("Check responsiveness of the patient.");
+    communicateWithUser("Check responsiveness of the patient.");
     waitTimer->start(WAIT_MS);
 }
 
 void AED::callEmergencyServices()
 {
-    qDebug() << "[SPEAKER] Call emergency services.";
-    updateText("Call emergency services.");
+    communicateWithUser("Call emergency services.");
+    waitTimer->start(WAIT_MS);
+}
+
+void AED::tiltHead(){
+    communicateWithUser("Tilt patient's head.");
     waitTimer->start(WAIT_MS);
 }
 
 void AED::checkAirway()
 {
-    qDebug() << "[SPEAKER] Check for breathing and airway of patient.";
-    updateText("Check for breathing and airway of patient.");
+    communicateWithUser("Check for breathing and airway of patient.");
     waitTimer->start(WAIT_MS);
 }
 
 void AED::attachDefibPad()
 {
     if (!pSensor->getGoodPlacement()){
-        qDebug() << "[SPEAKER] Bad pad placement. Waiting for good placement...";
+        communicateWithUser("Bad pad placement. Waiting for good placement...");
     }
     while(!pSensor->getGoodPlacement()){
         QCoreApplication::processEvents();
     }
-    stageComplete();
+    emit stageComplete();
 }
 
-void AED::checkForShock()
-{
-    int heartState = pAnalyzer->analyzeHeart();
-
-    // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
-    //TODO: talk to the others, pls i dont want switch case
-    //Switch case implemented so it can mimic Zuhayr and Justin design thought process
-
-     switch(heartState) {
-         case 1: // Vtac
-            qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
-            prepareForShock(0);
-            stageComplete();
-            break;
-         case 2: // Vfib
-             qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
-             prepareForShock(0);
-             stageComplete();
-             break;
-         case 0: // Regular
-            qDebug() << "[SPEAKER] Regular heartbeat.";
-            stageComplete();
-            break;
-         case 3: // Asystole
-            qDebug() << "[SPEAKER] Asystole heartbeat.";
-            stageComplete();
-            break;
-         case 4: // Unknown
-            qDebug() << "[SPEAKER] stuff broken, unkown heartbeat.";
-            stageComplete();
-            break;
-         default:
-             qDebug() << "[SPEAKER] No shock advised.";
-             stageComplete();
-             break;
-     }
+void AED::standClear(){
+    qDebug() << "[SPEAKER] Stand clear. Schock commencing.";
+    updateText("Stand clear. Schock commencing.");
+    waitTimer->start(WAIT_MS);
 }
-
 
 void AED::prepareForShock(int i)
 {
@@ -126,11 +95,11 @@ AED::AED(QObject *parent)
 
     stateFunctions = {&AED::checkResponsiveness,
                       &AED::callEmergencyServices,
+                      &AED::tiltHead,
                       &AED::checkAirway,
                       &AED::attachDefibPad,
-                      &AED::checkForShock,
-                      &AED::instructCPR,
-                      &AED::checkAirBreathing};
+                      &AED::standClear,
+                      &AED::instructCPR};
 
     waitTimer = new QTimer(this);
     waitTimer->setSingleShot(true);
@@ -149,6 +118,50 @@ AED::AED(QObject *parent)
 
 AED::~AED(){
 
+}
+
+void AED::communicateWithUser(std::string const & s){
+    QString qs = QString::fromStdString("[SPEAKER] " + s);
+    qDebug() << qs;
+    updateText(s);
+}
+
+void AED::checkForShock()
+{
+    int heartState = pAnalyzer->analyzeHeart();
+
+    // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
+    //TODO: talk to the others, pls i dont want switch case
+    //Switch case implemented so it can mimic Zuhayr and Justin design thought process
+
+     switch(heartState) {
+         case 1: // Vtac
+            qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
+            prepareForShock(0);
+            stageComplete();
+            break;
+         case 2: // Vfib
+             qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
+             prepareForShock(0);
+             stageComplete();
+             break;
+         case 0: // Regular
+            qDebug() << "[SPEAKER] Regular heartbeat.";
+            stageComplete();
+            break;
+         case 3: // Asystole
+            qDebug() << "[SPEAKER] Asystole heartbeat.";
+            stageComplete();
+            break;
+         case 4: // Unknown
+            qDebug() << "[SPEAKER] stuff broken, unkown heartbeat.";
+            stageComplete();
+            break;
+         default:
+             qDebug() << "[SPEAKER] No shock advised.";
+             stageComplete();
+             break;
+     }
 }
 
 //Function added by Zuhayr

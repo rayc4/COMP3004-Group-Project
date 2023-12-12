@@ -29,6 +29,8 @@ private:
     QTimer* waitTimer;
     QTimer* updateTimer;
 
+    void checkForShock();
+    void communicateWithUser(std::string const &);
 
 public:
     explicit AED(QObject *parent = nullptr);
@@ -54,15 +56,13 @@ public:
     void setIsChild(bool child);
     void setBattery(int newBattery);
 
-
-//STEPS FOR EAD main steps
-    //chain logic
-
+    // AED indicated stages
     void checkResponsiveness();
     void callEmergencyServices();
+    void tiltHead();
     void checkAirway();
     void attachDefibPad();
-    void checkForShock();
+    void standClear();
     void instructCPR();
     void checkAirBreathing();
 
@@ -73,7 +73,7 @@ public:
 
 
     signals:
-        void updateText(std::string s);
+        void updateText(std::string const & s);
         void updateState(int state);
         void stateDone();
         void stageComplete();
