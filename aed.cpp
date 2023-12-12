@@ -6,8 +6,15 @@
 
 void AED::checkResponsiveness()
 {
-    communicateWithUser("Check responsiveness of the patient.");
-    waitTimer->start(WAIT_MS);
+    if (pSensor->getGoodPlacement()){
+        communicateWithUser("Pad has already been placed, skipping steps...");
+        state = 4;
+        waitTimer->start(WAIT_MS);
+    }else{
+        communicateWithUser("Check responsiveness of the patient.");
+        waitTimer->start(WAIT_MS);
+    }
+
 }
 
 void AED::callEmergencyServices()
@@ -36,15 +43,12 @@ void AED::attachDefibPad()
         QCoreApplication::processEvents();
     }
     communicateWithUser("Good placement detected. Analyzing heart rate. Stand back.");
-    //checkForShock();
-    shockPressed = true;
+    waitTimer->start(WAIT_MS);
     emit stageComplete();
 }
 
 void AED::standClear()
 {
-    waitTimer->start(WAIT_MS);
-
     //does analyzer have enough data to produce a result?
 
     int heartState = pAnalyzer->analyzeHeart();
@@ -162,13 +166,11 @@ AED::AED(QObject *parent)
 
     connect(this, SIGNAL(stageComplete()), this, SLOT(enterNextState()));
 
-    //Zuhayr
     updateTimer = new QTimer();
     connect(updateTimer, &QTimer::timeout, [=]() {
         updateAED();
     });
     updateTimer->start(300);
-    // Zuhayr
 
     batteryTimer = new QTimer(this);
     connect(batteryTimer, &QTimer::timeout, [=](){
@@ -210,14 +212,12 @@ void AED::batteryUpdate(){
     }
 }
 
-//Function added by Zuhayr
 void AED::updateAED(){
     pAnalyzer->CollectHeart(pSensor->getHeartRate());
     QString feedback;
     pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), feedback);
     //qDebug() << feedback;
 }
-
 
 void AED::enterNextState(){
     if(state == FINAL_STATE) return;

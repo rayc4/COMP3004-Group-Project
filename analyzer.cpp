@@ -1,4 +1,4 @@
-#include "Analyzer.h"
+#include "analyzer.h"
 
 
 Analyzer::Analyzer(QObject *parent) : QObject(parent), pSensor(nullptr), heartState(0), shockState(false){
@@ -23,6 +23,7 @@ void Analyzer::CollectHeart(int hbit)
 
 int Analyzer::analyzeHeart()
 {
+
     //add only numbers once a second
     if(heartbeats.empty() || (heartbeats.size() <=60))
     {
@@ -82,7 +83,6 @@ int Analyzer::analyzeHeart()
     return heartState; // Placeholder
 }
 
-//Done by Zuhayr
 void Analyzer::checkCPR(int depth, bool isChild, QString &feedback) {
     int cprSum = 0;
 
