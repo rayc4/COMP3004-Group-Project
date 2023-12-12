@@ -1,4 +1,4 @@
-#include "Analyzer.h"
+#include "analyzer.h"
 
 
 Analyzer::Analyzer(QObject *parent) : QObject(parent), pSensor(nullptr), heartState(0), shockState(false){
@@ -20,6 +20,7 @@ void Analyzer::CollectHeart(int hbit)
         heartbeats.push_back(hbit);
     }
 }
+
 
 //int Analyzer::analyzeHeart()
 //{
@@ -87,10 +88,10 @@ void Analyzer::CollectHeart(int hbit)
 
 
 int Analyzer::analyzeHeart() {
-    if (heartbeats.empty() || heartbeats.size() < 60) {
+    if (heartbeats.empty() || heartbeats.size() < 60)
+    {
         return NEG; // Assuming NEG is used for an unknown or indeterminate state
     }
-
     int sum = 0;
     int minRate = INT_MAX;
     int maxRate = INT_MIN;
@@ -118,8 +119,6 @@ int Analyzer::analyzeHeart() {
     }
 }
 
-
-//Done by Zuhayr
 void Analyzer::checkCPR(int depth, bool isChild, QString &feedback) {
     int cprSum = 0;
 

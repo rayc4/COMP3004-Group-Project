@@ -6,8 +6,6 @@ Patient::Patient(int a, QString nm):age(a), name(nm)
 
     setAge(age);
 
-
-
     //Let patient run on it's own thread:
     patientThread = new QThread;
 
@@ -145,7 +143,6 @@ void Patient::updateSurvivalRate(){
 
     if (baseSurvivalChance < 0)
         baseSurvivalChance = 0;
-
 
 }
 

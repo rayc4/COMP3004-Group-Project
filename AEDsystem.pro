@@ -10,19 +10,19 @@ CONFIG += c++11
 
 SOURCES += \
     aed.cpp \
+    analyzer.cpp \
     patientwindow.cpp \
     sensor.cpp \
-    Analyzer.cpp \
     patient.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     aed.h \
+    analyzer.h \
     enums.h \
     patientwindow.h \
     sensor.h \
-    Analyzer.h \
     patient.h \
     mainwindow.h
 

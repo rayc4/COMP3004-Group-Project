@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QMainWindow>
 #include "sensor.h"
-#include "Analyzer.h"
+#include "analyzer.h"
 
 #define FINAL_STATE 6
 #define WAIT_MS 3000
