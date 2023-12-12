@@ -51,8 +51,8 @@ void AED::standClear()
 {
 
     //does analyzer have enough data to produce a result?
+    int heartState = -1;
 
-    int heartState = pAnalyzer->analyzeHeart();
     //int heartState = pAnalyzer->getHeartState();
 
     if(heartState== -1)
@@ -84,44 +84,6 @@ void AED::standClear()
             break;
     }
     emit stageComplete();
-}
-
-void AED::checkForShock()
-{
-    int heartState = pAnalyzer->analyzeHeart();
-
-    // Heart states: 0 - Regular, 1 - Vtac, 2 - Vfib, 3 - Asystole, 4 - Unknown
-    //TODO: talk to the others, pls i dont want switch case
-    //Switch case implemented so it can mimic Zuhayr and Justin design thought process
-
-     switch(heartState) {
-         case 1: // Vtac
-            qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
-            prepareForShock();
-            stageComplete();
-            break;
-         case 2: // Vfib
-             qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
-             prepareForShock();
-             stageComplete();
-             break;
-         case 0: // Regular
-            qDebug() << "[SPEAKER] Regular heartbeat.";
-            stageComplete();
-            break;
-         case 3: // Asystole
-            qDebug() << "[SPEAKER] Asystole heartbeat.";
-            stageComplete();
-            break;
-         case 4: // Unknown
-            qDebug() << "[SPEAKER] stuff broken, unkown heartbeat.";
-            stageComplete();
-            break;
-         default:
-             qDebug() << "[SPEAKER] No shock advised.";
-             stageComplete();
-             break;
-     }
 }
 
 void AED::instructCPR()
@@ -187,6 +149,7 @@ AED::~AED(){
 void AED::prepareForShock() {
     chargeLevel = 0;
     incrementCharge(); // Start the charging process
+    emit doneCharging();
 }
 
 void AED::incrementCharge() {

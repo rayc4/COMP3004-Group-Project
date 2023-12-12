@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Shock button
     connect(ui->shockPB, SIGNAL(clicked()), pAED, SLOT(setShockPressed()));
+    connect(pAED, SIGNAL(doneCharging()), this, SLOT(enableShockPB()));
 
     // display updates
     connect(pAED, SIGNAL(updateText(std::string)), this, SLOT(updateText(std::string)));
@@ -32,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(pAED, SIGNAL(updateBattery(int)), this, SLOT(updateBatteryStatus(int)));
 
     stateRBs = findChildren<QRadioButton*>();
+}
+
+void MainWindow::enableShockPB(){
+    ui->shockPB->setEnabled(true);
 }
 
 void MainWindow::setPatientWindow(PatientWindow* pw){

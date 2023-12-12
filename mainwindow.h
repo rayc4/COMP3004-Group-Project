@@ -36,6 +36,7 @@ private slots:
     void updateText(std::string s);
     void updateState(int state);
     void updateBatteryStatus (int value);
+    void enableShockPB();
 
 private:
     void updateGUI();

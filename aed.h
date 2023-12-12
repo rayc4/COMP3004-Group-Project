@@ -16,7 +16,6 @@ class AED : public QObject
 private:
     void updateAED();
     void batteryUpdate();
-    void checkForShock();
     void communicateWithUser(std::string const &);
 
     QMainWindow* window;
@@ -88,6 +87,7 @@ public:
         void stateDone();
         void stageComplete();
         void updateBattery(int battery);
+        void doneCharging();
 
     public slots:
         void power();
