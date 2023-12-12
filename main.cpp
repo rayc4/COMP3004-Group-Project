@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     //this will launch multiple instances
     //to be able to test if our project will always compile correctly, and not by coincidence
 
-    const int numberOfInstances = 10;
+    const int numberOfInstances = 1;
     // Set the number of instances here
     //set 1 if not testing
     std::vector<MainWindow*> windows;
