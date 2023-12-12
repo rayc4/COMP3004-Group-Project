@@ -86,7 +86,6 @@ void Analyzer::CollectHeart(int hbit)
 //fallback line
 
 
-
 int Analyzer::analyzeHeart() {
     if (heartbeats.empty() || heartbeats.size() < 60)
     {
