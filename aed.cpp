@@ -43,11 +43,12 @@ void AED::attachDefibPad()
 
 void AED::standClear()
 {
-    waitTimer->start(WAIT_MS);
+    //waitTimer->start(WAIT_MS);
 
     //does analyzer have enough data to produce a result?
 
     int heartState = pAnalyzer->analyzeHeart();
+    //int heartState = pAnalyzer->getHeartState();
 
     if(heartState== -1)
     {
@@ -62,10 +63,10 @@ void AED::standClear()
             break;
         case 1: // Vtac
             qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
-            //prepareForShock(0);
+            prepareForShock();
         case 2: // Vfib
             qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
-            //prepareForShock(0);
+            prepareForShock();
             break;
         case 3: // Asystole
             qDebug() << "[SPEAKER] Asystole heartbeat.";
@@ -194,6 +195,7 @@ void AED::incrementCharge() {
     } else {
         qDebug() << "CHARGING: " << chargeLevel << "%";
         waitTimer->start(3000); // Wait for 3 seconds before incrementing charge again
+        incrementCharge(); //TODO: CHANGE THIS FOR LATER to work with the list or call per tic
     }
 }
 

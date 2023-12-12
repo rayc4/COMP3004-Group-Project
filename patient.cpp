@@ -242,7 +242,8 @@ QString Patient::getName(){
 
 int Patient::getSurvival(){
     QMutexLocker locker(&heartMutex);
-    return baseSurvivalChance+survivalBonus;
+    //return baseSurvivalChance+survivalBonus;
+    return 100; //TODO: swap to normal later. hard code for testing
 }
 
 HeartState Patient::getState(){

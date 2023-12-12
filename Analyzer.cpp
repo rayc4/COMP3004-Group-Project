@@ -21,66 +21,103 @@ void Analyzer::CollectHeart(int hbit)
     }
 }
 
-int Analyzer::analyzeHeart()
-{
-    //add only numbers once a second
-    if(heartbeats.empty() || (heartbeats.size() <=60))
-    {
-        return -1;
+//int Analyzer::analyzeHeart()
+//{
+//    heartState = -1;
+//    //add only numbers once a second
+//    if(heartbeats.empty() || (heartbeats.size() <=60))
+//    {
+//        return -1;
+//    }
+
+
+//    int sum = 0;
+//    int minBit = 60;
+//    int maxBit = 360;
+
+//    bool isErratic = false;
+
+//    int previousBeat = heartbeats.front();
+//    for(int i = 0; i < heartbeats.size(); i++)
+//    {
+//        int beat = heartbeats.at(i);
+//        sum += beat;
+
+//        //double if in case of flat line
+
+//        if(beat < minBit) minBit = beat;
+//        if(beat > maxBit) maxBit = beat;
+
+//        if(abs(beat - previousBeat) >30)
+//        {
+//            isErratic = true;
+//        }
+//        previousBeat= beat;
+//    }
+
+//    double average = sum / static_cast<double>(heartbeats.size());
+
+//    // Detect conditions
+//    if (average < 30) {
+//        heartState=3; //testing for the lads
+//        return 3;
+//        //"Asystole" Very low or no heart rate
+//    } else if (average > 100) {
+//        if (isErratic) {
+//            heartState = 2;
+//            return 2; //"Vfib" Erratic and high
+//        } else {
+//            heartState=1;
+//            return 1; //"Vtac"  Consistently high heart rate
+//        }
+//    } else {
+//        if ((maxBit - minBit) < 20 && !isErratic)
+//        {
+//            heartState=0;
+//            return 0;  //"Regular"  Consistent heart rate
+//        } else {
+//            return 4;//TODO CHECK FOR CARDIAC ARREST AGAIN
+//            //return -1;//"Unknown"
+//        }
+//    }
+//    return heartState; // Placeholder
+//}
+//fallback line
+
+
+
+int Analyzer::analyzeHeart() {
+    if (heartbeats.empty() || heartbeats.size() < 60) {
+        return NEG; // Assuming NEG is used for an unknown or indeterminate state
     }
 
-
     int sum = 0;
-    int minBit = 60;
-    int maxBit = 360;
-
+    int minRate = INT_MAX;
+    int maxRate = INT_MIN;
     bool isErratic = false;
 
     int previousBeat = heartbeats.front();
-    for(int i = 0; i < heartbeats.size(); i++)
-    {
-        int beat = heartbeats.at(i);
+    for (int beat : heartbeats) {
         sum += beat;
-
-        //double if in case of flat line
-
-        if(beat < minBit) minBit = beat;
-        if(beat > maxBit) maxBit = beat;
-
-        if(abs(beat - previousBeat) >30)
-        {
+        if (beat < minRate) minRate = beat;
+        if (beat > maxRate) maxRate = beat;
+        if (abs(beat - previousBeat) > 30) {
             isErratic = true;
         }
-        previousBeat= beat;
+        previousBeat = beat;
     }
 
     double average = sum / static_cast<double>(heartbeats.size());
 
-    // Detect conditions
     if (average < 30) {
-        heartState=3; //testing for the lads
-        return 3;
-        //"Asystole" Very low or no heart rate
+        return ASYS;
     } else if (average > 100) {
-        if (isErratic) {
-            heartState = 2;
-            return 2; //"Vfib" Erratic and high
-        } else {
-            heartState=1;
-            return 1; //"Vtac"  Consistently high heart rate
-        }
+        return isErratic ? VFIB : VTAC;
     } else {
-        if ((maxBit - minBit) < 20 && !isErratic)
-        {
-            heartState=0;
-            return 0;  //"Regular"  Consistent heart rate
-        } else {
-            return 4;//TODO CHECK FOR CARDIAC ARREST AGAIN
-            //return -1;//"Unknown"
-        }
+        return (maxRate - minRate) < 20 && !isErratic ? REG : NEG;
     }
-    return heartState; // Placeholder
 }
+
 
 //Done by Zuhayr
 void Analyzer::checkCPR(int depth, bool isChild, QString &feedback) {

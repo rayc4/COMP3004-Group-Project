@@ -5,6 +5,8 @@
 #include <deque>
 #include "sensor.h"
 
+#include "enums.h"
+
 
 class Analyzer : public QObject {
     Q_OBJECT
