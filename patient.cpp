@@ -77,9 +77,12 @@ void Patient::updateHeartRate(){
             backToLife();
         }
         else{
+            currentState = VTAC;
             sequence2CPRCount++;
-            if (sequence2CPRCount >= 2)
+            if (sequence2CPRCount >= 2){
                 currentState = ASYS;
+                sequence2CPRCount = 0;
+            }
         }
         cprCount = 0;
         breathCount = 0;
