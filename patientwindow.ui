@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>415</width>
-    <height>630</height>
+    <height>685</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -680,7 +680,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>530</y>
      <width>421</width>
-     <height>101</height>
+     <height>201</height>
     </rect>
    </property>
    <widget class="QPushButton" name="cardiacButton">
@@ -815,6 +815,54 @@ color: rgb(0,0,0);</string>
     </property>
     <property name="text">
      <string>TESTING AREA</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>110</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>No Sequence</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Sequence 1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Sequence 2</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="nameLabel_3">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>110</y>
+      <width>151</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>FORCE SEQUENCE:</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

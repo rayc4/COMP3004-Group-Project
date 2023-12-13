@@ -71,11 +71,18 @@ void Patient::updateHeartRate(){
 
     //Check with cpr affecting survival rate:
     if (cprCount >= 30 && breathCount >= 2){
-        oneCPR = true;
+        if (!forceSequence2){ //In the second sequence, CPR is ineffective.
+            oneCPR = true;
+            survivalBonus += 10; //If given 30 compressions + 2 breaths, survival chance goes up
+            backToLife();
+        }
+        else{
+            sequence2CPRCount++;
+            if (sequence2CPRCount >= 2)
+                currentState = ASYS;
+        }
         cprCount = 0;
         breathCount = 0;
-        survivalBonus += 10; //If given 30 compressions + 2 breaths, survival chance goes up
-        backToLife();
     }
 
 
@@ -200,7 +207,16 @@ void Patient::respondToShock(){
     //3 pathways: a) Regular, b) Continued vfib/vtac, or c) asystole
     //a) 50%, b) 40%, c) 10%
     int response = -1;
-    if (!(currentState == ASYS)){
+    if (forceSequence1){
+        currentState = PEA;
+        baseSurvivalChance = 90;
+        qDebug() << "Setting for sequence 1";
+    }
+    else if (forceSequence2){
+        currentState = VTAC;
+        qDebug() << "Setting for sequence 2";
+    }
+    else if (!(currentState == ASYS)){
         response = randomGen.bounded(0, 100);
         //qDebug() << response;
         if (response > 30)
@@ -208,7 +224,8 @@ void Patient::respondToShock(){
          survivalBonus += 10; // 10% survival bonus for trying
     }
 
-    backToLife(); // Check to see if patient can be brought back to life
+    if (!forceSequence1 || !forceSequence2)
+        backToLife(); // Check to see if patient can be brought back to life
 
 }
 
@@ -390,3 +407,19 @@ void Patient::setSurvivalTimer(bool enabled){
         survivalDisabled = false;
 }
 
+void Patient::setSequence(int seq){
+    if (seq == 1){
+        forceSequence1 = true;
+        forceSequence2 = false;
+        setState(VFIB);
+    }
+    else if (seq == 2){
+        forceSequence1 = false;
+        forceSequence2 = true;
+        setState(VTAC);
+    }
+    else{
+        forceSequence1 = false;
+        forceSequence2 = false;
+    }
+}

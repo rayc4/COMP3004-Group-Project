@@ -43,6 +43,9 @@ public:
 
     void setSurvivalTimer(bool enabled);
 
+    //For testing
+    void setSequence(int seq);
+
 public slots:
     void updateHeartRate();
     void updateSurvivalRate();
@@ -98,6 +101,10 @@ private:
 
     //Added in to help during debugging
     bool survivalDisabled = false;
+
+    bool forceSequence1 = false;
+    bool forceSequence2 = false;
+    int sequence2CPRCount = 0;
 
 signals:
     void sendHeartRate(int HR);

@@ -402,3 +402,20 @@ void PatientWindow::on_disableSurvivalButton_clicked(bool checked)
     pPatient->setSurvivalTimer(checked);
 }
 
+
+void PatientWindow::on_comboBox_currentIndexChanged(int index)
+{
+    pPatient->setSequence(index);
+    if (index == 1){
+        ui->vFibButton->setStyleSheet("border: 4px solid rgb(129, 61, 156);"
+                                         "color: rgb(129, 61, 156);");
+        ui->vFibButton->setChecked(true);
+    }
+    else if (index == 2){
+        ui->vTacButton->setStyleSheet("border: 4px solid rgb(129, 61, 156);"
+                                         "color: rgb(129, 61, 156);");
+        ui->vTacButton->setChecked(true);
+    }
+
+}
+
