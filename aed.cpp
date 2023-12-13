@@ -192,6 +192,8 @@ void AED::power()
 {  
     if (battery <= 0){
         updateText("Please Charge. There is no battery");
+    }else if (battery < 16){
+        updateText("Please Charge. Low Battery");
     }else{
         if(state != -1){
             state = -1;
