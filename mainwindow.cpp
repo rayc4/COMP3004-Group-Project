@@ -91,7 +91,8 @@ AED* MainWindow::getAed()
 
 void MainWindow::updateGUI(){
     //qDebug() << "Current GUI heartrate is " << aedRef->getSensor()->getHeartRate();
-    ui->heartRateLCD->display(pAED->getSensor()->getHeartRate());
+    if(pAED->getState() != -1)
+        ui->heartRateLCD->display(pAED->getSensor()->getHeartRate());
 }
 
 void MainWindow::updateText(std::string s){
