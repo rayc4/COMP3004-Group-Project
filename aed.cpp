@@ -49,7 +49,7 @@ void AED::attachDefibPad()
 
 void AED::standClear()
 {
-    int heartState = pAnalyzer->analyzeHeart();
+    HeartState heartState = pAnalyzer->analyzeHeart();
     qDebug() << heartState;
     if(heartState == NEG)
     {
@@ -60,41 +60,60 @@ void AED::standClear()
     // Heart states: REG - Regular, VTAC - Vtac, VFIB - Vfib, PEA - PEA, ASYS - Asystole, NEG - Unknown
     switch(heartState) {
         case REG: // Regular
+            communicateWithUser("Regular heartbeat.");
             qDebug() << "[SPEAKER] Regular heartbeat.";
             break;
         case VTAC: // Vtac
+            communicateWithUser("Patient in V-TAC.");
             qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
             prepareForShock();
             break;
         case VFIB: // Vfib
+            communicateWithUser("Patient in V-FIB.");
             qDebug() << "[SPEAKER] Shock Advised. Preparing to shock.";
             prepareForShock();
             break;
         case ASYS: // Asystole
+            communicateWithUser("Patient is ASYS.");
             qDebug() << "[SPEAKER] Asystole heartbeat.";
             break;
+        case PEA:
+            communicateWithUser("Patient in PEA.");
+            qDebug() << "[SPEAKER] No pulse, elecrtical actvity detected.";
+            break;
         case NEG: // Unknown
+            communicateWithUser("Cannot determine patient status.");
             qDebug() << "[SPEAKER] Unknown heartbeat. Unable to advise.";
             break;
         default:
+            communicateWithUser("No shock advised.");
             qDebug() << "[SPEAKER] No shock advised.";
             break;
     }
-    emit stageComplete();
+    if (!(heartState == VTAC || heartState == VFIB))
+        emit stageComplete();
 }
 
 void AED::instructCPR()
 {
+
     //function 6
-
-    qDebug()<< "Instructing CPR!!!";
-    // CPR instruction here
-    //CPR quality here
-
-    // Retry || bypass to different step
-//    QString feedback;
-//    pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), feedback);
-//    qDebug() << feedback;
+    if(pAnalyzer->getHeartState() != REG){
+        qDebug()<< "Instructing CPR!!!";
+        communicateWithUser("Perform CPR.");
+        pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), cprFeedback);
+        communicateWithUser(cprFeedback.toStdString());
+        if (cprCheckCount < 33){
+            cprCheckCount++;
+            QTimer::singleShot(900, this, &AED::instructCPR);
+        }
+        else{
+            cprCheckCount = 0;
+            state = 5;
+        }
+    }
+    else
+        emit stageComplete();
 
 }
 
@@ -145,20 +164,24 @@ AED::~AED(){
 }
 
 void AED::prepareForShock() {
-    chargeLevel = 0;
+    if (charging == false)
+        chargeLevel = 0;
     incrementCharge(); // Start the charging process
-    emit doneCharging();
 }
 
 void AED::incrementCharge() {
     chargeLevel += 10;
     if (chargeLevel >= 100) {
         chargeLevel = 100;
+        communicateWithUser("Charge ready. Press the shock button now.");
         qDebug() << "Charge ready. Press the shock button now.";
-        disconnect(waitTimer, SIGNAL(timeout()), this, SLOT(repeatFunction()));
+        charging = false;
+        emit doneCharging();
     } else {
+        charging = true;
+        communicateWithUser("CHARGING: %"+std::to_string(chargeLevel));
         qDebug() << "CHARGING: " << chargeLevel << "%";
-        repeatCurrentState(); // Schedule to call incrementCharge again after a delay
+        QTimer::singleShot(300, this, &AED::incrementCharge);
     }
 }
 
@@ -262,10 +285,11 @@ void AED::setShockPressed(){
     if (chargeLevel >= 100) {
         // Logic to handle the shock delivery
         qDebug() << "Delivering shock...";
+        pSensor->sendShock();
+        emit stageComplete();
     } else {
         qDebug() << "Charge not ready. Current charge level: " << chargeLevel << "%";
     }
-    shockPressed = true;
 }
 
 //This function generates intervals for the ecg graph

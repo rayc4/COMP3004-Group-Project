@@ -23,6 +23,8 @@ public:
     void setPatient(Patient* tempPatient);
     void checkPads();
 
+    void sendShock();
+
 //signals:
       //void setCPR(int cBpm);
 

@@ -60,6 +60,12 @@ void Sensor::checkPads(){
     goodPlacement = leftPad && rightPad;
 }
 
+
+void Sensor::sendShock(){
+    pPatient->respondToShock();
+}
+
+//Setters and getters
 void Sensor::setDepth(int depth){
     cprDepth = depth;
     pressureCPR = true;

@@ -88,41 +88,45 @@ void Analyzer::CollectHeart(int hbit)
 
 
 HeartState Analyzer::analyzeHeart() {
-    if (heartbeats.empty() || heartbeats.size() < 10)
-    {
-        return NEG; // Assuming NEG is used for an unknown or indeterminate state
+
+    if (heartbeats.empty() || heartbeats.size() < 10) {
+        heartState = NEG; // Not enough data
+        return NEG;
     }
+
     int sum = 0;
     int minRate = INT_MAX;
     int maxRate = INT_MIN;
     bool isErratic = false;
-
     int previousBeat = heartbeats.front();
+
+
     for (int beat : heartbeats) {
         sum += beat;
         if (beat < minRate) minRate = beat;
         if (beat > maxRate) maxRate = beat;
-        if (abs(beat - previousBeat) > 30) {
+        if (abs(beat - previousBeat) > 30) { // Check for erratic changes
             isErratic = true;
         }
         previousBeat = beat;
     }
 
-    double average = sum / static_cast<double>(heartbeats.size());
-
+    double average = static_cast<double>(sum) / heartbeats.size();
     if (average < 30) {
-        heartState = ASYS;
-        return ASYS;
-    } else if (average > 100 && !isErratic) {
+        heartState = ASYS; // Very low heart rate
+    } else if (average > 240 && !isErratic) {
         heartState = VTAC;
-        return VTAC;
     } else if (isErratic){
         heartState = VFIB;
-        return VFIB;
     } else {
-        heartState = REG;
-        return !isErratic ? REG : NEG;
+        if ((maxRate - minRate) < 20 && !isErratic) {
+            heartState = REG; // Regular heart rate
+        } else {
+            heartState = NEG; // no fit
+        }
     }
+
+    return heartState;
 }
 
 void Analyzer::checkCPR(int depth, bool isChild, QString &feedback) {

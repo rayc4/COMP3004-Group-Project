@@ -24,6 +24,7 @@ private:
     QString feedbackString;
 
 
+
 public:
    Analyzer(QObject *parent = nullptr);
     ~Analyzer();

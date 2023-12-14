@@ -387,9 +387,9 @@ void Patient::backToLife(){
 
 
 void Patient::breath(){
-    if (breathState == 1)
-        qDebug() << "Patient breathes";
-    else if (breathState == 2)
+//    if (breathState == 1)
+//        qDebug() << "Patient breathes"; //This got annoying
+    if (breathState == 2)
         qDebug() << "Patient breathes unsteadily";
     emit sendBreath();
 }

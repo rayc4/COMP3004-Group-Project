@@ -38,6 +38,12 @@ private:
     QTimer* waitTimer;
     QTimer* updateTimer;
     QTimer *batteryTimer;
+    QTimer *cprTimer;
+
+    bool charging = false;
+
+    QString cprFeedback;
+    int cprCheckCount = 0;
 
 public:
     explicit AED(QObject *parent = nullptr);
