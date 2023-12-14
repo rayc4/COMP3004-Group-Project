@@ -13,7 +13,10 @@ PatientWindow::PatientWindow(QWidget *parent)
     });
     guiTimer->start(300);
 
-
+    ui->shockTestButton->setVisible(false);
+    ui->cardiacButton->setVisible(false);
+    ui->killButton->setVisible(false);
+    ui->stateLabel->setVisible(false);
 
 
 
@@ -403,7 +406,7 @@ void PatientWindow::on_disableSurvivalButton_clicked(bool checked)
 }
 
 
-void PatientWindow::on_comboBox_currentIndexChanged(int index)
+void PatientWindow::on_forceCombo_currentIndexChanged(int index)
 {
     pPatient->setSequence(index);
     if (index == 1){
@@ -417,5 +420,24 @@ void PatientWindow::on_comboBox_currentIndexChanged(int index)
         ui->vTacButton->setChecked(true);
     }
 
+}
+
+
+void PatientWindow::on_checkBox_clicked(bool checked)
+{
+    if (checked){
+        ui->shockTestButton->setVisible(false);
+        ui->cardiacButton->setVisible(false);
+        ui->killButton->setVisible(false);
+        ui->stateLabel->setVisible(false);
+    }
+    else{
+        ui->shockTestButton->setVisible(true);
+        ui->cardiacButton->setVisible(true);
+        ui->killButton->setVisible(true);
+        ui->stateLabel->setVisible(true);
+        ui->forceLabel->setVisible(true);
+
+    }
 }
 

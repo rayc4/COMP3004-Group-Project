@@ -71,7 +71,9 @@ private slots:
 
     void on_disableSurvivalButton_clicked(bool checked);
 
-    void on_comboBox_currentIndexChanged(int index);
+    void on_forceCombo_currentIndexChanged(int index);
+
+    void on_checkBox_clicked(bool checked);
 
 signals:
     void declarePosition(bool placement);

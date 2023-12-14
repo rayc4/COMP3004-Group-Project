@@ -70,24 +70,25 @@ void Patient::updateHeartRate(){
     //qDebug() << "Bonus: " << survivalBonus;
 
     //Check with cpr affecting survival rate:
-    if (cprCount >= 30 && breathCount >= 2){
-        if (!forceSequence2){ //In the second sequence, CPR is ineffective.
+    if (cprCount >= 30){
+        if (breathCount >= 2 && !forceSequence2){ //In the second sequence, CPR is ineffective.
             oneCPR = true;
             survivalBonus += 10; //If given 30 compressions + 2 breaths, survival chance goes up
             backToLife();
         }
-        else{
+        else if (forceSequence2){
             currentState = VTAC;
+            baseSurvivalChance-=10;
             sequence2CPRCount++;
             if (sequence2CPRCount >= 2){
                 currentState = ASYS;
                 sequence2CPRCount = 0;
             }
         }
+
         cprCount = 0;
         breathCount = 0;
     }
-
 
     if (baseSurvivalChance+survivalBonus > 100){
         baseSurvivalChance = 100;

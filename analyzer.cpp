@@ -13,7 +13,7 @@ void Analyzer::CollectHeart(int hbit)
 {
     //qDebug() << "heartbeats size: " << heartbeats.size();
     if (hbit != -1){
-        if(heartbeats.size() >= 15)
+        if(heartbeats.size() >= 10)
         {
             heartbeats.pop_front();
             //qDebug() << "Popped" << heartbits.front();
@@ -89,7 +89,7 @@ void Analyzer::CollectHeart(int hbit)
 
 HeartState Analyzer::analyzeHeart() {
 
-    if (heartbeats.empty() || heartbeats.size() < 10) {
+    if (heartbeats.empty() || heartbeats.size() < 5) {
         heartState = NEG; // Not enough data
         return NEG;
     }
@@ -112,14 +112,14 @@ HeartState Analyzer::analyzeHeart() {
     }
 
     double average = static_cast<double>(sum) / heartbeats.size();
-    if (average < 10) {
-        heartState = PEA; // Very low heart rate
-    } else if (average == 0){
+    if (average < 3) {
         heartState = ASYS;
-    } else if (average > 240 && !isErratic) {
-        heartState = VTAC;
+    } else if (average < 10){
+        heartState = PEA;
     } else if (isErratic){
         heartState = VFIB;
+    } else if (average > 240) {
+        heartState = VTAC;
     } else {
         if (average > 70 && average < 80 && (maxRate - minRate) < 20 && !isErratic) {
             heartState = REG; // Regular heart rate

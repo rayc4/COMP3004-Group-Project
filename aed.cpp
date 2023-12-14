@@ -49,6 +49,7 @@ void AED::attachDefibPad()
 
 void AED::standClear()
 {
+    communicateWithUser("Stand clear of the patient!!");
     HeartState heartState = pAnalyzer->analyzeHeart();
     qDebug() << heartState;
     if(heartState == NEG)
@@ -79,7 +80,9 @@ void AED::standClear()
             break;
         case PEA:
             communicateWithUser("Patient in PEA.");
-            qDebug() << "[SPEAKER] No pulse, elecrtical actvity detected.";
+            qDebug() << "[SPEAKER] No pulse, electrical actvity detected.";
+            updateState(6);
+            (this->*(stateFunctions[6]))();
             break;
         case NEG: // Unknown
             communicateWithUser("Cannot determine patient status.");
@@ -97,21 +100,26 @@ void AED::standClear()
 void AED::instructCPR()
 {
 
+    HeartState currState = pAnalyzer->getHeartState();
     //function 6
-    if(pAnalyzer->getHeartState() != REG){
+    if(!(currState == REG || currState == ASYS)){
         if (cprCheckCount == 0){
             qDebug()<< "Instructing CPR!!!";
             communicateWithUser("Perform CPR.");
         }
         pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), cprFeedback);
-        communicateWithUser(cprFeedback.toStdString());
+        if (cprFeedback != lastFeedback){
+            communicateWithUser(cprFeedback.toStdString());
+            lastFeedback = cprFeedback;
+        }
         if (cprCheckCount < 30){
             cprCheckCount++;
             QTimer::singleShot(900, this, &AED::instructCPR);
         }
         else{
             cprCheckCount = 0;
-            (this->*(stateFunctions[5]))();
+            state=5;
+            standClear();
         }
     }
     else
@@ -142,7 +150,8 @@ AED::AED(QObject *parent)
                       &AED::checkAirway,
                       &AED::attachDefibPad,
                       &AED::standClear,
-                      &AED::instructCPR};
+                      &AED::instructCPR,
+                      &AED::endState};
 
     waitTimer = new QTimer(this);
     waitTimer->setSingleShot(true);
@@ -191,9 +200,14 @@ void AED::incrementCharge() {
 
 
 void AED::communicateWithUser(std::string const & s){
+
     QString qs = QString::fromStdString("[SPEAKER] " + s);
-    qDebug() << qs;
-    updateText(s);
+    if (qs != lastFeedback){
+        qDebug() << qs;
+        updateText(s);
+        lastFeedback = qs;
+    }
+
 }
 
 void AED::batteryUpdate(){
@@ -203,18 +217,41 @@ void AED::batteryUpdate(){
     }
 }
 
-void AED::updateAED(){
+void AED::updateAED() {
     pAnalyzer->CollectHeart(pSensor->getHeartRate());
-    if (state > 5){
-        if (pAnalyzer->analyzeHeart() != lastState){
-            lastState = pAnalyzer->analyzeHeart();
+
+    HeartState currentHeartState = pAnalyzer->analyzeHeart();
+
+    // Check for changes in heart state
+    if (currentHeartState != prevHeartState) {
+        qDebug() << "Heart state changed!";
+        prevHeartState = currentHeartState;
+        if (state > 5 && cprCheckCount >= 30) {
             updateState(5);
-            (this->*(stateFunctions[5]))();
+            state = 5;
+            standClear();
+        }
+        if (currentHeartState == REG && state > 4){
+            updateText("Patient in stable condition.");
         }
     }
 
+    if (currentHeartState == ASYS){
+        updateText("Patient has flatlined.");
+        state = 7;
+        endState();
+        return;
+    }
+
+    if (!pSensor->getGoodPlacement() && state > 4){
+        updateState(4);
+        state = 4;
+        attachDefibPad();
+    }
 
 }
+
+
 
 void AED::enterNextState(){
     if(state == FINAL_STATE) return;
@@ -341,4 +378,8 @@ float AED::generateInterval() {
 
 Analyzer* AED::getAnalyzer(){
     return pAnalyzer;
+}
+
+void AED::endState(){
+    communicateWithUser("End of treatment.");
 }

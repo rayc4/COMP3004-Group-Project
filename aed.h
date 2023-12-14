@@ -20,6 +20,7 @@ private:
     void updateAED();
     void batteryUpdate();
     void communicateWithUser(std::string const &);
+    void updateCharge();
 
     QMainWindow* window;
     Sensor* pSensor;
@@ -39,13 +40,15 @@ private:
     QTimer* updateTimer;
     QTimer *batteryTimer;
     QTimer *cprTimer;
+    QTimer *chargeTimer;
 
     bool charging = false;
 
     QString cprFeedback;
+    QString lastFeedback;
     int cprCheckCount = 0;
 
-    HeartState lastState = REG;
+    HeartState prevHeartState = REG;
 
 public:
     explicit AED(QObject *parent = nullptr);
@@ -85,6 +88,7 @@ public:
     void instructCPR();
     void checkAirBreathing();
     void prepareForShock();
+    void endState();
     //extra?
  //last second setters
 

@@ -42,10 +42,10 @@
     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
    </property>
    <property name="value">
-    <number>10</number>
+    <number>45</number>
    </property>
    <property name="sliderPosition">
-    <number>10</number>
+    <number>45</number>
    </property>
    <property name="orientation">
     <enum>Qt::Vertical</enum>
@@ -820,7 +820,7 @@ color: rgb(0,0,0);</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="forceCombo">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -845,7 +845,7 @@ color: rgb(0,0,0);</string>
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="nameLabel_3">
+   <widget class="QLabel" name="forceLabel">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -891,14 +891,15 @@ color: rgb(0,0,0);</string>
   <widget class="QPushButton" name="shockTestButton">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>60</y>
-     <width>101</width>
-     <height>31</height>
+     <x>120</x>
+     <y>100</y>
+     <width>81</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
-    <string>Shock (TEST)</string>
+    <string>Shock
+(TEST)</string>
    </property>
   </widget>
   <widget class="Line" name="line_8">
@@ -933,9 +934,9 @@ color: rgb(154, 153, 150);</string>
   <widget class="QPushButton" name="autoCPRButton">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>100</y>
-     <width>101</width>
+     <x>120</x>
+     <y>60</y>
+     <width>81</width>
      <height>31</height>
     </rect>
    </property>
@@ -1084,6 +1085,26 @@ color: rgb(0,0,0);</string>
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>500</y>
+     <width>171</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgba(191, 64, 64, 0);
+color: rgb(0, 0, 0);</string>
+   </property>
+   <property name="text">
+    <string>Hide Debug Elements?</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
   <zorder>adultFrontLabel</zorder>
   <zorder>line_3</zorder>
   <zorder>nameLabel</zorder>
@@ -1115,6 +1136,7 @@ color: rgb(0,0,0);</string>
   <zorder>cprPB</zorder>
   <zorder>line_9</zorder>
   <zorder>disableSurvivalButton</zorder>
+  <zorder>checkBox</zorder>
  </widget>
  <resources/>
  <connections/>
