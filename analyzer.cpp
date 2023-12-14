@@ -1,7 +1,7 @@
 #include "analyzer.h"
 
 
-Analyzer::Analyzer(QObject *parent) : QObject(parent), pSensor(nullptr), heartState(0), shockState(false){
+Analyzer::Analyzer(QObject *parent) : QObject(parent), pSensor(nullptr), heartState(REG), shockState(false){
 }
 
 Analyzer::~Analyzer() {
@@ -87,7 +87,7 @@ void Analyzer::CollectHeart(int hbit)
 //fallback line
 
 
-int Analyzer::analyzeHeart() {
+HeartState Analyzer::analyzeHeart() {
     if (heartbeats.empty() || heartbeats.size() < 60)
     {
         return NEG; // Assuming NEG is used for an unknown or indeterminate state
@@ -173,7 +173,7 @@ bool Analyzer::checkPlacement() {
 // Getters
 
 
-int Analyzer::getHeartState() const {
+HeartState Analyzer::getHeartState() const {
     return heartState;
 }
 
@@ -189,7 +189,7 @@ void Analyzer::setSensor(Sensor* newSensor) {
     }
 }
 
-void Analyzer::setHeartState(int state) {
+void Analyzer::setHeartState(HeartState state) {
     heartState = state;
 }
 

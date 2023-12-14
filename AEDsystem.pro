@@ -1,6 +1,6 @@
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++11
 
@@ -12,6 +12,7 @@ SOURCES += \
     aed.cpp \
     analyzer.cpp \
     patientwindow.cpp \
+    qcustomplot.cpp \
     sensor.cpp \
     patient.cpp \
     main.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     analyzer.h \
     enums.h \
     patientwindow.h \
+    qcustomplot.h \
     sensor.h \
     patient.h \
     mainwindow.h

@@ -6,6 +6,7 @@
 #include "patient.h"
 #include "aed.h"
 #include "patientwindow.h"
+#include "qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -37,6 +38,7 @@ private slots:
     void updateState(int state);
     void updateBatteryStatus (int value);
     void enableShockPB();
+    void updateGraph(HeartState state);
 
 private:
     void updateGUI();
@@ -47,5 +49,19 @@ private:
     PatientWindow* patientWindow;
     QList<QRadioButton*> stateRBs;
 
+    QCustomPlot *customPlot;
+    double time = 0;
+    int counter = 0;
+    int currentInterval = 0;
+    bool fibrillation = false;
+    double bpm = 75;
+
+    int bpmOffset = 0;
+
+    HeartState currentState;
+    QRandomGenerator randomGen;
+    QRandomGenerator randomFluctuation;
+
+    QTimer* heartRateTimer;
 };
 #endif // MAINWINDOW_H

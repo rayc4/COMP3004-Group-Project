@@ -15,7 +15,7 @@ class Analyzer : public QObject {
 
 private:
     Sensor* pSensor;
-    int heartState;
+    HeartState heartState;
     bool shockState;
     int cBPM;
     bool goodCPR;
@@ -29,18 +29,18 @@ public:
     ~Analyzer();
 
  
-    int analyzeHeart();
+    HeartState analyzeHeart();
     void setShock(bool shock);
     bool checkPlacement();
 
+    HeartState getHeartState() const;
  
     Sensor* getSensor() const;
-    int getHeartState() const;
     bool getShockState() const;
 
  
     void setSensor(Sensor* newSensor);
-    void setHeartState(int state);
+    void setHeartState(HeartState state);
     void setShockState(bool state);
     /* Regular, asystole, vtac, vfib
      * Check for placement, check for cpr (depth AND speed)

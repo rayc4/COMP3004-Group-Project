@@ -31,10 +31,6 @@ private:
 
     QString feedback; // Added feedback as a member variable
 
-
-
-
-
     int chargeLevel = 0;
     QTimer* waitTimer;
     QTimer* updateTimer;
@@ -76,12 +72,15 @@ public:
     void standClear();
     void instructCPR();
     void checkAirBreathing();
-   void prepareForShock();
+    void prepareForShock();
     //extra?
  //last second setters
 
 //        void repeatCurrentState();
 //        void repeatFunction();
+
+    float generateInterval();
+
     signals:
         void updateText(std::string const & s);
         void updateState(int state);

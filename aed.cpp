@@ -263,3 +263,35 @@ void AED::setShockPressed(){
     shockPressed = true;
 }
 
+float AED::generateInterval() {
+    /*This is currently set to the resting heart rate.
+        If we assume it generates a BPM between 70-70bpm, that's...
+        60/70 ~ 0.85
+        60/75 ~ 0.8
+        Between every 0.8-0.85s, it should send one heartbeat.
+        Because updateGraph generates 7 points, we need to divide this by 7.
+        (0.8/7)*100 ~ 115
+        (0.5/7)*100 ~ 121
+        I multipled it by 1000 to convert it to ms.
+        Therefore, we need to call updateGraph to show pulse every 115-121ms...
+
+    */
+    HeartState currentState = pAnalyzer->getHeartState();
+    int bpm = pSensor->getHeartRate();
+    if (currentState == REG){
+        bpm = pSensor->getHeartRate();
+        if (bpm < 0)
+            return 1000;
+        return 1000*((60.0/bpm)/7.0);
+    }
+    else if (currentState == VTAC){
+        return 1000*(60.0/120);
+    }
+//    else if (currentState == VFIB){
+//        bpm = randomGen.bounded(150, 300);
+//    }
+//    else if (currentState == ASYS)
+//        bpm = randomGen.bounded(-5, 5);
+
+}
+

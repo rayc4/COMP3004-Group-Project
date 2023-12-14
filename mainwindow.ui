@@ -64,27 +64,6 @@ color: black;</string>
      <string>On/Off</string>
     </property>
    </widget>
-   <widget class="QTextBrowser" name="textBrowser_2">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>500</y>
-      <width>81</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(166,193,54); 
-color: black;</string>
-    </property>
-    <property name="html">
-     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Chart&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
    <widget class="QRadioButton" name="radioButton1">
     <property name="enabled">
      <bool>false</bool>
@@ -370,10 +349,32 @@ p, li { white-space: pre-wrap; }
      <string>AED Status Indicatior</string>
     </property>
    </widget>
+   <widget class="QWidget" name="customPlot" native="true">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>410</y>
+      <width>211</width>
+      <height>151</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="bpmLabel">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>570</y>
+      <width>81</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>textBrowser</zorder>
    <zorder>powerPB</zorder>
-   <zorder>textBrowser_2</zorder>
    <zorder>radioButton1</zorder>
    <zorder>radioButton2</zorder>
    <zorder>radioButton0</zorder>
@@ -386,6 +387,8 @@ p, li { white-space: pre-wrap; }
    <zorder>label_2</zorder>
    <zorder>frame</zorder>
    <zorder>label_3</zorder>
+   <zorder>customPlot</zorder>
+   <zorder>bpmLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
