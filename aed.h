@@ -59,6 +59,7 @@ public:
     int getState() const;
     bool getIsChild() const;
     int getBattery() const;
+    void getPower() const;
 
     void setSensor(Sensor* newSensor);
     void setAnalyzer(Analyzer* newAnalyzer);

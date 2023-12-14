@@ -11,9 +11,9 @@ Analyzer::~Analyzer() {
 
 void Analyzer::CollectHeart(int hbit)
 {
-        qDebug() << "heartbeats size: " << heartbeats.size();
+    //qDebug() << "heartbeats size: " << heartbeats.size();
     if (hbit != -1){
-        if(heartbeats.size() >= 120)
+        if(heartbeats.size() >= 15)
         {
             heartbeats.pop_front();
             //qDebug() << "Popped" << heartbits.front();
@@ -70,7 +70,7 @@ void Analyzer::CollectHeart(int hbit)
 //            return 2; //"Vfib" Erratic and high
 //        } else {
 //            heartState=1;
-//            return 1; //"Vtac"  Consistently high heart rate
+//            return 1; //"Vtac"  Consisten20tly high heart rate
 //        }
 //    } else {
 //        if ((maxBit - minBit) < 20 && !isErratic)
@@ -88,7 +88,7 @@ void Analyzer::CollectHeart(int hbit)
 
 
 HeartState Analyzer::analyzeHeart() {
-    if (heartbeats.empty() || heartbeats.size() < 60)
+    if (heartbeats.empty() || heartbeats.size() < 10)
     {
         return NEG; // Assuming NEG is used for an unknown or indeterminate state
     }
@@ -111,11 +111,17 @@ HeartState Analyzer::analyzeHeart() {
     double average = sum / static_cast<double>(heartbeats.size());
 
     if (average < 30) {
+        heartState = ASYS;
         return ASYS;
-    } else if (average > 100) {
-        return isErratic ? VFIB : VTAC;
+    } else if (average > 100 && !isErratic) {
+        heartState = VTAC;
+        return VTAC;
+    } else if (isErratic){
+        heartState = VFIB;
+        return VFIB;
     } else {
-        return (maxRate - minRate) < 20 && !isErratic ? REG : NEG;
+        heartState = REG;
+        return !isErratic ? REG : NEG;
     }
 }
 

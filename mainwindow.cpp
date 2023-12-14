@@ -44,18 +44,23 @@ MainWindow::MainWindow(QWidget *parent)
     graph->setPen(QPen(Qt::red));
     graph->setName("ECG");
 
+
+
+
     customPlot->setMinimumSize(ui->customPlot->width(), ui->customPlot->height());
-    customPlot->xAxis->setLabel("Time (ms)");
+    //customPlot->xAxis->setLabel("Time (ms)");
     customPlot->xAxis->setRange(0, 2000);
     customPlot->yAxis->setRange(-50, 500);
+    customPlot->xAxis->setTickLabels(false);
     customPlot->yAxis->setTickLabels(false);
+
+
 
     currentState = REG;
 
     heartRateTimer = new QTimer();
-    heartRateTimer->setSingleShot(true);
     connect(heartRateTimer, &QTimer::timeout, [=]() {
-        updateGraph(currentState);
+        updateGraph();
     });
     currentInterval = pAED->generateInterval();
     heartRateTimer->start(currentInterval);
@@ -68,11 +73,15 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-void MainWindow::updateGraph(HeartState state) {
+void MainWindow::updateGraph() {
+    HeartState heartState = REG;
+    int aedState;
+    heartState = pAED->getAnalyzer()->analyzeHeart();
+    aedState = pAED->getState();
 
     heartRateTimer->start(currentInterval);
 
-    if (state == REG){
+    if (heartState == REG && aedState >= 4){
         // Hardcoding datapoints for a regular heartbeat (example)
         if (counter == 0) {
 
@@ -86,7 +95,7 @@ void MainWindow::updateGraph(HeartState state) {
         } else if (counter == 3) {
             ui->bpmLabel->setStyleSheet("color: red;");
             customPlot->graph(0)->addData(time + 20, 60 + randomFluctuation.bounded(-2, 2));
-            ui->bpmLabel->setText(QString("♥ BPM: %1").arg(bpm));
+            ui->bpmLabel->setText(QString("♥ BPM: %1").arg(pAED->getSensor()->getHeartRate()));
         } else if (counter == 4) {
             customPlot->graph(0)->addData(time + 24, -15 + randomFluctuation.bounded(-2, 2));
         } else if (counter == 5) {
@@ -149,7 +158,7 @@ void MainWindow::updateGraph(HeartState state) {
 //        customPlot->replot();
 //    }
 
-    qDebug() << "generateInterval";
+    //qDebug() << "generateInterval";
     currentInterval = pAED->generateInterval();
 }
 
@@ -210,9 +219,7 @@ AED* MainWindow::getAed()
 }
 
 void MainWindow::updateGUI(){
-    //qDebug() << "Current GUI heartrate is " << aedRef->getSensor()->getHeartRate();
-    if(pAED->getState() != -1)
-        ui->heartRateLCD->display(pAED->getSensor()->getHeartRate());
+    //qDebug() << "Current GUI heartrate is " << pAED->getSensor()->getHeartRate();
 }
 
 void MainWindow::updateText(std::string s){

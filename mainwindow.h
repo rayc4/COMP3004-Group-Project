@@ -38,7 +38,7 @@ private slots:
     void updateState(int state);
     void updateBatteryStatus (int value);
     void enableShockPB();
-    void updateGraph(HeartState state);
+    void updateGraph();
 
 private:
     void updateGUI();

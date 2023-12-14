@@ -268,6 +268,7 @@ void AED::setShockPressed(){
     shockPressed = true;
 }
 
+//This function generates intervals for the ecg graph
 float AED::generateInterval() {
     /*This is currently set to the resting heart rate.
         If we assume it generates a BPM between 70-70bpm, that's...
@@ -281,8 +282,8 @@ float AED::generateInterval() {
         Therefore, we need to call updateGraph to show pulse every 115-121ms...
 
     */
-    HeartState currentState = pAnalyzer->getHeartState();
-    int bpm = pSensor->getHeartRate();
+    HeartState currentState = pAnalyzer->analyzeHeart();
+    int bpm;
     if (currentState == REG){
         bpm = pSensor->getHeartRate();
         if (bpm < 0)
@@ -297,6 +298,11 @@ float AED::generateInterval() {
 //    }
 //    else if (currentState == ASYS)
 //        bpm = randomGen.bounded(-5, 5);
-
+    return 1;
 }
 
+
+
+Analyzer* AED::getAnalyzer(){
+    return pAnalyzer;
+}
