@@ -99,11 +99,13 @@ void AED::instructCPR()
 
     //function 6
     if(pAnalyzer->getHeartState() != REG){
-        qDebug()<< "Instructing CPR!!!";
-        communicateWithUser("Perform CPR.");
+        if (cprCheckCount == 0){
+            qDebug()<< "Instructing CPR!!!";
+            communicateWithUser("Perform CPR.");
+        }
         pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), cprFeedback);
         communicateWithUser(cprFeedback.toStdString());
-        if (cprCheckCount < 33){
+        if (cprCheckCount < 30){
             cprCheckCount++;
             QTimer::singleShot(900, this, &AED::instructCPR);
         }
@@ -129,6 +131,8 @@ void AED::checkAirBreathing()
 AED::AED(QObject *parent)
     : QObject(parent)
 {
+
+
     pSensor = new Sensor();
     pAnalyzer = new Analyzer();
 
@@ -181,7 +185,7 @@ void AED::incrementCharge() {
         charging = true;
         communicateWithUser("CHARGING: %"+std::to_string(chargeLevel));
         qDebug() << "CHARGING: " << chargeLevel << "%";
-        QTimer::singleShot(300, this, &AED::incrementCharge);
+        repeatCurrentState();
     }
 }
 
@@ -201,8 +205,8 @@ void AED::batteryUpdate(){
 
 void AED::updateAED(){
     pAnalyzer->CollectHeart(pSensor->getHeartRate());
-    QString feedback;
-    pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), feedback);
+    //QString feedback;
+    //pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), feedback);
     //qDebug() << feedback;
 }
 
@@ -315,7 +319,8 @@ float AED::generateInterval() {
         return 1000*((60.0/bpm)/7.0);
     }
     else if (currentState == VTAC){
-        return 1000*(60.0/120);
+        bpm = pSensor->getHeartRate();
+        return 1000*(60.0/bpm);
     }
 //    else if (currentState == VFIB){
 //        bpm = randomGen.bounded(150, 300);
