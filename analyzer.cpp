@@ -112,14 +112,16 @@ HeartState Analyzer::analyzeHeart() {
     }
 
     double average = static_cast<double>(sum) / heartbeats.size();
-    if (average < 30) {
-        heartState = ASYS; // Very low heart rate
+    if (average < 10) {
+        heartState = PEA; // Very low heart rate
+    } else if (average == 0){
+        heartState = ASYS;
     } else if (average > 240 && !isErratic) {
         heartState = VTAC;
     } else if (isErratic){
         heartState = VFIB;
     } else {
-        if ((maxRate - minRate) < 20 && !isErratic) {
+        if (average > 70 && average < 80 && (maxRate - minRate) < 20 && !isErratic) {
             heartState = REG; // Regular heart rate
         } else {
             heartState = NEG; // no fit
@@ -155,17 +157,17 @@ void Analyzer::checkCPR(int depth, bool isChild, QString &feedback) {
 
     }
 
-    int lowerBound = isChild ? 45 : 50;
-    int upperBound = isChild ? 55 : 60;
-    int depthOffset = (depth < lowerBound) ? (depth - 45) : ((depth > upperBound) ? (depth - 55) : -1);
-    bool isGoodDepth = (depth >= lowerBound) && (depth <= upperBound);
+    int lowerBound = isChild ? 40 : 50;
+    int upperBound = isChild ? 60 : 70;
+    int depthOffset = (depth > upperBound) ? (depth - upperBound) : ((depth < lowerBound) ? (depth - lowerBound) : -1);
+    bool isGoodDepth = (depth <= upperBound) && (depth >= lowerBound);
 
     if (isGoodDepth) {
         feedbackString.append("Good depth.");
     } else {
         feedbackString.append("Poor depth.");
-        feedbackString.append((depthOffset > 0) ? QString("Lower hands by ~%1mm.").arg(depthOffset)
-                                                 : QString("Raise hands by ~%1mm.").arg(qAbs(depthOffset)));
+        feedbackString.append((depthOffset > 0) ? QString("Raise hands by ~%1mm.").arg(depthOffset)
+                                                 : QString("Lower hands by ~%1mm.").arg(qAbs(depthOffset)));
     }
 
     feedback = feedbackString;

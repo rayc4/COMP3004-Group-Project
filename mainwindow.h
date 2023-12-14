@@ -63,5 +63,7 @@ private:
     QRandomGenerator randomFluctuation;
 
     QTimer* heartRateTimer;
+
+    QString lastString;
 };
 #endif // MAINWINDOW_H

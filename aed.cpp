@@ -111,7 +111,7 @@ void AED::instructCPR()
         }
         else{
             cprCheckCount = 0;
-            state = 5;
+            (this->*(stateFunctions[5]))();
         }
     }
     else
@@ -205,9 +205,15 @@ void AED::batteryUpdate(){
 
 void AED::updateAED(){
     pAnalyzer->CollectHeart(pSensor->getHeartRate());
-    //QString feedback;
-    //pAnalyzer->checkCPR(pSensor->getDepth(), pSensor->getChild(), feedback);
-    //qDebug() << feedback;
+    if (state > 5){
+        if (pAnalyzer->analyzeHeart() != lastState){
+            lastState = pAnalyzer->analyzeHeart();
+            updateState(5);
+            (this->*(stateFunctions[5]))();
+        }
+    }
+
+
 }
 
 void AED::enterNextState(){
@@ -290,6 +296,8 @@ void AED::setShockPressed(){
         // Logic to handle the shock delivery
         qDebug() << "Delivering shock...";
         pSensor->sendShock();
+        battery -= 20;
+        emit updateBattery(battery);
         emit stageComplete();
     } else {
         qDebug() << "Charge not ready. Current charge level: " << chargeLevel << "%";
@@ -298,7 +306,7 @@ void AED::setShockPressed(){
 
 //This function generates intervals for the ecg graph
 float AED::generateInterval() {
-    /*This is currently set to the resting heart rate.
+    /*Logic for resting heartrate:
         If we assume it generates a BPM between 70-70bpm, that's...
         60/70 ~ 0.85
         60/75 ~ 0.8
@@ -318,15 +326,14 @@ float AED::generateInterval() {
             return 1000;
         return 1000*((60.0/bpm)/7.0);
     }
-    else if (currentState == VTAC){
+    else if (currentState == VTAC || currentState == VFIB){
         bpm = pSensor->getHeartRate();
-        return 1000*(60.0/bpm);
+        return 1000*((60.0/bpm)/3.0);
     }
-//    else if (currentState == VFIB){
-//        bpm = randomGen.bounded(150, 300);
-//    }
-//    else if (currentState == ASYS)
-//        bpm = randomGen.bounded(-5, 5);
+    else if (currentState == ASYS || currentState == PEA){
+        return 1000*((60.0/250)/3.0); //not actual bpm, but how often it updates
+    }
+
     return 1;
 }
 

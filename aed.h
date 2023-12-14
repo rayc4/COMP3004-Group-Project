@@ -45,6 +45,8 @@ private:
     QString cprFeedback;
     int cprCheckCount = 0;
 
+    HeartState lastState = REG;
+
 public:
     explicit AED(QObject *parent = nullptr);
     ~AED();

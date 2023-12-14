@@ -52,7 +52,9 @@ MainWindow::MainWindow(QWidget *parent)
     customPlot->xAxis->setRange(0, 2000);
     customPlot->yAxis->setRange(-50, 500);
     customPlot->xAxis->setTickLabels(false);
+    customPlot->xAxis->setTicks(false);
     customPlot->yAxis->setTickLabels(false);
+    customPlot->yAxis->setTicks(false);
 
 
 
@@ -79,7 +81,7 @@ void MainWindow::updateGraph() {
     heartState = pAED->getAnalyzer()->getHeartState();
     aedState = pAED->getState();
 
-    heartRateTimer->start(currentInterval);
+    heartRateTimer->setInterval(currentInterval);
     if (aedState >=4){
         if (heartState == REG){
             // Hardcoding datapoints for a regular heartbeat
@@ -117,17 +119,32 @@ void MainWindow::updateGraph() {
             customPlot->xAxis->setRange(time - 500, time + 125);
             double maxAmplitude = 100.0;  // Temporarily limiting max amp to 100
             customPlot->yAxis->setRange(-50, maxAmplitude);
-
             customPlot->replot();
 
-
         }
-        else if (heartState == VTAC){ //DOES NOT WORK!
+        else if (heartState == VTAC || heartState == VFIB){
+            // Hardcoding datapoints for a VTAC/VFIB heartbeat
+            if (counter == 0){
+                customPlot->graph(0)->addData(time, 0);
+                ui->bpmLabel->setStyleSheet("color: black;");
+            }
+            else if (counter == 1){
+                if (heartState == VTAC)
+                    customPlot->graph(0)->addData(time + 40, 80 + randomFluctuation.bounded(-2, 2));
+                else if (heartState == VFIB)
+                    customPlot->graph(0)->addData(time + 40, QRandomGenerator::securelySeeded().bounded(-20, 150) + randomFluctuation.bounded(-2, 2));
+                ui->bpmLabel->setStyleSheet("color: red;");
+                ui->bpmLabel->setText(QString("♥ BPM: %1").arg(pAED->getSensor()->getHeartRate()));
+            }
 
-            // Hardcoding datapoints for a VTAC heartbeat
-            customPlot->graph(0)->addData(time, 0);
-            customPlot->graph(0)->addData(time + 10, 80 + randomFluctuation.bounded(-2, 2));
-            customPlot->graph(0)->addData(time + 20, 0);
+            counter++;
+
+            if (counter > 1) {
+                counter = 0;
+
+                time += currentInterval;
+
+             }
 
             customPlot->xAxis->setRange(time - 500, time + 125);
             double maxAmplitude = 100.0;  // Temporarily limiting max amp to 100
@@ -135,20 +152,23 @@ void MainWindow::updateGraph() {
 
             customPlot->replot();
         }
-    //    else if (state == VFIB){ //Also doesn't work (don't know what this does)
-    //        customPlot->graph(0)->addData(time, randomFluctuation.bounded(-20,150));
-    //        time += currentInterval;
-    //        customPlot->xAxis->setRange(time-1250, time + 500); //Update how much is shown on screen at a time
+        else if (heartState == ASYS || heartState == PEA){
+            customPlot->graph(0)->addData(time, 0);
+            ui->bpmLabel->setStyleSheet("color: black;");
+            time += currentInterval;
+            customPlot->xAxis->setRange(time - 500, time + 125);
+            double maxAmplitude = 100.0;  // Temporarily limiting max amp to 100
+            customPlot->yAxis->setRange(-50, maxAmplitude);
 
-    //        double maxAmplitude = 175;  // Temporarily limiting max amp to 100
-    //        customPlot->yAxis->setRange(-50, maxAmplitude);
-
-    //        customPlot->replot();
-    //    }
-
-        //qDebug() << "generateInterval";
+            customPlot->replot();
+        }
     }
+
+
     currentInterval = pAED->generateInterval();
+    if (currentInterval < 0)
+        currentInterval = 70; //This fixes a bug with ASYS/PEA
+
 }
 
 
@@ -213,7 +233,10 @@ void MainWindow::updateGUI(){
 
 void MainWindow::updateText(std::string s){
     QString qs = QString::fromStdString(s);
-    ui->textBrowser->setText(qs);
+    if (qs != lastString){
+        ui->textBrowser->append(qs);
+        lastString = qs;
+    }
 }
 
 void MainWindow::updateState(int state){
