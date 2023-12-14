@@ -137,7 +137,8 @@ AED::AED(QObject *parent)
     connect(batteryTimer, &QTimer::timeout, [=](){
         batteryUpdate();
     });
-    batteryTimer->start(15000);}
+    batteryTimer->start(15000);
+}
 
 AED::~AED(){
 
@@ -154,13 +155,13 @@ void AED::incrementCharge() {
     if (chargeLevel >= 100) {
         chargeLevel = 100;
         qDebug() << "Charge ready. Press the shock button now.";
-        // Optionally emit a signal or enable the shock button here
+        disconnect(waitTimer, SIGNAL(timeout()), this, SLOT(repeatFunction()));
     } else {
         qDebug() << "CHARGING: " << chargeLevel << "%";
-        waitTimer->start(3000); // Wait for 3 seconds before incrementing charge again
-        incrementCharge(); //TODO: CHANGE THIS FOR LATER to work with the list or call per tic
+        repeatCurrentState(); // Schedule to call incrementCharge again after a delay
     }
 }
+
 
 void AED::communicateWithUser(std::string const & s){
     QString qs = QString::fromStdString("[SPEAKER] " + s);
@@ -218,18 +219,22 @@ void AED::repeatFunction() {
 
 
 void AED::power()
-{  
+{
     if (battery <= 0){
         updateText("Please Charge. There is no battery");
     }else if (battery < 16){
         updateText("Please Charge. Low Battery");
     }else{
-        if(state != -1){
-            state = -1;
-            updateText("");
-        }else{
+        if (state != -1) {
+            updateText("Machine is now off.");
+            state = -1; // Update the state to reflect that the machine is off
+            updateTimer->stop(); // Stop the timer
+        } else {
+            // Machine is off
             updateText("Powered on, performing self-check");
+            state = 0; // Update the state to reflect that the machine is on
             waitTimer->start(WAIT_MS);
+            updateTimer->start(300); // Start updating when powered on
         }
     }
 
