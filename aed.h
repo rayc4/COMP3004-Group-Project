@@ -6,6 +6,9 @@
 #include "sensor.h"
 #include "analyzer.h"
 
+#include "qcustomplot.h"
+
+
 #define FINAL_STATE 6
 #define WAIT_MS 3000
 
