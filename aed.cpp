@@ -102,7 +102,7 @@ void AED::instructCPR()
 
     HeartState currState = pAnalyzer->getHeartState();
     //function 6
-    if(!(currState == REG || currState == ASYS)){
+    if(currState != REG && currState !=ASYS){
         if (cprCheckCount == 0){
             qDebug()<< "Instructing CPR!!!";
             communicateWithUser("Perform CPR.");
@@ -122,9 +122,6 @@ void AED::instructCPR()
             standClear();
         }
     }
-    else
-        emit stageComplete();
-
 }
 
 void AED::checkAirBreathing()

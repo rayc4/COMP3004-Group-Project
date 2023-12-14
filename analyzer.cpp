@@ -112,7 +112,7 @@ HeartState Analyzer::analyzeHeart() {
     }
 
     double average = static_cast<double>(sum) / heartbeats.size();
-    if (average < 3) {
+    if (average < 1) {
         heartState = ASYS;
     } else if (average < 10){
         heartState = PEA;
