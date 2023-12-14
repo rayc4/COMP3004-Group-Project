@@ -80,16 +80,25 @@ public:
     //extra?
  //last second setters
 
-
+//        void repeatCurrentState();
+//        void repeatFunction();
     signals:
         void updateText(std::string const & s);
         void updateState(int state);
+
         void stateDone();
         void stageComplete();
         void updateBattery(int battery);
         void doneCharging();
 
+
+        //maybe?
+
+
     public slots:
+        void repeatCurrentState();
+        void repeatFunction();
+
         void power();
         void enterNextState();
         void batteryLogic(int value);

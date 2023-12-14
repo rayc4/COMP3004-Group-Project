@@ -11,6 +11,7 @@ Analyzer::~Analyzer() {
 
 void Analyzer::CollectHeart(int hbit)
 {
+        qDebug() << "heartbeats size: " << heartbeats.size();
     if (hbit != -1){
         if(heartbeats.size() >= 120)
         {

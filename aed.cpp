@@ -53,7 +53,9 @@ void AED::standClear()
     qDebug() << heartState;
     if(heartState == NEG)
     {
-        standClear();
+        repeatCurrentState();
+        //standClear();
+        return;
     }
     // Heart states: REG - Regular, VTAC - Vtac, VFIB - Vfib, PEA - PEA, ASYS - Asystole, NEG - Unknown
     switch(heartState) {
@@ -187,6 +189,33 @@ void AED::enterNextState(){
     //this-> compile issue
     //this->* is definetly derreferring the iterator
 }
+
+
+void AED::repeatCurrentState()
+{
+    //we are calling this when we need to repeat a function
+    //usually because we are waiting for something else to be done running
+    //or to run 2 things on our system one after the other
+    //this sets a timer for 300
+    //allowing other things to update, or be process
+    //then check the function again
+    if(state == FINAL_STATE) return;
+
+    // Disconnect any existing connections to ensure only the repeat function is called
+    disconnect(waitTimer, SIGNAL(timeout()), this, SLOT(enterNextState()));
+    connect(waitTimer, SIGNAL(timeout()), this, SLOT(repeatFunction()));
+
+    waitTimer->start(300); // Start the timer for 300 milliseconds
+}
+
+void AED::repeatFunction() {
+    disconnect(waitTimer, SIGNAL(timeout()), this, SLOT(repeatFunction()));
+    connect(waitTimer, SIGNAL(timeout()), this, SLOT(enterNextState()));
+
+    (this->*(stateFunctions[state]))();  // Call the current function again
+}
+
+
 
 void AED::power()
 {  
