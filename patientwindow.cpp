@@ -26,6 +26,8 @@ PatientWindow::PatientWindow(QWidget *parent)
 //    }
 
 
+
+
 }
 
 void PatientWindow::setPatient(Patient* tempPatient)
@@ -43,6 +45,11 @@ void PatientWindow::setPatient(Patient* tempPatient)
     connect(ui->rightPadTable, SIGNAL(cellPressed(int,int)), pPatient, SLOT(receiveRightPad(int,int)));
     connect(ui->verticalSlider, SIGNAL(valueChanged(int)), pPatient, SLOT(receiveDepth(int)));
     connect(pPatient, &Patient::sendBreath, this, &PatientWindow::receiveBreath);
+
+
+    ui->verticalSlider->setValue(55); //This just automatically sets default value
+
+
 }
 
 
@@ -209,7 +216,7 @@ void PatientWindow::on_vTacButton_clicked(bool checked)
 //void PatientWindow::on_verticalSlider_valueChanged(int value)
 //{
 //    //circular call
-//    //aed->getSensor()->setDepth(value);
+//    aed->getSensor()->setDepth(value);
 //    //qDebug() << "Current value is " << value;
 
 //    //TODO: delete this

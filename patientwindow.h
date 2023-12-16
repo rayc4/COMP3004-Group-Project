@@ -75,6 +75,9 @@ private slots:
 
     void on_checkBox_clicked(bool checked);
 
+
+    //void on_verticalSlider_valueChanged(int value);
+
 signals:
     void declarePosition(bool placement);
 

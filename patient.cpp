@@ -75,6 +75,8 @@ void Patient::updateHeartRate(){
             oneCPR = true;
             survivalBonus += 10; //If given 30 compressions + 2 breaths, survival chance goes up
             backToLife();
+            cprCount = 0;
+            breathCount = 0;
         }
         else if (forceSequence2){
             currentState = VTAC;
@@ -84,10 +86,12 @@ void Patient::updateHeartRate(){
                 currentState = ASYS;
                 sequence2CPRCount = 0;
             }
+            cprCount = 0;
+            breathCount = 0;
         }
 
-        cprCount = 0;
-        breathCount = 0;
+
+
     }
 
     if (baseSurvivalChance+survivalBonus > 100){
@@ -228,7 +232,7 @@ void Patient::respondToShock(){
          survivalBonus += 10; // 10% survival bonus for trying
     }
 
-    if (!forceSequence1 || !forceSequence2)
+    if (!forceSequence1 || !forceSequence2)    qDebug() << cprCount;
         backToLife(); // Check to see if patient can be brought back to life
 
 }
@@ -341,6 +345,7 @@ void Patient::patientCPS(){
     if (cprBPM > 80 && cprBPM < 140) //Supposed to be 100-120, but made easier here.
         cprCount++; //If its good CPR, make it count
     heartRate = cprBPM;
+
 }
 
 void Patient::setCPR(bool c){
@@ -377,7 +382,7 @@ void Patient::backToLife(){
     }
 
     //Adding a 5% chance for death here...
-    if (!(currentState == REG || currentState == ASYS)) {
+    if (!(currentState == REG || currentState == ASYS) && !forceSequence1 && !forceSequence2) {
         int deathChange = randomGen.bounded(0, 100);
         if (deathChange < 5){
              currentState = ASYS;
